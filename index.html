@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Español de bolsillo</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#0F1C16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Español">
+<link rel="apple-touch-icon" href="icon-180.png">
+<style>
+:root{
+  --bg:#F1F3EE; --card:#FFFFFF; --ink:#16271E; --soft:#5A6B61;
+  --rule:#D5DBD1; --teal:#0D5F63; --gold:#946A05; --alert:#A62F22; --tico:#1F6B34;
+  --shadow:0 1px 2px rgba(22,39,30,.07);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0F1C16; --card:#17281F; --ink:#E8EDE7; --soft:#9BAAA0;
+        --rule:#2C3F35; --teal:#5FBFC4; --gold:#D9A93A; --alert:#E8776A; --tico:#6FCB8A;
+        --shadow:none;}
+}
+html[data-theme=light]{--bg:#F1F3EE;--card:#FFF;--ink:#16271E;--soft:#5A6B61;--rule:#D5DBD1;--teal:#0D5F63;--gold:#946A05;--alert:#A62F22;--tico:#1F6B34;--shadow:0 1px 2px rgba(22,39,30,.07)}
+html[data-theme=dark]{--bg:#0F1C16;--card:#17281F;--ink:#E8EDE7;--soft:#9BAAA0;--rule:#2C3F35;--teal:#5FBFC4;--gold:#D9A93A;--alert:#E8776A;--tico:#6FCB8A;--shadow:none}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:var(--bg); color:var(--ink);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  padding-bottom:calc(76px + env(safe-area-inset-bottom));
+  overscroll-behavior-y:contain;
+}
+.wrap{max-width:680px;margin:0 auto;padding:0 14px}
+
+/* ---------- Kopf ---------- */
+header{
+  position:sticky; top:0; z-index:20; background:var(--bg);
+  padding-top:calc(10px + env(safe-area-inset-top));
+  border-bottom:1px solid var(--rule);
+}
+.brandrow{display:flex;align-items:center;gap:10px;padding:2px 0 10px}
+.brand{font-size:19px;font-weight:700;letter-spacing:-.02em;flex:1}
+.brand span{color:var(--teal)}
+.iconbtn{
+  width:38px;height:38px;border:1px solid var(--rule);background:var(--card);
+  border-radius:10px;color:var(--ink);font-size:16px;display:grid;place-items:center;cursor:pointer;
+}
+.searchrow{padding-bottom:10px;position:relative}
+input[type=search]{
+  width:100%;padding:11px 38px 11px 14px;font-size:16px;
+  border:1px solid var(--rule);border-radius:11px;background:var(--card);color:var(--ink);
+  -webkit-appearance:none;
+}
+input[type=search]:focus{outline:2px solid var(--teal);outline-offset:-1px}
+#clear{
+  position:absolute;right:8px;top:6px;width:30px;height:34px;border:0;background:none;
+  color:var(--soft);font-size:18px;display:none;cursor:pointer
+}
+
+/* ---------- Abschnitte ---------- */
+main{padding-top:14px}
+.parthead{
+  font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--soft);margin:22px 0 10px;
+}
+.parthead:first-child{margin-top:4px}
+details{
+  background:var(--card);border:1px solid var(--rule);border-radius:12px;
+  margin-bottom:8px;box-shadow:var(--shadow);overflow:hidden;
+}
+summary{
+  padding:13px 14px;font-weight:600;font-size:15.5px;cursor:pointer;
+  display:flex;align-items:center;gap:10px;list-style:none;
+}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"›";margin-left:auto;color:var(--soft);font-size:20px;transform:rotate(90deg);transition:transform .15s}
+details[open] summary::after{transform:rotate(-90deg)}
+.num{
+  font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+  background:var(--teal);color:var(--bg);padding:4px 5px;border-radius:4px;flex:none;
+}
+.voc .num{background:var(--gold)}
+.body{padding:0 14px 14px;font-size:14.5px}
+.body>*:first-child{margin-top:0}
+.body p{margin:0 0 10px}
+
+/* ---------- Inhalte ---------- */
+table{width:100%;border-collapse:collapse;font-size:14px;margin:0 0 10px}
+th,td{text-align:left;padding:5px 8px 5px 0;vertical-align:baseline;border-bottom:1px solid var(--rule)}
+th{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
+tr:last-child td{border-bottom:0}
+td.de,.de{color:var(--soft)}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+.es{font-style:italic;font-weight:600}
+.gloss{color:var(--soft);font-style:normal;font-weight:400}
+ul.phr{list-style:none;margin:0 0 10px;padding:0}
+ul.phr li{padding:6px 0;border-bottom:1px solid var(--rule)}
+ul.phr li:last-child{border-bottom:0}
+.words{line-height:1.9}
+.words b{font-style:italic}
+.words span{color:var(--soft)}
+.note{border-left:3px solid var(--alert);padding:6px 0 6px 11px;margin:10px 0 0;font-size:13.5px}
+.note.t{border-left-color:var(--tico)}
+.tag{display:block;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--alert);margin-bottom:2px}
+.note.t .tag{color:var(--tico)}
+mark{background:var(--gold);color:var(--bg);border-radius:2px;padding:0 1px}
+
+/* ---------- Abfrage ---------- */
+#quiz{display:none}
+.qcard{
+  background:var(--card);border:1px solid var(--rule);border-radius:14px;
+  padding:22px 18px;box-shadow:var(--shadow);text-align:center;margin-bottom:14px;
+}
+.qlabel{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--soft);margin-bottom:12px}
+.qde{font-size:21px;font-weight:600;line-height:1.35}
+.qes{font-size:20px;font-style:italic;font-weight:600;color:var(--teal);margin-top:18px;line-height:1.4}
+.qhint{font-size:13px;color:var(--soft);margin-top:12px}
+.btnrow{display:flex;gap:9px}
+button.act{
+  flex:1;padding:14px;font-size:15px;font-weight:600;border-radius:11px;
+  border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;
+}
+button.pri{background:var(--teal);border-color:var(--teal);color:var(--bg)}
+button.act:active{opacity:.7}
+.stats{text-align:center;font-size:12.5px;color:var(--soft);margin-top:14px}
+.stats a{color:var(--soft)}
+
+/* ---------- Tableiste ---------- */
+nav{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  background:var(--card);border-top:1px solid var(--rule);
+  padding-bottom:env(safe-area-inset-bottom);
+  display:flex;
+}
+nav button{
+  flex:1;padding:11px 4px 12px;border:0;background:none;color:var(--soft);
+  font-size:11px;font-weight:600;letter-spacing:.03em;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+nav button b{font-size:17px;font-weight:600;line-height:1}
+nav button[aria-selected=true]{color:var(--teal)}
+.empty{text-align:center;color:var(--soft);padding:40px 20px;font-size:14.5px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="brandrow">
+      <div class="brand">Español <span>de bolsillo</span></div>
+      <button class="iconbtn" id="theme" aria-label="Hell/Dunkel umschalten">◐</button>
+    </div>
+    <div class="searchrow">
+      <input type="search" id="q" placeholder="Suchen — deutsch oder spanisch" autocomplete="off" autocorrect="off" spellcheck="false">
+      <button id="clear" aria-label="Suche löschen">✕</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="ref"></div>
+  <div id="quiz">
+    <div class="qcard">
+      <div class="qlabel" id="qlabel">Übersetze</div>
+      <div class="qde" id="qde"></div>
+      <div class="qes" id="qes" hidden></div>
+      <div class="qhint" id="qhint" hidden></div>
+    </div>
+    <div class="btnrow" id="rowReveal">
+      <button class="act pri" id="reveal">Lösung zeigen</button>
+    </div>
+    <div class="btnrow" id="rowJudge" hidden>
+      <button class="act" id="again">Nochmal üben</button>
+      <button class="act pri" id="got">Saß</button>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+</main>
+
+<nav>
+  <button data-tab="gram" aria-selected="true"><b>¶</b>Grammatik</button>
+  <button data-tab="voc" aria-selected="false"><b>A</b>Wortschatz</button>
+  <button data-tab="quiz" aria-selected="false"><b>?</b>Abfrage</button>
+</nav>
+
+<script>
+/* ===================== Speicher mit Rückfallebene ===================== */
+const mem={};
+const store={
+  get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]??null}},
+  set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}}
+};
+
+/* ===================== Thema ===================== */
+const html=document.documentElement;
+const saved=store.get('theme');
+if(saved) html.dataset.theme=saved;
+document.getElementById('theme').onclick=()=>{
+  const cur=html.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
+  const next=cur==='dark'?'light':'dark';
+  html.dataset.theme=next; store.set('theme',next);
+  document.querySelector('meta[name=theme-color]').content=next==='dark'?'#0F1C16':'#F1F3EE';
+};
+
+/* ===================== Inhalte ===================== */
+const GRAM=[
+{n:'01',t:'Aussprache',h:`
+<table>
+<tr><td class="mono">h</td><td class="de">stumm — <i>hola</i> = „ola"</td></tr>
+<tr><td class="mono">j, g+e/i</td><td class="de">ch wie in Ba<b>ch</b> — <i>jamón</i></td></tr>
+<tr><td class="mono">ll, y</td><td class="de">j wie in <b>j</b>a — <i>llave</i></td></tr>
+<tr><td class="mono">ñ</td><td class="de">nj — <i>mañana</i></td></tr>
+<tr><td class="mono">v</td><td class="de">b — <i>vino</i> = „bino"</td></tr>
+<tr><td class="mono">z, c+e/i</td><td class="de">scharfes s — <i>gracias</i></td></tr>
+<tr><td class="mono">qu</td><td class="de">k — <i>¿qué?</i> = „ke"</td></tr>
+<tr><td class="mono">r / rr</td><td class="de">Zungenspitze — <i>pero</i> ≠ <i>perro</i></td></tr>
+</table>
+<p>Vokale immer kurz und klar, nie gedehnt, nie geschluckt. Betonung: Wörter auf Vokal, <span class="mono">-n</span> oder <span class="mono">-s</span> auf der vorletzten Silbe, sonst auf der letzten. Der Akzent markiert jede Abweichung.</p>`},
+
+{n:'02',t:'Die Personalpronomen',h:`
+<table>
+<tr><th></th><th>Singular</th><th>Plural</th></tr>
+<tr><td class="de">1.</td><td class="mono">yo <span class="gloss">ich</span></td><td class="mono">nosotros/-as <span class="gloss">wir</span></td></tr>
+<tr><td class="de">2.</td><td class="mono">tú <span class="gloss">du</span></td><td class="mono">vosotros/-as <span class="gloss">ihr</span></td></tr>
+<tr><td class="de">3.</td><td class="mono">él / ella <span class="gloss">er / sie</span></td><td class="mono">ellos / ellas <span class="gloss">sie</span></td></tr>
+<tr><td class="de">Höflich</td><td class="mono">usted <span class="gloss">Sie</span></td><td class="mono">ustedes <span class="gloss">Sie, ihr</span></td></tr>
+</table>
+<p><i>usted</i> und <i>ustedes</i> stehen grammatisch in der <b>3. Person</b> — sie nehmen dieselbe Verbform wie <i>él</i> und <i>ellos</i>. Reine Frauengruppen bekommen <i>nosotras / vosotras / ellas</i>, gemischte immer die maskuline Form. In Lateinamerika fehlt <i>vosotros</i> vollständig.</p>`},
+
+{n:'03',t:'Präsens — die drei Klassen',h:`
+<table>
+<tr><th></th><th>hablar</th><th>comer</th><th>vivir</th></tr>
+<tr><td class="de">yo</td><td class="mono">hablo</td><td class="mono">como</td><td class="mono">vivo</td></tr>
+<tr><td class="de">tú</td><td class="mono">hablas</td><td class="mono">comes</td><td class="mono">vives</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">habla</td><td class="mono">come</td><td class="mono">vive</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">hablamos</td><td class="mono">comemos</td><td class="mono">vivimos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">habláis</td><td class="mono">coméis</td><td class="mono">vivís</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">hablan</td><td class="mono">comen</td><td class="mono">viven</td></tr>
+</table>
+<p><span class="mono">-er</span> und <span class="mono">-ir</span> unterscheiden sich nur bei <i>nosotros</i> und <i>vosotros</i>.</p>
+<div class="note"><span class="tag">Falle</span>In den Beispielsätzen hier steht das Pronomen zum Lernen immer dabei. Im echten Spanisch <b>lässt man es weg</b> — die Endung sagt es schon. <span class="es">Hablo español</span>, nicht <i>yo hablo español</i>, außer du willst betonen oder abgrenzen.</div>
+<div class="note t"><span class="tag">Tico</span>„Ihr" ist immer <span class="es">ustedes</span>, also die letzte Zeile. <i>vosotros</i> steht hier nur der Vollständigkeit halber.</div>`},
+
+{n:'04',t:'Stiefel-Verben',h:`
+<p>Der Stammvokal ändert sich überall dort, wo die Betonung auf ihn fällt — also überall außer bei <i>nosotros</i> und <i>vosotros</i>.</p>
+<table>
+<tr><th></th><th>e→ie</th><th>o→ue</th><th>e→i</th></tr>
+<tr><td class="de">yo</td><td class="mono">quiero</td><td class="mono">puedo</td><td class="mono">pido</td></tr>
+<tr><td class="de">tú</td><td class="mono">quieres</td><td class="mono">puedes</td><td class="mono">pides</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">quiere</td><td class="mono">puede</td><td class="mono">pide</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">queremos</td><td class="mono">podemos</td><td class="mono">pedimos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">queréis</td><td class="mono">podéis</td><td class="mono">pedís</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">quieren</td><td class="mono">pueden</td><td class="mono">piden</td></tr>
+</table>
+<p class="words"><span>e→ie:</span> <b>querer, pensar, empezar, entender, preferir, cerrar</b><br>
+<span>o→ue:</span> <b>poder, dormir, volver, costar, encontrar, llover</b><br>
+<span>e→i:</span> <b>pedir, servir, repetir, seguir</b></p>`},
+
+{n:'05',t:'Nur die yo-Form ist unregelmäßig',h:`
+<table>
+<tr><th>Infinitiv</th><th>yo</th><th>Rest</th></tr>
+<tr><td class="de">hacer machen</td><td class="mono">hago</td><td class="mono de">haces…</td></tr>
+<tr><td class="de">poner stellen</td><td class="mono">pongo</td><td class="mono de">pones…</td></tr>
+<tr><td class="de">salir hinausgehen</td><td class="mono">salgo</td><td class="mono de">sales…</td></tr>
+<tr><td class="de">conocer kennen</td><td class="mono">conozco</td><td class="mono de">conoces…</td></tr>
+<tr><td class="de">saber wissen</td><td class="mono">sé</td><td class="mono de">sabes…</td></tr>
+<tr><td class="de">dar geben</td><td class="mono">doy</td><td class="mono de">das…</td></tr>
+<tr><td class="de">ver sehen</td><td class="mono">veo</td><td class="mono de">ves…</td></tr>
+</table>
+<p><b>Beides zugleich</b> — yo-Form plus Stiefel:<br>
+<span class="mono">tener</span> → yo tengo, tú tienes, él tiene, nosotros tenemos, vosotros tenéis, ellos tienen<br>
+<span class="mono">venir</span> → yo vengo, tú vienes, él viene, nosotros venimos, vosotros venís, ellos vienen<br>
+<span class="mono">decir</span> → yo digo, tú dices, él dice, nosotros decimos, vosotros decís, ellos dicen</p>`},
+
+{n:'06',t:'Die vier Unregelmäßigen',h:`
+<table>
+<tr><th></th><th>ser</th><th>estar</th><th>ir</th></tr>
+<tr><td class="de">yo</td><td class="mono">soy</td><td class="mono">estoy</td><td class="mono">voy</td></tr>
+<tr><td class="de">tú</td><td class="mono">eres</td><td class="mono">estás</td><td class="mono">vas</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">es</td><td class="mono">está</td><td class="mono">va</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">somos</td><td class="mono">estamos</td><td class="mono">vamos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">sois</td><td class="mono">estáis</td><td class="mono">vais</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">son</td><td class="mono">están</td><td class="mono">van</td></tr>
+</table>
+<p><span class="es">hay</span> <span class="gloss">= es gibt.</span> Unveränderlich, Singular wie Plural, und <b>ohne Subjekt</b>: <span class="es">Hay un problema. Hay muchos turistas. ¿Hay wifi?</span></p>`},
+
+{n:'07',t:'ser vs. estar',h:`
+<p><b>ser = was etwas ist. estar = wie oder wo es gerade ist.</b></p>
+<table>
+<tr><th>ser</th><th>estar</th></tr>
+<tr><td class="de">Identität, Herkunft</td><td class="de">Ort — immer</td></tr>
+<tr><td class="de">Beruf, Wesenszug</td><td class="de">momentaner Zustand</td></tr>
+<tr><td class="de">Material, Besitz</td><td class="de">Ergebnis der Veränderung</td></tr>
+<tr><td class="de">Uhrzeit, Datum</td><td class="de">Verlaufsform</td></tr>
+</table>
+<p><span class="es">Yo soy alemán. Ella es mi esposa. Nosotros somos turistas.</span><br>
+<span class="es">Yo estoy en Costa Rica. Nosotros estamos cansados. El café está frío.</span><br>
+<span class="gloss">Uhrzeit und Wetter haben kein Subjekt:</span> <span class="es">Son las tres. Hace calor.</span></p>
+<div class="note"><span class="tag">Falle</span>Der Ort steht immer mit <i>estar</i>, auch wenn er ewig gilt: <span class="es">San José está en Costa Rica.</span> Das Verb kippt außerdem die Bedeutung — <span class="es">él es aburrido</span> er ist langweilig / <span class="es">él está aburrido</span> er langweilt sich · <span class="es">la sopa es rica</span> ein gutes Gericht / <span class="es">la sopa está rica</span> schmeckt gerade toll.</div>`},
+
+{n:'08',t:'tener statt „sein"',h:`
+<p>Wo das Deutsche „sein" nimmt, nimmt Spanisch <i>tener</i>:</p>
+<ul class="phr">
+<li><span class="es">Yo tengo 34 años.</span> <span class="gloss">Ich bin 34.</span></li>
+<li><span class="es">Yo tengo hambre / sed.</span> <span class="gloss">Hunger / Durst</span></li>
+<li><span class="es">Nosotros tenemos frío / calor.</span> <span class="gloss">Uns ist kalt / warm</span></li>
+<li><span class="es">Ella tiene sueño.</span> <span class="gloss">Sie ist müde.</span></li>
+<li><span class="es">Yo tengo miedo / prisa.</span> <span class="gloss">Angst / Eile</span></li>
+<li><span class="es">Usted tiene razón.</span> <span class="gloss">Sie haben recht.</span></li>
+</ul>`},
+
+{n:'09',t:'Fünf Bausteine',h:`
+<p>Damit deckst du drei Zeitformen ab, ohne sie zu lernen.</p>
+<ul class="phr">
+<li><span class="es">ir a</span> + Inf. <span class="gloss">Zukunft — Nosotros vamos a viajar.</span></li>
+<li><span class="es">estar</span> + <span class="mono">-ando/-iendo</span> <span class="gloss">gerade — Yo estoy buscando el hotel.</span></li>
+<li><span class="es">tener que</span> + Inf. <span class="gloss">müssen — Nosotros tenemos que salir.</span></li>
+<li><span class="es">poder</span> + Inf. <span class="gloss">können — ¿Usted puede repetir?</span></li>
+<li><span class="es">acabar de</span> + Inf. <span class="gloss">gerade eben — Yo acabo de llegar.</span></li>
+</ul>`},
+
+{n:'10',t:'Substantiv, Artikel, Plural',h:`
+<table>
+<tr><th>Endung</th><th>Genus</th><th>Ausnahmen</th></tr>
+<tr><td class="mono">-o</td><td class="de">m.</td><td class="de">la mano, la foto, la moto</td></tr>
+<tr><td class="mono">-a</td><td class="de">f.</td><td class="de">el problema, el día, el mapa, el clima, el agua</td></tr>
+<tr><td class="mono">-ción -dad</td><td class="de">f.</td><td class="de">—</td></tr>
+<tr><td class="mono">-or -aje</td><td class="de">m.</td><td class="de">la flor</td></tr>
+</table>
+<table>
+<tr><th></th><th>bestimmt</th><th>unbestimmt</th></tr>
+<tr><td class="de">m. Sg./Pl.</td><td class="mono">el / los</td><td class="mono">un / unos</td></tr>
+<tr><td class="de">f. Sg./Pl.</td><td class="mono">la / las</td><td class="mono">una / unas</td></tr>
+</table>
+<p><b>Plural:</b> Vokal → <span class="mono">-s</span> · Konsonant → <span class="mono">-es</span> (<i>hotel → hoteles</i>) · <span class="mono">-z</span> → <span class="mono">-ces</span> (<i>vez → veces</i>).</p>
+<div class="note"><span class="tag">Falle</span>Pflichtverschmelzungen: <span class="mono">a + el = al</span>, <span class="mono">de + el = del</span>. <span class="es">Nosotros vamos al hotel. La llave del cuarto.</span></div>`},
+
+{n:'11',t:'Adjektive & Steigerung',h:`
+<p>Sie stehen <b>hinter</b> dem Substantiv und richten sich nach Genus und Zahl: <span class="es">un café caliente · una playa bonita · unos días tranquilos</span>. Adjektive auf <span class="mono">-e</span> oder Konsonant haben keine eigene weibliche Form — außer Nationalitäten: <i>alemán / alemana</i>.</p>
+<ul class="phr">
+<li><span class="es">más … que</span> <span class="gloss">mehr als</span></li>
+<li><span class="es">menos … que</span> <span class="gloss">weniger als</span></li>
+<li><span class="es">tan … como</span> <span class="gloss">so … wie</span></li>
+<li><span class="es">el / la más …</span> <span class="gloss">der/die/das …ste</span></li>
+<li><span class="mono">bueno → mejor · malo → peor</span></li>
+<li><span class="mono">grande → mayor · pequeño → menor</span></li>
+</ul>`},
+
+{n:'12',t:'Possessiv & Demonstrativ',h:`
+<p><span class="mono">mi · tu · su · nuestro</span> — Plural durch <span class="mono">-s</span>: <span class="es">Yo tengo mis maletas.</span> Nur <i>nuestro</i> hat eine weibliche Form: <span class="es">Nosotros tenemos nuestra habitación.</span></p>
+<p><span class="mono">este</span> dieser hier · <span class="mono">ese</span> der da · <span class="mono">aquel</span> jener dort. Angleichung wie beim Adjektiv: <span class="es">Nosotros queremos esta playa.</span> Für Unbestimmtes unveränderlich: <span class="es">¿Qué es esto?</span></p>
+<div class="note"><span class="tag">Falle</span><i>su</i> heißt <i>sein, ihr, Ihr</i> und <i>deren</i> zugleich. Im Zweifel anhängen: <span class="es">la maleta de él / de usted.</span></div>`},
+
+{n:'13',t:'Objektpronomen',h:`
+<table>
+<tr><th></th><th>direkt</th><th>indirekt</th></tr>
+<tr><td class="de">mich / mir</td><td class="mono">me</td><td class="mono">me</td></tr>
+<tr><td class="de">dich / dir</td><td class="mono">te</td><td class="mono">te</td></tr>
+<tr><td class="de">ihn, sie, es / ihm</td><td class="mono">lo, la</td><td class="mono">le</td></tr>
+<tr><td class="de">uns</td><td class="mono">nos</td><td class="mono">nos</td></tr>
+<tr><td class="de">sie / ihnen, Ihnen</td><td class="mono">los, las</td><td class="mono">les</td></tr>
+</table>
+<div class="note"><span class="tag">Falle</span>Das Objektpronomen steht <b>vor</b> dem konjugierten Verb, nicht dahinter: <span class="es">Yo no lo entiendo. ¿Usted me puede ayudar?</span> An Infinitiv und Gerundium darf es angehängt werden: <span class="es">¿Usted puede ayudarme?</span> — beides richtig.</div>`},
+
+{n:'14',t:'gustar — rückwärts gebaut',h:`
+<p>Nicht „ich mag X", sondern „mir gefällt X". Das Gemochte ist das Subjekt und bestimmt die Verbform.</p>
+<ul class="phr">
+<li><span class="es">A mí me gusta el café.</span> <span class="gloss">Singular</span></li>
+<li><span class="es">A mí me gustan las playas.</span> <span class="gloss">Plural → Verb im Plural</span></li>
+<li><span class="es">A nosotros nos gusta viajar.</span> <span class="gloss">Infinitiv → immer Sg.</span></li>
+<li><span class="es">A usted le gusta el pescado.</span> <span class="gloss">Sie mögen Fisch.</span></li>
+<li><span class="es">A ella le gustan los monos.</span> <span class="gloss">Sie mag Affen.</span></li>
+</ul>
+<p class="gloss">Betontes Pronomen mit <b>a</b>: a mí, a ti, a él/ella/usted, a nosotros, a vosotros, a ellos/ustedes. Es steht zusätzlich zu <i>me, te, le, nos, os, les</i> — nie an dessen Stelle.</p>
+<p class="words"><span>Genauso:</span> <b>encantar</b> <span>lieben</span> · <b>interesar</b> · <b>parecer</b> <span>scheinen</span> · <b>doler</b> <span>wehtun</span> · <b>faltar</b> <span>fehlen</span> · <b>quedar</b> <span>passen</span></p>`},
+
+{n:'15',t:'Fragen & Verneinung',h:`
+<table>
+<tr><td class="mono">¿qué?</td><td class="de">was</td><td class="mono">¿quién?</td><td class="de">wer</td></tr>
+<tr><td class="mono">¿dónde?</td><td class="de">wo</td><td class="mono">¿adónde?</td><td class="de">wohin</td></tr>
+<tr><td class="mono">¿de dónde?</td><td class="de">woher</td><td class="mono">¿cuándo?</td><td class="de">wann</td></tr>
+<tr><td class="mono">¿cómo?</td><td class="de">wie</td><td class="mono">¿por qué?</td><td class="de">warum</td></tr>
+<tr><td class="mono">¿cuál?</td><td class="de">welcher</td><td class="mono">¿cuánto?</td><td class="de">wie viel</td></tr>
+</table>
+<p>Verneinung: <span class="mono">no</span> vor das Verb. Entscheidungsfragen brauchen keine Umstellung, nur Intonation: <span class="es">¿Usted habla inglés?</span></p>
+<div class="note"><span class="tag">Falle</span>Doppelte Verneinung ist Pflicht: <span class="es">No hay nada. Yo no veo a nadie. Nosotros nunca comemos carne.</span></div>`},
+
+{n:'16',t:'por / para · persönliches a',h:`
+<table>
+<tr><th>para = Ziel</th><th>por = Grund, Durchgang</th></tr>
+<tr><td class="de">Zweck: <i>Esto es para mi esposa.</i></td><td class="de">Ursache: <i>Gracias por todo.</i></td></tr>
+<tr><td class="de">Richtung: <i>Nosotros salimos para Jacó.</i></td><td class="de">durch: <i>Nosotros caminamos por la playa.</i></td></tr>
+<tr><td class="de">Frist: <i>para mañana</i></td><td class="de">Preis: <i>diez dólares por persona</i></td></tr>
+<tr><td class="de">Empfänger</td><td class="de">Zeitspanne: <i>por dos días</i></td></tr>
+</table>
+<div class="note"><span class="tag">Falle</span>Ist das direkte Objekt eine Person, steht <span class="mono">a</span> davor: <span class="es">Yo veo la playa</span>, aber <span class="es">Yo veo a mi esposa.</span> Gibt es im Deutschen nicht — wird ständig vergessen.</div>`},
+
+{n:'17',t:'Vergangenheit',h:`
+<p><b>Indefinido</b> — abgeschlossene Einzelhandlung, bringt die Geschichte voran.<br>
+<b>Imperfecto</b> — Zustand, Gewohnheit, Kulisse.</p>
+<table>
+<tr><th>Indefinido</th><th>hablar</th><th>comer</th></tr>
+<tr><td class="de">yo</td><td class="mono">hablé</td><td class="mono">comí</td></tr>
+<tr><td class="de">tú</td><td class="mono">hablaste</td><td class="mono">comiste</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">habló</td><td class="mono">comió</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">hablamos</td><td class="mono">comimos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">hablasteis</td><td class="mono">comisteis</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">hablaron</td><td class="mono">comieron</td></tr>
+</table>
+<table>
+<tr><th>Imperfecto</th><th>hablar</th><th>comer</th></tr>
+<tr><td class="de">yo</td><td class="mono">hablaba</td><td class="mono">comía</td></tr>
+<tr><td class="de">tú</td><td class="mono">hablabas</td><td class="mono">comías</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">hablaba</td><td class="mono">comía</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">hablábamos</td><td class="mono">comíamos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">hablabais</td><td class="mono">comíais</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">hablaban</td><td class="mono">comían</td></tr>
+</table>
+<p><span class="mono">-ir</span> läuft wie <span class="mono">-er</span>. Unregelmäßige Indefinido-Stämme: <span class="mono">ser/ir → fui · estar → estuve · tener → tuve · hacer → hice · poder → pude · dar → di</span>. Imperfecto ist fast völlig regelmäßig — nur <span class="mono">ser → era · ir → iba · ver → veía</span>.</p>
+<p><span class="es">Ayer nosotros fuimos a la playa. Hacía calor y el hotel era bonito.</span></p>`},
+
+{n:'18',t:'Höflichkeit & Imperativ',h:`
+<p><b>usted-Imperativ:</b> yo-Form nehmen, Endvokal umdrehen. <span class="mono">hablar → hable · comer → coma · venir → venga</span>. Das Pronomen bleibt weg: <span class="es">Perdone. Disculpe. Dígame. Espere un momento.</span></p>
+<ul class="phr">
+<li><span class="es">¿Usted me puede traer…?</span> <span class="gloss">Können Sie mir … bringen?</span></li>
+<li><span class="es">¿Usted podría…?</span> <span class="gloss">Könnten Sie…? — am höflichsten</span></li>
+<li><span class="es">Yo quisiera…</span> <span class="gloss">Ich hätte gern… statt <i>quiero</i></span></li>
+<li><span class="es">¿Sería posible…?</span> <span class="gloss">Wäre es möglich…?</span></li>
+</ul>
+<p><b>Subjuntivo</b> — vier Formeln reichen fürs Erste: <span class="es">Ojalá que sí. Yo espero que a usted le guste. Cuando yo llegue… Que usted tenga un buen día.</span></p>`}
+];
+
+const VOC=[
+{n:'19',t:'Bindewörter',h:`<p class="words"><b>y</b> <span>und</span> · <b>o</b> <span>oder</span> · <b>pero</b> <span>aber</span> · <b>porque</b> <span>weil</span> · <b>que</b> <span>dass</span> · <b>si</b> <span>wenn</span> · <b>también</b> <span>auch</span> · <b>tampoco</b> <span>auch nicht</span> · <b>entonces</b> <span>dann</span> · <b>pues</b> <span>also</span> · <b>aunque</b> <span>obwohl</span> · <b>además</b> <span>außerdem</span> · <b>por eso</b> <span>deshalb</span></p>`},
+{n:'20',t:'Menge & Grad',h:`<p class="words"><b>muy</b> <span>sehr</span> · <b>mucho</b> <span>viel</span> · <b>poco</b> <span>wenig</span> · <b>demasiado</b> <span>zu viel</span> · <b>bastante</b> <span>ziemlich</span> · <b>más / menos</b> · <b>todo</b> <span>alles</span> · <b>nada</b> <span>nichts</span> · <b>algo</b> <span>etwas</span> · <b>alguien</b> <span>jemand</span> · <b>nadie</b> <span>niemand</span> · <b>otro</b> <span>ein anderer</span> · <b>mismo</b> <span>derselbe</span> · <b>cada</b> <span>jeder</span> · <b>solo</b> <span>nur</span> · <b>casi</b> <span>fast</span></p>`},
+{n:'21',t:'Ort',h:`<p class="words"><b>aquí</b> <span>hier</span> · <b>allí, ahí</b> <span>dort</span> · <b>cerca / lejos</b> <span>nah / weit</span> · <b>arriba / abajo</b> <span>oben / unten</span> · <b>dentro / fuera</b> <span>drinnen / draußen</span> · <b>al lado de</b> <span>neben</span> · <b>enfrente de</b> <span>gegenüber</span> · <b>detrás de</b> <span>hinter</span> · <b>delante de</b> <span>vor</span> · <b>entre</b> <span>zwischen</span> · <b>a la derecha / izquierda</b> <span>rechts / links</span> · <b>derecho</b> <span>geradeaus</span></p>`},
+{n:'22',t:'Zeit',h:`<p class="words"><b>ahora</b> <span>jetzt</span> · <b>hoy</b> <span>heute</span> · <b>mañana</b> <span>morgen und Vormittag</span> · <b>ayer</b> <span>gestern</span> · <b>luego, después</b> <span>später</span> · <b>antes</b> <span>vorher</span> · <b>siempre / nunca</b> <span>immer / nie</span> · <b>a veces</b> <span>manchmal</span> · <b>ya</b> <span>schon</span> · <b>todavía</b> <span>noch</span> · <b>temprano / tarde</b> <span>früh / spät</span> · <b>pronto</b> <span>bald</span> · <b>hasta / desde</b> <span>bis / seit</span> · <b>la semana, el mes, el año</b></p>`},
+{n:'23',t:'Reagieren',h:`<p class="words"><b>claro</b> <span>klar</span> · <b>listo</b> <span>okay, fertig</span> · <b>de acuerdo</b> <span>einverstanden</span> · <b>por supuesto</b> <span>selbstverständlich</span> · <b>tal vez</b> <span>vielleicht</span> · <b>¿verdad?</b> <span>oder?</span> · <b>lo siento</b> <span>tut mir leid</span> · <b>no importa</b> <span>macht nichts</span> · <b>con permiso</b> <span>Entschuldigung, beim Vorbeigehen</span> · <b>¡qué bien!</b> · <b>¡qué lástima!</b> <span>wie schade</span></p>`},
+{n:'24',t:'Die 40 Verben',h:`
+<table>
+<tr><td class="mono">ser / estar</td><td class="de">sein</td><td class="mono">poder</td><td class="de">können</td></tr>
+<tr><td class="mono">tener</td><td class="de">haben</td><td class="mono">querer</td><td class="de">wollen</td></tr>
+<tr><td class="mono">hacer</td><td class="de">machen</td><td class="mono">ir</td><td class="de">gehen</td></tr>
+<tr><td class="mono">venir</td><td class="de">kommen</td><td class="mono">llegar</td><td class="de">ankommen</td></tr>
+<tr><td class="mono">salir</td><td class="de">abfahren</td><td class="mono">volver</td><td class="de">zurück</td></tr>
+<tr><td class="mono">dar</td><td class="de">geben</td><td class="mono">tomar</td><td class="de">nehmen</td></tr>
+<tr><td class="mono">llevar</td><td class="de">mitnehmen</td><td class="mono">traer</td><td class="de">bringen</td></tr>
+<tr><td class="mono">decir</td><td class="de">sagen</td><td class="mono">hablar</td><td class="de">sprechen</td></tr>
+<tr><td class="mono">preguntar</td><td class="de">fragen</td><td class="mono">pedir</td><td class="de">bestellen</td></tr>
+<tr><td class="mono">saber</td><td class="de">wissen</td><td class="mono">conocer</td><td class="de">kennen</td></tr>
+<tr><td class="mono">ver</td><td class="de">sehen</td><td class="mono">mirar</td><td class="de">anschauen</td></tr>
+<tr><td class="mono">oír</td><td class="de">hören</td><td class="mono">entender</td><td class="de">verstehen</td></tr>
+<tr><td class="mono">comer</td><td class="de">essen</td><td class="mono">beber</td><td class="de">trinken</td></tr>
+<tr><td class="mono">dormir</td><td class="de">schlafen</td><td class="mono">comprar</td><td class="de">kaufen</td></tr>
+<tr><td class="mono">pagar</td><td class="de">bezahlen</td><td class="mono">costar</td><td class="de">kosten</td></tr>
+<tr><td class="mono">buscar</td><td class="de">suchen</td><td class="mono">encontrar</td><td class="de">finden</td></tr>
+<tr><td class="mono">necesitar</td><td class="de">brauchen</td><td class="mono">gustar</td><td class="de">gefallen</td></tr>
+<tr><td class="mono">esperar</td><td class="de">warten</td><td class="mono">ayudar</td><td class="de">helfen</td></tr>
+<tr><td class="mono">abrir</td><td class="de">öffnen</td><td class="mono">cerrar</td><td class="de">schließen</td></tr>
+<tr><td class="mono">empezar</td><td class="de">anfangen</td><td class="mono">terminar</td><td class="de">beenden</td></tr>
+<tr><td class="mono">quedarse</td><td class="de">bleiben</td><td class="mono">funcionar</td><td class="de">funktionieren</td></tr>
+</table>
+<div class="note"><span class="tag">Falle</span><i>saber</i> = Fakten wissen. <i>conocer</i> = Personen und Orte kennen. <span class="es">Sé dónde está, pero no conozco el lugar.</span></div>`},
+{n:'25',t:'Zahlen',h:`
+<p class="words"><b>1–15 einzeln:</b> uno, dos, tres, cuatro, cinco, seis, siete, ocho, nueve, diez, once, doce, trece, catorce, quince</p>
+<p class="words"><b>ab 16 gebaut:</b> dieciséis, diecisiete … veinte, veintiuno … treinta y uno, cuarenta, cincuenta, sesenta, setenta, ochenta, noventa, cien, doscientos, <b>quinientos</b> <span>(unregelmäßig)</span>, mil</p>
+<div class="note t"><span class="tag">Tico</span>Gezahlt wird in <b>colones</b>, meist in Tausendern: <i>cinco mil colones</i> ≈ 9 €. US-Dollar werden fast überall angenommen, das Wechselgeld kommt in Colones zurück.</div>`},
+{n:'26',t:'Restaurant',h:`
+<p class="words"><b>el desayuno / el almuerzo / la cena</b> <span>Frühstück, Mittag, Abend</span> · <b>la carta</b> <span>Speisekarte</span> · <b>el plato</b> <span>Gericht</span> · <b>la bebida</b> <span>Getränk</span> · <b>la propina</b> <span>Trinkgeld</span> · <b>el agua, el café, el jugo, la cerveza, el vino</b> · <b>el pollo</b> <span>Huhn</span> · <b>la carne</b> <span>Fleisch</span> · <b>el pescado</b> <span>Fisch</span> · <b>los camarones</b> <span>Garnelen</span> · <b>el arroz</b> <span>Reis</span> · <b>los frijoles</b> <span>Bohnen</span> · <b>la ensalada, las verduras, la fruta, el pan, el queso, los huevos</b> · <b>el postre</b> <span>Nachtisch</span> · <b>picante / dulce / salado</b> <span>scharf / süß / salzig</span> · <b>rico</b> <span>lecker</span></p>
+<ul class="phr">
+<li><span class="es">Una mesa para dos, por favor.</span></li>
+<li><span class="es">¿Qué me recomienda?</span> <span class="gloss">Was empfehlen Sie?</span></li>
+<li><span class="es">Para mí, el pollo. Para ella, el pescado.</span></li>
+<li><span class="es">¿Tiene algo vegetariano?</span></li>
+<li><span class="es">Soy alérgico a…</span> <span class="gloss">Ich bin allergisch gegen…</span></li>
+<li><span class="es">La cuenta, por favor.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span><b>casado</b> = Standard-Mittagsteller mit Reis, Bohnen, Salat, Fleisch, Kochbanane · <b>gallo pinto</b> = Frühstück aus Reis und Bohnen · <b>soda</b> = kleines günstiges Lokal, dort esst ihr am besten · <b>refresco natural</b> = frisch gemixter Saft, <i>con agua</i> oder <i>con leche</i>.</div>`},
+{n:'27',t:'Unterkunft',h:`
+<p class="words"><b>la habitación, el cuarto</b> <span>Zimmer</span> · <b>la llave</b> <span>Schlüssel</span> · <b>la cama</b> <span>Bett</span> · <b>la toalla</b> <span>Handtuch</span> · <b>la ducha</b> <span>Dusche</span> · <b>el baño</b> <span>Bad, Toilette</span> · <b>el aire acondicionado</b> · <b>el ventilador</b> · <b>la reserva</b> <span>Buchung</span> · <b>la recepción</b> · <b>la piscina</b> · <b>la caja fuerte</b> <span>Safe</span> · <b>la contraseña</b> <span>Passwort</span></p>
+<ul class="phr">
+<li><span class="es">Tenemos una reserva a nombre de…</span></li>
+<li><span class="es">¿A qué hora es el check-out?</span></li>
+<li><span class="es">No funciona el aire acondicionado.</span></li>
+<li><span class="es">¿Está incluido el desayuno?</span></li>
+</ul>`},
+{n:'28',t:'Unterwegs',h:`
+<p class="words"><b>el aeropuerto</b> <span>Flughafen</span> · <b>el vuelo</b> <span>Flug</span> · <b>la maleta</b> <span>Koffer</span> · <b>el equipaje</b> <span>Gepäck</span> · <b>el bus</b> · <b>la parada</b> <span>Haltestelle</span> · <b>el tiquete</b> <span>Ticket</span> · <b>el carro</b> <span>Auto</span> · <b>alquilar</b> <span>mieten</span> · <b>la gasolina</b> · <b>la carretera</b> <span>Landstraße</span> · <b>el camino</b> <span>Weg</span> · <b>el puente</b> <span>Brücke</span> · <b>la lluvia</b> <span>Regen</span> · <b>el barro</b> <span>Schlamm</span> · <b>la tarjeta</b> <span>Karte</span></p>
+<ul class="phr">
+<li><span class="es">¿Dónde está la parada del bus?</span></li>
+<li><span class="es">¿Este bus va a Monteverde?</span></li>
+<li><span class="es">¿Cuánto tiempo toma?</span> <span class="gloss">Wie lange dauert es?</span></li>
+<li><span class="es">¿Se puede pagar con tarjeta?</span></li>
+<li><span class="es">Estamos perdidos.</span> <span class="gloss">Wir haben uns verlaufen.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Adressen laufen ohne Straßennamen über Landmarken: <span class="es">200 metros al sur de la iglesia.</span> Eine <b>cuadra</b> ist ein Häuserblock und zählt als 100 Meter.</div>`},
+{n:'29',t:'Natur & Ausflüge',h:`
+<p class="words"><b>la playa</b> <span>Strand</span> · <b>el mar, la ola, la arena</b> <span>Meer, Welle, Sand</span> · <b>el bosque</b> <span>Wald</span> · <b>la selva</b> <span>Dschungel</span> · <b>el volcán</b> · <b>la catarata</b> <span>Wasserfall</span> · <b>el río</b> · <b>el sendero</b> <span>Wanderweg</span> · <b>la caminata</b> <span>Wanderung</span> · <b>el parque nacional</b> · <b>la entrada</b> <span>Eintritt</span> · <b>el guía</b> <span>Führer</span> · <b>el horario</b> <span>Öffnungszeiten</span> · <b>el protector solar</b> <span>Sonnencreme</span> · <b>el repelente</b> <span>Mückenschutz</span></p>
+<p class="words"><b>el mono</b> <span>Affe</span> · <b>el perezoso</b> <span>Faultier</span> · <b>el tucán</b> · <b>la rana</b> <span>Frosch</span> · <b>la tortuga</b> <span>Schildkröte</span> · <b>el cocodrilo</b> · <b>la mariposa</b> <span>Schmetterling</span> · <b>el pájaro</b> <span>Vogel</span> · <b>el mosquito</b></p>
+<ul class="phr">
+<li><span class="es">¿A qué hora abre el parque?</span></li>
+<li><span class="es">¿Cuánto cuesta la entrada por persona?</span></li>
+<li><span class="es">¿Hace falta reservar?</span> <span class="gloss">Muss man reservieren?</span></li>
+<li><span class="es">¿Es seguro nadar aquí?</span></li>
+</ul>`},
+{n:'30',t:'Notfall',h:`
+<p class="words"><b>la farmacia</b> · <b>el médico</b> <span>Arzt</span> · <b>el hospital</b> · <b>la policía</b> · <b>la emergencia</b> · <b>la fiebre</b> <span>Fieber</span> · <b>la cabeza / el estómago / la garganta</b> <span>Kopf, Bauch, Hals</span></p>
+<ul class="phr">
+<li><span class="es">Necesito un médico.</span></li>
+<li><span class="es">Me duele la cabeza.</span> <span class="gloss">Mir tut der Kopf weh.</span></li>
+<li><span class="es">Me siento mal.</span> <span class="gloss">Mir geht es schlecht.</span></li>
+<li><span class="es">¿Me puede ayudar?</span> · <span class="es">¡Cuidado!</span></li>
+</ul>
+<p><b>Notruf Costa Rica: 911.</b></p>`},
+{n:'31',t:'Hochzeitsreise',h:`
+<p class="words"><b>mi esposo / mi esposa</b> · <b>la luna de miel</b> <span>Flitterwochen</span> · <b>la boda</b> <span>Hochzeit</span> · <b>recién casados</b> <span>frisch verheiratet</span></p>
+<ul class="phr">
+<li><span class="es">Estamos de luna de miel.</span></li>
+<li><span class="es">Nos casamos hace dos semanas.</span></li>
+<li><span class="es">¿Nos puede tomar una foto?</span></li>
+<li><span class="es">¡Felicidades!</span> <span class="gloss">— hört ihr dann ständig zurück</span></li>
+</ul>`},
+{n:'32',t:'Tico-Spanisch',h:`
+<table>
+<tr><td class="mono">pura vida</td><td class="de">hallo, danke, bitte, alles gut</td></tr>
+<tr><td class="mono">con mucho gusto</td><td class="de">gern geschehen — nicht <i>de nada</i></td></tr>
+<tr><td class="mono">mae</td><td class="de">Alter, Kumpel</td></tr>
+<tr><td class="mono">tuanis</td><td class="de">cool, super</td></tr>
+<tr><td class="mono">¿cómo va?</td><td class="de">wie läuft's?</td></tr>
+<tr><td class="mono">¡upe!</td><td class="de">Ruf an der Haustür statt Klopfen</td></tr>
+<tr><td class="mono">la vara</td><td class="de">die Sache, das Ding</td></tr>
+<tr><td class="mono">chunche</td><td class="de">Dingsbums</td></tr>
+<tr><td class="mono">soda</td><td class="de">kleines Speiselokal</td></tr>
+<tr><td class="mono">estar de goma</td><td class="de">verkatert sein</td></tr>
+</table>
+<div class="note t"><span class="tag">Tico</span>Ticos duzen mit <b>vos</b>, nicht mit <i>tú</i> — endbetont: <i>vos hablás, comés, vivís</i>, und <i>vos sos</i>. Aktiv brauchst du das nicht, <b>usted</b> ist immer höflich und richtig. Wundere dich nur nicht über <span class="es">¿De dónde sos?</span></div>`}
+];
+
+/* ===================== Abfragesätze ===================== */
+const QUIZ=[
+["Guten Morgen, wie geht es Ihnen?","Buenos días, ¿cómo está?"],
+["Ich heiße Philipp, wir sind aus Deutschland.","Me llamo Philipp, somos de Alemania."],
+["Wir sind auf Hochzeitsreise.","Estamos de luna de miel."],
+["Was kostet das?","¿Cuánto cuesta?"],
+["Die Rechnung, bitte.","La cuenta, por favor."],
+["Ich verstehe nicht, können Sie das wiederholen?","No entiendo, ¿puede repetir?"],
+["Wo ist die Bushaltestelle?","¿Dónde está la parada del bus?"],
+["Ich habe Hunger. Wo gibt es ein gutes Restaurant?","Tengo hambre. ¿Dónde hay un buen restaurante?"],
+["Meine Frau ist müde, sie will schlafen.","Mi esposa está cansada, quiere dormir."],
+["Wir müssen morgen zum Flughafen fahren.","Tenemos que ir al aeropuerto mañana."],
+["Ein Tisch für zwei, bitte.","Una mesa para dos, por favor."],
+["Was empfehlen Sie mir?","¿Qué me recomienda?"],
+["Haben Sie etwas Vegetarisches?","¿Tiene algo vegetariano?"],
+["Ich hätte gern einen Kaffee ohne Zucker.","Quisiera un café sin azúcar."],
+["Es hat sehr gut geschmeckt, danke.","Estaba muy rico, gracias."],
+["Kann man mit Karte bezahlen?","¿Se puede pagar con tarjeta?"],
+["Wir haben eine Buchung auf den Namen Müller.","Tenemos una reserva a nombre de Müller."],
+["Die Klimaanlage funktioniert nicht.","No funciona el aire acondicionado."],
+["Ist das Frühstück inbegriffen?","¿Está incluido el desayuno?"],
+["Wie lautet das WLAN-Passwort?","¿Cuál es la contraseña del wifi?"],
+["Um wie viel Uhr ist der Check-out?","¿A qué hora es el check-out?"],
+["Wir haben uns verlaufen.","Estamos perdidos."],
+["Fährt dieser Bus nach Monteverde?","¿Este bus va a Monteverde?"],
+["Wie lange dauert es?","¿Cuánto tiempo toma?"],
+["Können Sie uns nach San José bringen?","¿Nos puede llevar a San José?"],
+["Ich möchte ein Auto mieten.","Quiero alquilar un carro."],
+["Um wie viel Uhr öffnet der Park?","¿A qué hora abre el parque?"],
+["Was kostet der Eintritt pro Person?","¿Cuánto cuesta la entrada por persona?"],
+["Muss man reservieren?","¿Hace falta reservar?"],
+["Ist es sicher, hier zu schwimmen?","¿Es seguro nadar aquí?"],
+["Können Sie ein Foto von uns machen?","¿Nos puede tomar una foto?"],
+["Wir mögen die Strände sehr.","Nos gustan mucho las playas."],
+["Mir gefällt dieses Hotel.","Me gusta este hotel."],
+["Ich mag Fisch, aber meine Frau bevorzugt Huhn.","Me gusta el pescado, pero mi esposa prefiere el pollo."],
+["Ich brauche einen Arzt.","Necesito un médico."],
+["Mir tut der Kopf weh.","Me duele la cabeza."],
+["Mir geht es schlecht.","Me siento mal."],
+["Wo ist die nächste Apotheke?","¿Dónde está la farmacia más cercana?"],
+["Ich bin allergisch gegen Garnelen.","Soy alérgico a los camarones."],
+["Ich bin vierunddreißig Jahre alt.","Tengo treinta y cuatro años."],
+["Uns ist warm und wir haben Durst.","Tenemos calor y sed."],
+["Ich habe es eilig.","Tengo prisa."],
+["Wir werden nach Costa Rica reisen.","Vamos a viajar a Costa Rica."],
+["Ich suche gerade das Hotel.","Estoy buscando el hotel."],
+["Ich bin gerade angekommen.","Acabo de llegar."],
+["Wir können morgen kommen.","Podemos venir mañana."],
+["Ich weiß nicht, wo es ist.","No sé dónde está."],
+["Ich kenne diesen Ort nicht.","No conozco este lugar."],
+["Es gibt viele Touristen hier.","Hay muchos turistas aquí."],
+["Es gibt kein Problem.","No hay ningún problema."],
+["Ich sehe niemanden.","No veo a nadie."],
+["Wir essen nie Fleisch.","Nunca comemos carne."],
+["Das ist für meine Frau.","Esto es para mi esposa."],
+["Danke für alles.","Gracias por todo."],
+["Wir laufen am Strand entlang.","Caminamos por la playa."],
+["Zehn Dollar pro Person.","Diez dólares por persona."],
+["Können Sie mir helfen?","¿Me puede ayudar?"],
+["Könnten Sie langsamer sprechen?","¿Podría hablar más despacio?"],
+["Einen Moment bitte.","Espere un momento, por favor."],
+["Gestern waren wir am Strand.","Ayer fuimos a la playa."],
+["Es war heiß und das Hotel war schön.","Hacía calor y el hotel era bonito."],
+["Wir haben vor zwei Wochen geheiratet.","Nos casamos hace dos semanas."],
+["Einen schönen Tag noch.","Que tenga un buen día."],
+["Sprechen Sie Englisch?","¿Usted habla inglés?"],
+["Woher kommen Sie?","¿De dónde es usted?"],
+["Dieser Strand ist schöner als der andere.","Esta playa es más bonita que la otra."],
+["Das ist das beste Restaurant der Stadt.","Este es el mejor restaurante de la ciudad."],
+["Der Kaffee ist kalt.","El café está frío."],
+["Wir sind müde, aber glücklich.","Estamos cansados, pero felices."]
+];
+
+/* ===================== Aufbau ===================== */
+const ref=document.getElementById('ref');
+function build(list,cls,label){
+  const h=document.createElement('div');
+  h.className='parthead'; h.textContent=label; h.dataset.head=cls;
+  ref.appendChild(h);
+  list.forEach(s=>{
+    const d=document.createElement('details');
+    d.className=cls;
+    d.innerHTML=`<summary><span class="num">${s.n}</span>${s.t}</summary><div class="body">${s.h}</div>`;
+    ref.appendChild(d);
+  });
+}
+build(GRAM,'gram','Teil I — Grammatik');
+build(VOC,'voc','Teil II — Wortschatz');
+
+/* ===================== Tabs ===================== */
+let tab='gram';
+const quizEl=document.getElementById('quiz');
+document.querySelectorAll('nav button').forEach(b=>{
+  b.onclick=()=>{
+    tab=b.dataset.tab;
+    document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
+    ref.style.display = tab==='quiz'?'none':'block';
+    quizEl.style.display = tab==='quiz'?'block':'none';
+    document.querySelector('.searchrow').style.display = tab==='quiz'?'none':'block';
+    if(tab==='quiz'&&!current) nextCard();
+    applyFilter();
+    scrollTo({top:0});
+  };
+});
+
+/* ===================== Suche ===================== */
+const qEl=document.getElementById('q'), clearBtn=document.getElementById('clear');
+const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+let empty=null;
+
+function applyFilter(){
+  if(tab==='quiz') return;
+  const term=norm(qEl.value.trim());
+  clearBtn.style.display=qEl.value?'block':'none';
+  let hits=0;
+  document.querySelectorAll('#ref details').forEach(d=>{
+    const inTab = d.classList.contains(tab);
+    if(!inTab){d.style.display='none';return}
+    if(!term){d.style.display='';d.open=false;hits++;return}
+    const match=norm(d.textContent).includes(term);
+    d.style.display=match?'':'none';
+    if(match){d.open=true;hits++}
+  });
+  document.querySelectorAll('.parthead').forEach(h=>{
+    h.style.display=(h.dataset.head===tab && !term)?'':'none';
+  });
+  if(!empty){empty=document.createElement('div');empty.className='empty';ref.appendChild(empty)}
+  empty.style.display=hits?'none':'block';
+  empty.textContent='Nichts gefunden. Versuch ein kürzeres Stichwort.';
+}
+qEl.addEventListener('input',applyFilter);
+clearBtn.onclick=()=>{qEl.value='';applyFilter();qEl.focus()};
+applyFilter();
+
+/* ===================== Abfrage ===================== */
+let current=null, dir='de';
+const load=k=>{try{return JSON.parse(store.get(k)||'null')}catch(e){return null}};
+let pool=load('pool');
+if(!Array.isArray(pool)||pool.length!==QUIZ.length) pool=QUIZ.map((_,i)=>i);
+let done=load('done')||[];
+
+function save(){store.set('pool',JSON.stringify(pool));store.set('done',JSON.stringify(done))}
+
+function nextCard(){
+  if(!pool.length){pool=done.slice();done=[]}
+  const i=pool[Math.floor(Math.random()*pool.length)];
+  current=i;
+  dir=Math.random()<0.75?'de':'es';
+  const [de,es]=QUIZ[i];
+  document.getElementById('qlabel').textContent = dir==='de'?'Ins Spanische':'Ins Deutsche';
+  document.getElementById('qde').textContent = dir==='de'?de:es;
+  document.getElementById('qde').className = dir==='de'?'qde':'qde qes';
+  const ans=document.getElementById('qes');
+  ans.textContent = dir==='de'?es:de;
+  ans.hidden=true;
+  document.getElementById('rowReveal').hidden=false;
+  document.getElementById('rowJudge').hidden=true;
+  updStats();
+}
+function updStats(){
+  document.getElementById('stats').textContent=`${done.length} von ${QUIZ.length} sitzen · ${pool.length} offen`;
+}
+document.getElementById('reveal').onclick=()=>{
+  document.getElementById('qes').hidden=false;
+  document.getElementById('rowReveal').hidden=true;
+  document.getElementById('rowJudge').hidden=false;
+};
+document.getElementById('got').onclick=()=>{
+  pool=pool.filter(x=>x!==current);
+  if(!done.includes(current)) done.push(current);
+  save(); nextCard();
+};
+document.getElementById('again').onclick=()=>{
+  done=done.filter(x=>x!==current);
+  if(!pool.includes(current)) pool.push(current);
+  save(); nextCard();
+};
+updStats();
+
+/* ===================== Offline ===================== */
+if('serviceWorker' in navigator){
+  addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
+</script>
+</body>
+</html>
