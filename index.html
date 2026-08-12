@@ -108,24 +108,50 @@ ul.phr li:last-child{border-bottom:0}
 mark{background:var(--gold);color:var(--bg);border-radius:2px;padding:0 1px}
 
 /* ---------- Abfrage ---------- */
-#quiz{display:none}
+#quiz{display:none;padding-top:2px}
+.qtop{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.track{flex:1;height:5px;background:var(--rule);border-radius:3px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--teal);border-radius:3px;transition:width .35s ease}
+.qcount{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--soft);flex:none}
+
 .qcard{
-  background:var(--card);border:1px solid var(--rule);border-radius:14px;
-  padding:22px 18px;box-shadow:var(--shadow);text-align:center;margin-bottom:14px;
+  background:var(--card);border:1px solid var(--rule);border-radius:18px;
+  box-shadow:var(--shadow);padding:20px 18px 22px;margin-bottom:14px;
+  min-height:210px;display:flex;flex-direction:column;cursor:pointer;
+  transition:border-color .2s;
 }
-.qlabel{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--soft);margin-bottom:12px}
-.qde{font-size:21px;font-weight:600;line-height:1.35}
-.qes{font-size:20px;font-style:italic;font-weight:600;color:var(--teal);margin-top:18px;line-height:1.4}
-.qhint{font-size:13px;color:var(--soft);margin-top:12px}
+.qcard:active{border-color:var(--teal)}
+.qchip{
+  align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--teal);border:1px solid var(--teal);border-radius:20px;padding:4px 10px;margin-bottom:auto;
+}
+.qchip.rev{color:var(--gold);border-color:var(--gold)}
+.qprompt{font-size:22px;font-weight:600;line-height:1.35;padding:20px 0 6px}
+.qprompt.esdir{font-style:italic;color:var(--teal)}
+.qans{margin-top:auto;padding-top:16px;border-top:1px dashed var(--rule)}
+.qans[hidden]{display:none}
+.qans .txt{font-size:20px;font-weight:600;line-height:1.4;font-style:italic;color:var(--teal)}
+.qans.dedir .txt{font-style:normal;color:var(--ink)}
+.qtap{
+  margin-top:auto;padding-top:16px;border-top:1px dashed var(--rule);
+  font-size:12.5px;color:var(--soft);text-align:center;
+}
 .btnrow{display:flex;gap:9px}
 button.act{
-  flex:1;padding:14px;font-size:15px;font-weight:600;border-radius:11px;
+  flex:1;padding:15px 10px;font-size:15px;font-weight:600;border-radius:13px;
   border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:7px;
 }
 button.pri{background:var(--teal);border-color:var(--teal);color:var(--bg)}
-button.act:active{opacity:.7}
-.stats{text-align:center;font-size:12.5px;color:var(--soft);margin-top:14px}
-.stats a{color:var(--soft)}
+button.warn{color:var(--alert);border-color:var(--alert)}
+button.act:active{transform:scale(.98);opacity:.85}
+.qfoot{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:18px;font-size:12.5px;color:var(--soft);
+}
+.qfoot button{background:none;border:0;color:var(--soft);font-size:12.5px;text-decoration:underline;cursor:pointer;padding:4px 0}
+.qdone{text-align:center;padding:30px 16px;font-size:15px}
+.qdone b{display:block;font-size:19px;margin-bottom:8px}
 
 /* ---------- Tableiste ---------- */
 nav{
@@ -162,20 +188,30 @@ nav button[aria-selected=true]{color:var(--teal)}
 <main class="wrap">
   <div id="ref"></div>
   <div id="quiz">
-    <div class="qcard">
-      <div class="qlabel" id="qlabel">Übersetze</div>
-      <div class="qde" id="qde"></div>
-      <div class="qes" id="qes" hidden></div>
-      <div class="qhint" id="qhint" hidden></div>
+    <div class="qtop">
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <div class="qcount" id="qcount"></div>
     </div>
+
+    <div class="qcard" id="card">
+      <div class="qchip" id="qchip">Ins Spanische</div>
+      <div class="qprompt" id="qprompt"></div>
+      <div class="qtap" id="qtap">Tippen zum Aufdecken</div>
+      <div class="qans" id="qans" hidden><div class="txt" id="qanstxt"></div></div>
+    </div>
+
     <div class="btnrow" id="rowReveal">
       <button class="act pri" id="reveal">Lösung zeigen</button>
     </div>
     <div class="btnrow" id="rowJudge" hidden>
-      <button class="act" id="again">Nochmal üben</button>
+      <button class="act warn" id="again">Nochmal</button>
       <button class="act pri" id="got">Saß</button>
     </div>
-    <div class="stats" id="stats"></div>
+
+    <div class="qfoot">
+      <span id="stats"></span>
+      <button id="reset">Fortschritt zurücksetzen</button>
+    </div>
   </div>
 </main>
 
@@ -433,11 +469,16 @@ const GRAM=[
 ];
 
 const VOC=[
-{n:'19',t:'Bindewörter',h:`<p class="words"><b>y</b> <span>und</span> · <b>o</b> <span>oder</span> · <b>pero</b> <span>aber</span> · <b>porque</b> <span>weil</span> · <b>que</b> <span>dass</span> · <b>si</b> <span>wenn</span> · <b>también</b> <span>auch</span> · <b>tampoco</b> <span>auch nicht</span> · <b>entonces</b> <span>dann</span> · <b>pues</b> <span>also</span> · <b>aunque</b> <span>obwohl</span> · <b>además</b> <span>außerdem</span> · <b>por eso</b> <span>deshalb</span></p>`},
-{n:'20',t:'Menge & Grad',h:`<p class="words"><b>muy</b> <span>sehr</span> · <b>mucho</b> <span>viel</span> · <b>poco</b> <span>wenig</span> · <b>demasiado</b> <span>zu viel</span> · <b>bastante</b> <span>ziemlich</span> · <b>más / menos</b> · <b>todo</b> <span>alles</span> · <b>nada</b> <span>nichts</span> · <b>algo</b> <span>etwas</span> · <b>alguien</b> <span>jemand</span> · <b>nadie</b> <span>niemand</span> · <b>otro</b> <span>ein anderer</span> · <b>mismo</b> <span>derselbe</span> · <b>cada</b> <span>jeder</span> · <b>solo</b> <span>nur</span> · <b>casi</b> <span>fast</span></p>`},
-{n:'21',t:'Ort',h:`<p class="words"><b>aquí</b> <span>hier</span> · <b>allí, ahí</b> <span>dort</span> · <b>cerca / lejos</b> <span>nah / weit</span> · <b>arriba / abajo</b> <span>oben / unten</span> · <b>dentro / fuera</b> <span>drinnen / draußen</span> · <b>al lado de</b> <span>neben</span> · <b>enfrente de</b> <span>gegenüber</span> · <b>detrás de</b> <span>hinter</span> · <b>delante de</b> <span>vor</span> · <b>entre</b> <span>zwischen</span> · <b>a la derecha / izquierda</b> <span>rechts / links</span> · <b>derecho</b> <span>geradeaus</span></p>`},
-{n:'22',t:'Zeit',h:`<p class="words"><b>ahora</b> <span>jetzt</span> · <b>hoy</b> <span>heute</span> · <b>mañana</b> <span>morgen und Vormittag</span> · <b>ayer</b> <span>gestern</span> · <b>luego, después</b> <span>später</span> · <b>antes</b> <span>vorher</span> · <b>siempre / nunca</b> <span>immer / nie</span> · <b>a veces</b> <span>manchmal</span> · <b>ya</b> <span>schon</span> · <b>todavía</b> <span>noch</span> · <b>temprano / tarde</b> <span>früh / spät</span> · <b>pronto</b> <span>bald</span> · <b>hasta / desde</b> <span>bis / seit</span> · <b>la semana, el mes, el año</b></p>`},
-{n:'23',t:'Reagieren',h:`<p class="words"><b>claro</b> <span>klar</span> · <b>listo</b> <span>okay, fertig</span> · <b>de acuerdo</b> <span>einverstanden</span> · <b>por supuesto</b> <span>selbstverständlich</span> · <b>tal vez</b> <span>vielleicht</span> · <b>¿verdad?</b> <span>oder?</span> · <b>lo siento</b> <span>tut mir leid</span> · <b>no importa</b> <span>macht nichts</span> · <b>con permiso</b> <span>Entschuldigung, beim Vorbeigehen</span> · <b>¡qué bien!</b> · <b>¡qué lástima!</b> <span>wie schade</span></p>`},
+{n:'19',t:'Bindewörter',h:`<p class="words"><b>y</b> <span>und</span> · <b>o</b> <span>oder</span> · <b>pero</b> <span>aber</span> · <b>porque</b> <span>weil</span> · <b>que</b> <span>dass</span> · <b>si</b> <span>wenn, falls</span> · <b>también</b> <span>auch</span> · <b>tampoco</b> <span>auch nicht</span> · <b>entonces</b> <span>dann, also</span> · <b>pues</b> <span>nun, also</span> · <b>aunque</b> <span>obwohl</span> · <b>además</b> <span>außerdem</span> · <b>por eso</b> <span>deshalb</span> · <b>sin embargo</b> <span>jedoch</span> · <b>mientras</b> <span>während</span></p>`},
+
+{n:'20',t:'Menge & Grad',h:`<p class="words"><b>muy</b> <span>sehr</span> · <b>mucho</b> <span>viel</span> · <b>poco</b> <span>wenig</span> · <b>demasiado</b> <span>zu viel</span> · <b>bastante</b> <span>ziemlich</span> · <b>más</b> <span>mehr</span> · <b>menos</b> <span>weniger</span> · <b>todo</b> <span>alles</span> · <b>nada</b> <span>nichts</span> · <b>algo</b> <span>etwas</span> · <b>alguien</b> <span>jemand</span> · <b>nadie</b> <span>niemand</span> · <b>otro</b> <span>ein anderer</span> · <b>mismo</b> <span>derselbe</span> · <b>cada</b> <span>jeder</span> · <b>solo</b> <span>nur</span> · <b>casi</b> <span>fast</span> · <b>medio</b> <span>halb</span></p>`},
+
+{n:'21',t:'Ort',h:`<p class="words"><b>aquí</b> <span>hier</span> · <b>allí, ahí</b> <span>dort</span> · <b>cerca</b> <span>nah</span> · <b>lejos</b> <span>weit</span> · <b>arriba</b> <span>oben</span> · <b>abajo</b> <span>unten</span> · <b>dentro</b> <span>drinnen</span> · <b>fuera</b> <span>draußen</span> · <b>al lado de</b> <span>neben</span> · <b>enfrente de</b> <span>gegenüber</span> · <b>detrás de</b> <span>hinter</span> · <b>delante de</b> <span>vor</span> · <b>entre</b> <span>zwischen</span> · <b>a la derecha</b> <span>rechts</span> · <b>a la izquierda</b> <span>links</span> · <b>derecho</b> <span>geradeaus</span> · <b>al norte / sur / este / oeste</b> <span>nördlich / südlich / östlich / westlich</span></p>`},
+
+{n:'22',t:'Zeit',h:`<p class="words"><b>ahora</b> <span>jetzt</span> · <b>hoy</b> <span>heute</span> · <b>mañana</b> <span>morgen und Vormittag</span> · <b>ayer</b> <span>gestern</span> · <b>luego, después</b> <span>später, danach</span> · <b>antes</b> <span>vorher</span> · <b>siempre</b> <span>immer</span> · <b>nunca</b> <span>nie</span> · <b>a veces</b> <span>manchmal</span> · <b>ya</b> <span>schon</span> · <b>todavía</b> <span>noch</span> · <b>temprano</b> <span>früh</span> · <b>tarde</b> <span>spät</span> · <b>pronto</b> <span>bald</span> · <b>hasta</b> <span>bis</span> · <b>desde</b> <span>seit</span> · <b>el día</b> <span>Tag</span> · <b>la semana</b> <span>Woche</span> · <b>el mes</b> <span>Monat</span> · <b>el año</b> <span>Jahr</span> · <b>la hora</b> <span>Stunde, Uhrzeit</span></p>`},
+
+{n:'23',t:'Reagieren',h:`<p class="words"><b>claro</b> <span>klar</span> · <b>listo</b> <span>okay, fertig</span> · <b>de acuerdo</b> <span>einverstanden</span> · <b>por supuesto</b> <span>selbstverständlich</span> · <b>tal vez</b> <span>vielleicht</span> · <b>¿verdad?</b> <span>oder?, stimmt's?</span> · <b>lo siento</b> <span>tut mir leid</span> · <b>no importa</b> <span>macht nichts</span> · <b>con permiso</b> <span>Entschuldigung, beim Vorbeigehen</span> · <b>¡qué bien!</b> <span>wie schön!</span> · <b>¡qué lástima!</b> <span>wie schade!</span> · <b>¡salud!</b> <span>Prost! / Gesundheit!</span></p>`},
+
 {n:'24',t:'Die 40 Verben',h:`
 <table>
 <tr><td class="mono">ser / estar</td><td class="de">sein</td><td class="mono">poder</td><td class="de">können</td></tr>
@@ -462,80 +503,149 @@ const VOC=[
 <tr><td class="mono">empezar</td><td class="de">anfangen</td><td class="mono">terminar</td><td class="de">beenden</td></tr>
 <tr><td class="mono">quedarse</td><td class="de">bleiben</td><td class="mono">funcionar</td><td class="de">funktionieren</td></tr>
 </table>
-<div class="note"><span class="tag">Falle</span><i>saber</i> = Fakten wissen. <i>conocer</i> = Personen und Orte kennen. <span class="es">Sé dónde está, pero no conozco el lugar.</span></div>`},
+<div class="note"><span class="tag">Falle</span><i>saber</i> = Fakten wissen. <i>conocer</i> = Personen und Orte kennen. <span class="es">Sé dónde está, pero no conozco el lugar.</span> <span class="gloss">Ich weiß, wo es ist, aber ich kenne den Ort nicht.</span></div>`},
+
 {n:'25',t:'Zahlen',h:`
-<p class="words"><b>1–15 einzeln:</b> uno, dos, tres, cuatro, cinco, seis, siete, ocho, nueve, diez, once, doce, trece, catorce, quince</p>
-<p class="words"><b>ab 16 gebaut:</b> dieciséis, diecisiete … veinte, veintiuno … treinta y uno, cuarenta, cincuenta, sesenta, setenta, ochenta, noventa, cien, doscientos, <b>quinientos</b> <span>(unregelmäßig)</span>, mil</p>
+<p class="words"><b>1–15 einzeln:</b> uno <span>1</span> · dos <span>2</span> · tres <span>3</span> · cuatro <span>4</span> · cinco <span>5</span> · seis <span>6</span> · siete <span>7</span> · ocho <span>8</span> · nueve <span>9</span> · diez <span>10</span> · once <span>11</span> · doce <span>12</span> · trece <span>13</span> · catorce <span>14</span> · quince <span>15</span></p>
+<p class="words"><b>ab 16 gebaut:</b> dieciséis <span>16</span> · diecisiete <span>17</span> · veinte <span>20</span> · veintiuno <span>21</span> · treinta y uno <span>31</span> · cuarenta <span>40</span> · cincuenta <span>50</span> · sesenta <span>60</span> · setenta <span>70</span> · ochenta <span>80</span> · noventa <span>90</span> · cien <span>100</span> · doscientos <span>200</span> · <b>quinientos</b> <span>500, unregelmäßig</span> · mil <span>1000</span></p>
 <div class="note t"><span class="tag">Tico</span>Gezahlt wird in <b>colones</b>, meist in Tausendern: <i>cinco mil colones</i> ≈ 9 €. US-Dollar werden fast überall angenommen, das Wechselgeld kommt in Colones zurück.</div>`},
+
 {n:'26',t:'Restaurant',h:`
-<p class="words"><b>el desayuno / el almuerzo / la cena</b> <span>Frühstück, Mittag, Abend</span> · <b>la carta</b> <span>Speisekarte</span> · <b>el plato</b> <span>Gericht</span> · <b>la bebida</b> <span>Getränk</span> · <b>la propina</b> <span>Trinkgeld</span> · <b>el agua, el café, el jugo, la cerveza, el vino</b> · <b>el pollo</b> <span>Huhn</span> · <b>la carne</b> <span>Fleisch</span> · <b>el pescado</b> <span>Fisch</span> · <b>los camarones</b> <span>Garnelen</span> · <b>el arroz</b> <span>Reis</span> · <b>los frijoles</b> <span>Bohnen</span> · <b>la ensalada, las verduras, la fruta, el pan, el queso, los huevos</b> · <b>el postre</b> <span>Nachtisch</span> · <b>picante / dulce / salado</b> <span>scharf / süß / salzig</span> · <b>rico</b> <span>lecker</span></p>
+<p class="words"><b>el desayuno</b> <span>Frühstück</span> · <b>el almuerzo</b> <span>Mittagessen</span> · <b>la cena</b> <span>Abendessen</span> · <b>la carta</b> <span>Speisekarte</span> · <b>el plato</b> <span>Gericht, Teller</span> · <b>la bebida</b> <span>Getränk</span> · <b>la propina</b> <span>Trinkgeld</span> · <b>la cuenta</b> <span>Rechnung</span></p>
+<p class="words"><b>el agua</b> <span>Wasser</span> · <b>el café</b> <span>Kaffee</span> · <b>el jugo</b> <span>Saft</span> · <b>la cerveza</b> <span>Bier</span> · <b>el vino</b> <span>Wein</span> · <b>la leche</b> <span>Milch</span> · <b>sin gas / con gas</b> <span>still / mit Kohlensäure</span></p>
+<p class="words"><b>el pollo</b> <span>Huhn</span> · <b>la carne</b> <span>Fleisch</span> · <b>el pescado</b> <span>Fisch</span> · <b>los camarones</b> <span>Garnelen</span> · <b>el arroz</b> <span>Reis</span> · <b>los frijoles</b> <span>Bohnen</span> · <b>la ensalada</b> <span>Salat</span> · <b>las verduras</b> <span>Gemüse</span> · <b>la fruta</b> <span>Obst</span> · <b>el pan</b> <span>Brot</span> · <b>el queso</b> <span>Käse</span> · <b>los huevos</b> <span>Eier</span> · <b>el postre</b> <span>Nachtisch</span></p>
+<p class="words"><b>picante</b> <span>scharf</span> · <b>dulce</b> <span>süß</span> · <b>salado</b> <span>salzig</span> · <b>frío</b> <span>kalt</span> · <b>caliente</b> <span>heiß</span> · <b>rico</b> <span>lecker</span></p>
 <ul class="phr">
-<li><span class="es">Una mesa para dos, por favor.</span></li>
-<li><span class="es">¿Qué me recomienda?</span> <span class="gloss">Was empfehlen Sie?</span></li>
-<li><span class="es">Para mí, el pollo. Para ella, el pescado.</span></li>
-<li><span class="es">¿Tiene algo vegetariano?</span></li>
+<li><span class="es">Una mesa para dos, por favor.</span> <span class="gloss">Einen Tisch für zwei, bitte.</span></li>
+<li><span class="es">¿Qué me recomienda?</span> <span class="gloss">Was empfehlen Sie mir?</span></li>
+<li><span class="es">Para mí, el pollo. Para ella, el pescado.</span> <span class="gloss">Für mich das Huhn, für sie den Fisch.</span></li>
+<li><span class="es">¿Tiene algo vegetariano?</span> <span class="gloss">Haben Sie etwas Vegetarisches?</span></li>
 <li><span class="es">Soy alérgico a…</span> <span class="gloss">Ich bin allergisch gegen…</span></li>
-<li><span class="es">La cuenta, por favor.</span></li>
+<li><span class="es">La cuenta, por favor.</span> <span class="gloss">Die Rechnung, bitte.</span></li>
 </ul>
-<div class="note t"><span class="tag">Tico</span><b>casado</b> = Standard-Mittagsteller mit Reis, Bohnen, Salat, Fleisch, Kochbanane · <b>gallo pinto</b> = Frühstück aus Reis und Bohnen · <b>soda</b> = kleines günstiges Lokal, dort esst ihr am besten · <b>refresco natural</b> = frisch gemixter Saft, <i>con agua</i> oder <i>con leche</i>.</div>`},
+<div class="note t"><span class="tag">Tico</span><b>casado</b> <span class="gloss">Standard-Mittagsteller mit Reis, Bohnen, Salat, Fleisch, Kochbanane</span> · <b>gallo pinto</b> <span class="gloss">Frühstück aus Reis und Bohnen</span> · <b>soda</b> <span class="gloss">kleines günstiges Lokal, dort esst ihr am besten</span> · <b>refresco natural</b> <span class="gloss">frisch gemixter Saft, con agua oder con leche</span> · <b>olla de carne</b> <span class="gloss">Rindfleischeintopf mit Wurzelgemüse</span></div>`},
+
 {n:'27',t:'Unterkunft',h:`
-<p class="words"><b>la habitación, el cuarto</b> <span>Zimmer</span> · <b>la llave</b> <span>Schlüssel</span> · <b>la cama</b> <span>Bett</span> · <b>la toalla</b> <span>Handtuch</span> · <b>la ducha</b> <span>Dusche</span> · <b>el baño</b> <span>Bad, Toilette</span> · <b>el aire acondicionado</b> · <b>el ventilador</b> · <b>la reserva</b> <span>Buchung</span> · <b>la recepción</b> · <b>la piscina</b> · <b>la caja fuerte</b> <span>Safe</span> · <b>la contraseña</b> <span>Passwort</span></p>
+<p class="words"><b>la habitación, el cuarto</b> <span>Zimmer</span> · <b>la llave</b> <span>Schlüssel</span> · <b>la cama</b> <span>Bett</span> · <b>la toalla</b> <span>Handtuch</span> · <b>la ducha</b> <span>Dusche</span> · <b>el baño</b> <span>Bad, Toilette</span> · <b>el aire acondicionado</b> <span>Klimaanlage</span> · <b>el ventilador</b> <span>Ventilator</span> · <b>la reserva</b> <span>Buchung</span> · <b>la recepción</b> <span>Rezeption</span> · <b>la piscina</b> <span>Schwimmbad</span> · <b>la caja fuerte</b> <span>Safe</span> · <b>la contraseña</b> <span>Passwort</span> · <b>la sábana</b> <span>Bettlaken</span> · <b>el mosquitero</b> <span>Moskitonetz</span></p>
 <ul class="phr">
-<li><span class="es">Tenemos una reserva a nombre de…</span></li>
-<li><span class="es">¿A qué hora es el check-out?</span></li>
-<li><span class="es">No funciona el aire acondicionado.</span></li>
-<li><span class="es">¿Está incluido el desayuno?</span></li>
+<li><span class="es">Tenemos una reserva a nombre de…</span> <span class="gloss">Wir haben eine Buchung auf den Namen…</span></li>
+<li><span class="es">¿A qué hora es el check-out?</span> <span class="gloss">Um wie viel Uhr ist der Check-out?</span></li>
+<li><span class="es">No funciona el aire acondicionado.</span> <span class="gloss">Die Klimaanlage funktioniert nicht.</span></li>
+<li><span class="es">¿Está incluido el desayuno?</span> <span class="gloss">Ist das Frühstück inbegriffen?</span></li>
 </ul>`},
+
 {n:'28',t:'Unterwegs',h:`
-<p class="words"><b>el aeropuerto</b> <span>Flughafen</span> · <b>el vuelo</b> <span>Flug</span> · <b>la maleta</b> <span>Koffer</span> · <b>el equipaje</b> <span>Gepäck</span> · <b>el bus</b> · <b>la parada</b> <span>Haltestelle</span> · <b>el tiquete</b> <span>Ticket</span> · <b>el carro</b> <span>Auto</span> · <b>alquilar</b> <span>mieten</span> · <b>la gasolina</b> · <b>la carretera</b> <span>Landstraße</span> · <b>el camino</b> <span>Weg</span> · <b>el puente</b> <span>Brücke</span> · <b>la lluvia</b> <span>Regen</span> · <b>el barro</b> <span>Schlamm</span> · <b>la tarjeta</b> <span>Karte</span></p>
+<p class="words"><b>el aeropuerto</b> <span>Flughafen</span> · <b>el vuelo</b> <span>Flug</span> · <b>la maleta</b> <span>Koffer</span> · <b>el equipaje</b> <span>Gepäck</span> · <b>el bus</b> <span>Bus</span> · <b>la parada</b> <span>Haltestelle</span> · <b>el tiquete</b> <span>Ticket</span> · <b>el carro</b> <span>Auto</span> · <b>alquilar</b> <span>mieten</span> · <b>la gasolina</b> <span>Benzin</span> · <b>la carretera</b> <span>Landstraße</span> · <b>el camino</b> <span>Weg</span> · <b>el puente</b> <span>Brücke</span> · <b>la lluvia</b> <span>Regen</span> · <b>el barro</b> <span>Schlamm</span> · <b>la tarjeta</b> <span>Karte</span> · <b>el peaje</b> <span>Maut</span> · <b>la bomba</b> <span>Tankstelle, in Costa Rica</span></p>
 <ul class="phr">
-<li><span class="es">¿Dónde está la parada del bus?</span></li>
-<li><span class="es">¿Este bus va a Monteverde?</span></li>
+<li><span class="es">¿Dónde está la parada del bus?</span> <span class="gloss">Wo ist die Bushaltestelle?</span></li>
+<li><span class="es">¿Este bus va a Monteverde?</span> <span class="gloss">Fährt dieser Bus nach Monteverde?</span></li>
 <li><span class="es">¿Cuánto tiempo toma?</span> <span class="gloss">Wie lange dauert es?</span></li>
-<li><span class="es">¿Se puede pagar con tarjeta?</span></li>
+<li><span class="es">¿Se puede pagar con tarjeta?</span> <span class="gloss">Kann man mit Karte zahlen?</span></li>
 <li><span class="es">Estamos perdidos.</span> <span class="gloss">Wir haben uns verlaufen.</span></li>
 </ul>
-<div class="note t"><span class="tag">Tico</span>Adressen laufen ohne Straßennamen über Landmarken: <span class="es">200 metros al sur de la iglesia.</span> Eine <b>cuadra</b> ist ein Häuserblock und zählt als 100 Meter.</div>`},
+<div class="note t"><span class="tag">Tico</span>Adressen laufen ohne Straßennamen über Landmarken: <span class="es">200 metros al sur de la iglesia.</span> <span class="gloss">200 Meter südlich der Kirche.</span> Eine <b>cuadra</b> ist ein Häuserblock und zählt als 100 Meter.</div>`},
+
 {n:'29',t:'Natur & Ausflüge',h:`
-<p class="words"><b>la playa</b> <span>Strand</span> · <b>el mar, la ola, la arena</b> <span>Meer, Welle, Sand</span> · <b>el bosque</b> <span>Wald</span> · <b>la selva</b> <span>Dschungel</span> · <b>el volcán</b> · <b>la catarata</b> <span>Wasserfall</span> · <b>el río</b> · <b>el sendero</b> <span>Wanderweg</span> · <b>la caminata</b> <span>Wanderung</span> · <b>el parque nacional</b> · <b>la entrada</b> <span>Eintritt</span> · <b>el guía</b> <span>Führer</span> · <b>el horario</b> <span>Öffnungszeiten</span> · <b>el protector solar</b> <span>Sonnencreme</span> · <b>el repelente</b> <span>Mückenschutz</span></p>
-<p class="words"><b>el mono</b> <span>Affe</span> · <b>el perezoso</b> <span>Faultier</span> · <b>el tucán</b> · <b>la rana</b> <span>Frosch</span> · <b>la tortuga</b> <span>Schildkröte</span> · <b>el cocodrilo</b> · <b>la mariposa</b> <span>Schmetterling</span> · <b>el pájaro</b> <span>Vogel</span> · <b>el mosquito</b></p>
+<p class="words"><b>la playa</b> <span>Strand</span> · <b>el mar</b> <span>Meer</span> · <b>la ola</b> <span>Welle</span> · <b>la arena</b> <span>Sand</span> · <b>el bosque</b> <span>Wald</span> · <b>la selva</b> <span>Dschungel</span> · <b>el volcán</b> <span>Vulkan</span> · <b>la catarata</b> <span>Wasserfall</span> · <b>el río</b> <span>Fluss</span> · <b>el sendero</b> <span>Wanderweg</span> · <b>la caminata</b> <span>Wanderung</span> · <b>el parque nacional</b> <span>Nationalpark</span> · <b>la entrada</b> <span>Eintritt</span> · <b>el guía</b> <span>Führer</span> · <b>el horario</b> <span>Öffnungszeiten</span> · <b>el protector solar</b> <span>Sonnencreme</span> · <b>el repelente</b> <span>Mückenschutz</span> · <b>la marea</b> <span>Gezeiten</span></p>
+<p class="words"><b>el mono</b> <span>Affe</span> · <b>el perezoso</b> <span>Faultier</span> · <b>el tucán</b> <span>Tukan</span> · <b>la rana</b> <span>Frosch</span> · <b>la tortuga</b> <span>Schildkröte</span> · <b>el cocodrilo</b> <span>Krokodil</span> · <b>la mariposa</b> <span>Schmetterling</span> · <b>el pájaro</b> <span>Vogel</span> · <b>el mosquito</b> <span>Mücke</span> · <b>la serpiente</b> <span>Schlange</span> · <b>el colibrí</b> <span>Kolibri</span></p>
 <ul class="phr">
-<li><span class="es">¿A qué hora abre el parque?</span></li>
-<li><span class="es">¿Cuánto cuesta la entrada por persona?</span></li>
+<li><span class="es">¿A qué hora abre el parque?</span> <span class="gloss">Um wie viel Uhr öffnet der Park?</span></li>
+<li><span class="es">¿Cuánto cuesta la entrada por persona?</span> <span class="gloss">Was kostet der Eintritt pro Person?</span></li>
 <li><span class="es">¿Hace falta reservar?</span> <span class="gloss">Muss man reservieren?</span></li>
-<li><span class="es">¿Es seguro nadar aquí?</span></li>
+<li><span class="es">¿Es seguro nadar aquí?</span> <span class="gloss">Ist es sicher, hier zu schwimmen?</span></li>
 </ul>`},
+
 {n:'30',t:'Notfall',h:`
-<p class="words"><b>la farmacia</b> · <b>el médico</b> <span>Arzt</span> · <b>el hospital</b> · <b>la policía</b> · <b>la emergencia</b> · <b>la fiebre</b> <span>Fieber</span> · <b>la cabeza / el estómago / la garganta</b> <span>Kopf, Bauch, Hals</span></p>
+<p class="words"><b>la farmacia</b> <span>Apotheke</span> · <b>el médico</b> <span>Arzt</span> · <b>el hospital</b> <span>Krankenhaus</span> · <b>la policía</b> <span>Polizei</span> · <b>la emergencia</b> <span>Notfall</span> · <b>la fiebre</b> <span>Fieber</span> · <b>la cabeza</b> <span>Kopf</span> · <b>el estómago</b> <span>Magen, Bauch</span> · <b>la garganta</b> <span>Hals</span> · <b>la quemadura de sol</b> <span>Sonnenbrand</span> · <b>el seguro</b> <span>Versicherung</span></p>
 <ul class="phr">
-<li><span class="es">Necesito un médico.</span></li>
+<li><span class="es">Necesito un médico.</span> <span class="gloss">Ich brauche einen Arzt.</span></li>
 <li><span class="es">Me duele la cabeza.</span> <span class="gloss">Mir tut der Kopf weh.</span></li>
 <li><span class="es">Me siento mal.</span> <span class="gloss">Mir geht es schlecht.</span></li>
-<li><span class="es">¿Me puede ayudar?</span> · <span class="es">¡Cuidado!</span></li>
+<li><span class="es">¿Me puede ayudar?</span> <span class="gloss">Können Sie mir helfen?</span></li>
+<li><span class="es">¡Cuidado!</span> <span class="gloss">Vorsicht!</span></li>
 </ul>
 <p><b>Notruf Costa Rica: 911.</b></p>`},
+
 {n:'31',t:'Hochzeitsreise',h:`
-<p class="words"><b>mi esposo / mi esposa</b> · <b>la luna de miel</b> <span>Flitterwochen</span> · <b>la boda</b> <span>Hochzeit</span> · <b>recién casados</b> <span>frisch verheiratet</span></p>
+<p class="words"><b>mi esposo</b> <span>mein Mann</span> · <b>mi esposa</b> <span>meine Frau</span> · <b>la luna de miel</b> <span>Flitterwochen</span> · <b>la boda</b> <span>Hochzeit</span> · <b>recién casados</b> <span>frisch verheiratet</span> · <b>el anillo</b> <span>Ring</span> · <b>la pareja</b> <span>Paar, Partner</span></p>
 <ul class="phr">
-<li><span class="es">Estamos de luna de miel.</span></li>
-<li><span class="es">Nos casamos hace dos semanas.</span></li>
-<li><span class="es">¿Nos puede tomar una foto?</span></li>
-<li><span class="es">¡Felicidades!</span> <span class="gloss">— hört ihr dann ständig zurück</span></li>
+<li><span class="es">Estamos de luna de miel.</span> <span class="gloss">Wir sind auf Hochzeitsreise.</span></li>
+<li><span class="es">Nos casamos hace dos semanas.</span> <span class="gloss">Wir haben vor zwei Wochen geheiratet.</span></li>
+<li><span class="es">¿Nos puede tomar una foto?</span> <span class="gloss">Können Sie ein Foto von uns machen?</span></li>
+<li><span class="es">¡Felicidades!</span> <span class="gloss">Herzlichen Glückwunsch!</span></li>
 </ul>`},
-{n:'32',t:'Tico-Spanisch',h:`
+
+{n:'32',t:'Redewendungen',h:`
+<p>Feste Wendungen, die im Gespräch ständig fallen. Wörtlich übersetzen führt hier meist in die Irre.</p>
 <table>
-<tr><td class="mono">pura vida</td><td class="de">hallo, danke, bitte, alles gut</td></tr>
+<tr><td class="mono">¿Qué tal?</td><td class="de">Wie läuft's?</td></tr>
+<tr><td class="mono">¿Qué pasa?</td><td class="de">Was ist los?</td></tr>
+<tr><td class="mono">No pasa nada.</td><td class="de">Kein Problem, nicht schlimm</td></tr>
+<tr><td class="mono">Más o menos.</td><td class="de">So lala</td></tr>
+<tr><td class="mono">Poco a poco.</td><td class="de">Nach und nach</td></tr>
+<tr><td class="mono">Da igual.</td><td class="de">Ist egal</td></tr>
+<tr><td class="mono">Ni idea.</td><td class="de">Keine Ahnung</td></tr>
+<tr><td class="mono">Ya veo.</td><td class="de">Ach so, verstehe</td></tr>
+<tr><td class="mono">¿En serio?</td><td class="de">Im Ernst?</td></tr>
+<tr><td class="mono">¡No me diga!</td><td class="de">Was Sie nicht sagen!</td></tr>
+<tr><td class="mono">¡Qué va!</td><td class="de">Ach was!</td></tr>
+<tr><td class="mono">Por si acaso</td><td class="de">Für alle Fälle</td></tr>
+<tr><td class="mono">De todos modos</td><td class="de">Wie auch immer</td></tr>
+<tr><td class="mono">Vale la pena.</td><td class="de">Es lohnt sich</td></tr>
+<tr><td class="mono">¡Ojo!</td><td class="de">Achtung! Pass auf!</td></tr>
+<tr><td class="mono">¡Qué pena!</td><td class="de">Wie peinlich / wie schade</td></tr>
+</table>
+<p><b>Mit Verb gebaut</b> — die brauchst du aktiv:</p>
+<table>
+<tr><td class="mono">tener ganas de</td><td class="de">Lust haben auf</td></tr>
+<tr><td class="mono">hacer falta</td><td class="de">nötig sein, fehlen</td></tr>
+<tr><td class="mono">dar una vuelta</td><td class="de">eine Runde drehen</td></tr>
+<tr><td class="mono">echar de menos</td><td class="de">vermissen</td></tr>
+<tr><td class="mono">estar de acuerdo</td><td class="de">einverstanden sein</td></tr>
+<tr><td class="mono">tomar el sol</td><td class="de">sich sonnen</td></tr>
+<tr><td class="mono">darse cuenta de</td><td class="de">etwas merken</td></tr>
+<tr><td class="mono">tener que ver con</td><td class="de">zu tun haben mit</td></tr>
+</table>
+<p><b>Bildhaft</b> — zum Verstehen, nicht unbedingt zum Nachsprechen:</p>
+<table>
+<tr><td class="mono">costar un ojo de la cara</td><td class="de">ein Vermögen kosten</td></tr>
+<tr><td class="mono">meter la pata</td><td class="de">ins Fettnäpfchen treten</td></tr>
+<tr><td class="mono">tomar el pelo</td><td class="de">auf den Arm nehmen</td></tr>
+<tr><td class="mono">estar hecho polvo</td><td class="de">völlig erledigt sein</td></tr>
+<tr><td class="mono">no tener pelos en la lengua</td><td class="de">kein Blatt vor den Mund nehmen</td></tr>
+<tr><td class="mono">ser pan comido</td><td class="de">ein Kinderspiel sein</td></tr>
+</table>`},
+
+{n:'33',t:'Tico-Spanisch',h:`
+<table>
+<tr><td class="mono">pura vida</td><td class="de">hallo, danke, bitte, alles gut — geht immer</td></tr>
 <tr><td class="mono">con mucho gusto</td><td class="de">gern geschehen — nicht <i>de nada</i></td></tr>
-<tr><td class="mono">mae</td><td class="de">Alter, Kumpel</td></tr>
-<tr><td class="mono">tuanis</td><td class="de">cool, super</td></tr>
+<tr><td class="mono">¡diay!</td><td class="de">tja, na ja — Füllwort am Satzanfang</td></tr>
 <tr><td class="mono">¿cómo va?</td><td class="de">wie läuft's?</td></tr>
+<tr><td class="mono">tuanis</td><td class="de">cool, super</td></tr>
+<tr><td class="mono">¡qué chiva!</td><td class="de">wie geil!</td></tr>
+<tr><td class="mono">buena nota</td><td class="de">netter Kerl, sympathisch</td></tr>
+<tr><td class="mono">salado</td><td class="de">Pech gehabt</td></tr>
+<tr><td class="mono">pura paja</td><td class="de">Blödsinn, Gelaber</td></tr>
 <tr><td class="mono">¡upe!</td><td class="de">Ruf an der Haustür statt Klopfen</td></tr>
+<tr><td class="mono">tico / tica</td><td class="de">Costa-Ricaner / -in</td></tr>
+</table>
+<p><b>Dinge und Orte</b></p>
+<table>
 <tr><td class="mono">la vara</td><td class="de">die Sache, das Ding</td></tr>
 <tr><td class="mono">chunche</td><td class="de">Dingsbums</td></tr>
 <tr><td class="mono">soda</td><td class="de">kleines Speiselokal</td></tr>
+<tr><td class="mono">pulpería</td><td class="de">Tante-Emma-Laden</td></tr>
+<tr><td class="mono">bomba</td><td class="de">Tankstelle</td></tr>
+<tr><td class="mono">Chepe</td><td class="de">Spitzname für San José</td></tr>
+<tr><td class="mono">brete</td><td class="de">Arbeit, Job</td></tr>
+<tr><td class="mono">harina, plata</td><td class="de">Geld</td></tr>
+<tr><td class="mono">rojo / tucán</td><td class="de">1000er- / 5000er-Schein</td></tr>
+<tr><td class="mono">birra</td><td class="de">Bier</td></tr>
 <tr><td class="mono">estar de goma</td><td class="de">verkatert sein</td></tr>
 </table>
-<div class="note t"><span class="tag">Tico</span>Ticos duzen mit <b>vos</b>, nicht mit <i>tú</i> — endbetont: <i>vos hablás, comés, vivís</i>, und <i>vos sos</i>. Aktiv brauchst du das nicht, <b>usted</b> ist immer höflich und richtig. Wundere dich nur nicht über <span class="es">¿De dónde sos?</span></div>`}
+<div class="note t"><span class="tag">Tico</span>Ticos duzen mit <b>vos</b>, nicht mit <i>tú</i> — endbetont: <i>vos hablás, comés, vivís</i>, und <i>vos sos</i>. Aktiv brauchst du das nicht, <b>usted</b> ist immer höflich und richtig. Wundere dich nur nicht über <span class="es">¿De dónde sos?</span> <span class="gloss">Woher kommst du?</span></div>
+<div class="note"><span class="tag">Falle</span><b>mae</b> heißt „Alter, Kumpel" und fällt unter Jüngeren in jedem zweiten Satz. Als Gast klingt es aufgesetzt — verstehen ja, selbst benutzen erst, wenn ihr jemanden gut kennt. Dasselbe gilt für den Rest des Slangs: <i>pura vida</i> und <i>con mucho gusto</i> kannst du bedenkenlos sagen, alles andere hörst du erstmal nur.</div>`}
 ];
 
 /* ===================== Abfragesätze ===================== */
@@ -609,6 +719,32 @@ const QUIZ=[
 ["Das ist das beste Restaurant der Stadt.","Este es el mejor restaurante de la ciudad."],
 ["Der Kaffee ist kalt.","El café está frío."],
 ["Wir sind müde, aber glücklich.","Estamos cansados, pero felices."]
+,
+["Wie läuft's?","¿Qué tal?"],
+["Kein Problem, nicht schlimm.","No pasa nada."],
+["So lala.","Más o menos."],
+["Nach und nach.","Poco a poco."],
+["Keine Ahnung.","Ni idea."],
+["Im Ernst?","¿En serio?"],
+["Für alle Fälle nehme ich eine Jacke mit.","Por si acaso llevo una chaqueta."],
+["Es lohnt sich.","Vale la pena."],
+["Ich habe Lust auf einen Kaffee.","Tengo ganas de un café."],
+["Ich vermisse meine Familie.","Echo de menos a mi familia."],
+["Wollen wir eine Runde drehen?","¿Damos una vuelta?"],
+["Wir sind einverstanden.","Estamos de acuerdo."],
+["Das kostet ein Vermögen.","Eso cuesta un ojo de la cara."],
+["Ich bin völlig erledigt.","Estoy hecho polvo."],
+["Danke — Antwort auf Costa-Ricanisch.","Con mucho gusto."],
+["Wo ist die nächste Tankstelle?","¿Dónde está la bomba más cercana?"],
+["Ich möchte mich sonnen.","Quiero tomar el sol."],
+["Vorsicht, pass auf!","¡Ojo!"],
+["Ach so, verstehe.","Ya veo."],
+["Wie schade!","¡Qué lástima!"],
+["Prost!","¡Salud!"],
+["Gibt es hier einen kleinen Laden?","¿Hay una pulpería aquí?"],
+["Wie viel Uhr ist es?","¿Qué hora es?"],
+["Können Sie das aufschreiben?","¿Me lo puede escribir?"],
+["Ich lerne noch Spanisch.","Todavía estoy aprendiendo español."]
 ];
 
 /* ===================== Aufbau ===================== */
@@ -676,44 +812,70 @@ applyFilter();
 let current=null, dir='de';
 const load=k=>{try{return JSON.parse(store.get(k)||'null')}catch(e){return null}};
 let pool=load('pool');
-if(!Array.isArray(pool)||pool.length!==QUIZ.length) pool=QUIZ.map((_,i)=>i);
+if(!Array.isArray(pool)||pool.length>QUIZ.length) pool=null;
+if(!pool) pool=QUIZ.map((_,i)=>i);
 let done=load('done')||[];
+// Nach Erweiterung der Satzliste: neue Sätze nachtragen
+QUIZ.forEach((_,i)=>{ if(!pool.includes(i)&&!done.includes(i)) pool.push(i); });
 
+const $=id=>document.getElementById(id);
 function save(){store.set('pool',JSON.stringify(pool));store.set('done',JSON.stringify(done))}
 
 function nextCard(){
-  if(!pool.length){pool=done.slice();done=[]}
+  if(!pool.length){pool=done.slice();done=[];save()}
   const i=pool[Math.floor(Math.random()*pool.length)];
   current=i;
   dir=Math.random()<0.75?'de':'es';
   const [de,es]=QUIZ[i];
-  document.getElementById('qlabel').textContent = dir==='de'?'Ins Spanische':'Ins Deutsche';
-  document.getElementById('qde').textContent = dir==='de'?de:es;
-  document.getElementById('qde').className = dir==='de'?'qde':'qde qes';
-  const ans=document.getElementById('qes');
-  ans.textContent = dir==='de'?es:de;
-  ans.hidden=true;
-  document.getElementById('rowReveal').hidden=false;
-  document.getElementById('rowJudge').hidden=true;
+
+  const chip=$('qchip');
+  chip.textContent = dir==='de'?'Ins Spanische':'Ins Deutsche';
+  chip.className = dir==='de'?'qchip':'qchip rev';
+
+  const p=$('qprompt');
+  p.textContent = dir==='de'?de:es;
+  p.className = dir==='de'?'qprompt':'qprompt esdir';
+
+  const ansBox=$('qans');
+  ansBox.className = dir==='de'?'qans':'qans dedir';
+  $('qanstxt').textContent = dir==='de'?es:de;
+
+  ansBox.hidden=true;
+  $('qtap').hidden=false;
+  $('rowReveal').hidden=false;
+  $('rowJudge').hidden=true;
   updStats();
 }
+
 function updStats(){
-  document.getElementById('stats').textContent=`${done.length} von ${QUIZ.length} sitzen · ${pool.length} offen`;
+  const n=done.length, total=QUIZ.length;
+  $('fill').style.width = Math.round(n/total*100)+'%';
+  $('qcount').textContent = n+' / '+total;
+  $('stats').textContent = pool.length+' offen';
 }
-document.getElementById('reveal').onclick=()=>{
-  document.getElementById('qes').hidden=false;
-  document.getElementById('rowReveal').hidden=true;
-  document.getElementById('rowJudge').hidden=false;
-};
-document.getElementById('got').onclick=()=>{
+
+function reveal(){
+  if(!$('qans').hidden) return;
+  $('qans').hidden=false;
+  $('qtap').hidden=true;
+  $('rowReveal').hidden=true;
+  $('rowJudge').hidden=false;
+}
+$('card').onclick=reveal;
+$('reveal').onclick=e=>{e.stopPropagation();reveal()};
+
+$('got').onclick=()=>{
   pool=pool.filter(x=>x!==current);
   if(!done.includes(current)) done.push(current);
   save(); nextCard();
 };
-document.getElementById('again').onclick=()=>{
+$('again').onclick=()=>{
   done=done.filter(x=>x!==current);
   if(!pool.includes(current)) pool.push(current);
   save(); nextCard();
+};
+$('reset').onclick=()=>{
+  pool=QUIZ.map((_,i)=>i); done=[]; save(); nextCard();
 };
 updStats();
 
