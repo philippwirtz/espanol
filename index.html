@@ -113,7 +113,7 @@ mark{background:var(--gold);color:var(--bg);border-radius:2px;padding:0 1px}
 
 /* Themenwahl */
 .seg{display:inline-flex;border:1px solid var(--rule);border-radius:9px;overflow:hidden;background:var(--card)}
-.seg button{border:0;background:none;color:var(--soft);font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:8px 11px;cursor:pointer}
+.seg button{white-space:nowrap;border:0;background:none;color:var(--soft);font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:8px 11px;cursor:pointer}
 .seg button[aria-pressed=true]{background:var(--teal);color:var(--bg)}
 .seglabel{font-size:11px;color:var(--soft);margin-right:6px}
 .deck{
@@ -446,6 +446,14 @@ nav button[aria-selected=true]{color:var(--teal)}
           <div class="seg" id="seg"><button data-n="5">5</button><button data-n="10">10</button><button data-n="20">20</button></div></div>
         <div class="setrow"><span class="seglabel">Neue Karten pro Tag</span>
           <div class="seg" id="segnew"><button data-n="10">10</button><button data-n="20">20</button><button data-n="40">40</button></div></div>
+        <div class="setrow"><span class="seglabel">Abfragerichtung</span>
+          <div class="seg" id="segdir"><button data-d="auto">Auto</button><button data-d="es">→ ES</button><button data-d="de">→ DE</button><button data-d="mix">Mix</button></div></div>
+        <p class="shint" id="dirHint"></p>
+        <div class="store" id="ttsBox" style="margin-top:4px">
+          <div class="strow"><span>Sprachausgabe</span><span id="ttsStat">–</span></div>
+          <button class="act" id="ttsTest" style="width:100%">Aussprache testen</button>
+          <p class="shint">Kein Ton? 1. Stummschalter an der Seite des iPhones — die Sprachausgabe folgt ihm. 2. Lautstärke hoch. 3. Unter Einstellungen → Bedienungshilfen → Gesprochene Inhalte → Stimmen → Spanisch eine Stimme laden.</p>
+        </div>
         <label class="toggle" id="autoRow">Spanisch automatisch vorlesen <input type="checkbox" id="autoSpeak" switch></label>
         <div class="store">
           <h4>Speichern</h4>
@@ -2076,22 +2084,60 @@ build(VERBS,'verb',false);
 
 /* ===================== Aussprache ===================== */
 const TTS=('speechSynthesis' in window)&&('SpeechSynthesisUtterance' in window);
-let esVoice=null;
+let esVoice=null, esVoices=[], utt=null, ttsUnlocked=false, ttsLast=null, ttsCancelAt=0, ttsTimer=null;
 function pickVoice(){
   if(!TTS) return;
-  const v=speechSynthesis.getVoices().filter(x=>/^es/i.test(x.lang));
+  esVoices=speechSynthesis.getVoices().filter(x=>/^es/i.test(x.lang));
   const pref=['es-CR','es-MX','es-419','es-US','es-CO','es-ES'];
-  esVoice=pref.map(l=>v.find(x=>x.lang.replace('_','-')===l)).find(Boolean)||v[0]||null;
+  esVoice=pref.map(l=>esVoices.find(x=>x.lang.replace('_','-')===l)).find(Boolean)||esVoices[0]||null;
 }
-if(TTS){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; document.body.classList.add('tts'); }
+if(TTS){
+  pickVoice();
+  if(speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged',pickVoice);
+  else speechSynthesis.onvoiceschanged=pickVoice;
+  setTimeout(pickVoice,1000); setTimeout(pickVoice,3000);     // iOS meldet Stimmen oft verspätet und ohne Ereignis
+  document.body.classList.add('tts');
+}
+/* iOS gibt die Sprachausgabe erst nach einer Berührung frei: einmal lautlos „sprechen" */
+function unlockTTS(){
+  if(!TTS||ttsUnlocked) return; ttsUnlocked=true;
+  try{ const u=new SpeechSynthesisUtterance(' '); u.volume=0; u.lang='es-MX'; speechSynthesis.speak(u); }catch(e){}
+}
+document.addEventListener('touchend',unlockTTS,{passive:true});
+document.addEventListener('click',unlockTTS);
 function speak(text,el){
   if(!TTS||!text) return;
+  if(!esVoice) pickVoice();
   const t=text.replace(/\s*[\/·]\s*/g,', ').replace(/\s+/g,' ').trim();   // „a / b" → „a, b": kurze Sprechpause
-  speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(t);
-  u.lang=esVoice?esVoice.lang:'es-MX'; if(esVoice) u.voice=esVoice; u.rate=.9;
-  if(el){ el.classList.add('speaking'); u.onend=u.onerror=()=>el.classList.remove('speaking'); }
-  speechSynthesis.speak(u);
+  const go=()=>{
+    const u=new SpeechSynthesisUtterance(t);
+    utt=u;                                                   // Referenz halten: Safari verwirft sonst mitten im Satz
+    u.lang=esVoice?esVoice.lang:'es-MX'; if(esVoice) u.voice=esVoice;
+    u.rate=.9; u.volume=1; u.pitch=1;
+    let started=false;
+    const done=()=>{ if(el) el.classList.remove('speaking'); if(utt===u) utt=null; };
+    u.onstart=()=>{ started=true; ttsLast={ok:true,msg:esVoice?esVoice.name+' ('+esVoice.lang+')':'Standardstimme (es-MX)'}; };
+    u.onend=done;
+    u.onerror=e=>{ ttsLast={ok:false,msg:'Fehler: '+(e&&e.error||'unbekannt')}; done(); };
+    if(el) el.classList.add('speaking');
+    speechSynthesis.speak(u);
+    setTimeout(()=>{ if(!started && utt===u){ ttsLast={ok:false,msg:'iOS hat die Wiedergabe nicht gestartet'}; done(); } },3000);
+  };
+  if(speechSynthesis.paused) speechSynthesis.resume();
+  // Safari verschluckt speak() kurz nach cancel(): nur abbrechen, wenn nötig, und mindestens 80 ms Abstand halten.
+  // Ein noch wartender Aufruf wird ersetzt — der zuletzt angetippte Text gewinnt.
+  clearTimeout(ttsTimer);
+  if(speechSynthesis.speaking||speechSynthesis.pending){ speechSynthesis.cancel(); ttsCancelAt=Date.now(); }
+  const gap=80-(Date.now()-ttsCancelAt);
+  if(gap>0) ttsTimer=setTimeout(go,gap); else go();
+}
+function ttsInfo(){
+  const el=$('ttsStat'); if(!el) return;
+  if(!TTS){ el.textContent='vom Browser nicht unterstützt'; el.className='warn'; return; }
+  pickVoice();
+  if(ttsLast){ el.textContent=(ttsLast.ok?'läuft · ':'')+ttsLast.msg; el.className=ttsLast.ok?'ok':'warn'; return; }
+  el.textContent=esVoices.length ? esVoices.length+' span. Stimme'+(esVoices.length>1?'n':'')+' · '+esVoice.name : 'Stimmenliste noch leer';
+  el.className=esVoices.length?'':'warn';
 }
 // Antippen im Nachschlageteil
 ref.querySelectorAll('.vt td.mono, table td.mono').forEach(td=>{
@@ -2188,7 +2234,23 @@ if(!SRS){                                // Übernahme des alten Fortschritts
 }
 if(!SRS.hist) SRS.hist={};
 const saveQ=()=>store.set('q.srs',JSON.stringify(SRS));
-let deckKind=loadJ('q.kind','s'), autoSpeak=loadJ('q.auto',false);
+let deckKind=loadJ('q.kind','s'), autoSpeak=loadJ('q.auto',false), dirMode=loadJ('q.dir','auto');
+const DIR_HINT={
+  auto:'Neue Karten: erst Spanisch → Deutsch. Ab Stufe 1 auch ins Spanische, ab Stufe 2 fast nur noch ins Spanische.',
+  es:'Immer Deutsch → Spanisch: selbst formulieren. Am anspruchsvollsten.',
+  de:'Immer Spanisch → Deutsch: verstehen. Gut zum Einstieg in ein neues Kapitel.',
+  mix:'Jede Karte zufällig in eine der beiden Richtungen.'};
+function hashStr(t){ let h=2166136261; for(let i=0;i<t.length;i++){ h^=t.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+function chooseDir(c,x){                   // true = Deutsch → Spanisch
+  const r=hashStr(c.key+'|'+today());      // pro Karte und Tag fest, damit Wiederholungen stabil bleiben
+  if(dirMode==='es') return true;
+  if(dirMode==='de') return false;
+  if(dirMode==='mix') return r%2===0;
+  if(x.b===0) return false;                // neu: erst verstehen
+  if(x.b===1) return r%2===0;              // Lernphase: beide Richtungen
+  if(x.b<=3) return true;                  // Stufe 2–3: selbst bilden
+  return r%4!==0;                          // ab Stufe 4: meist bilden, gelegentlich zurück
+}
 let level=loadJ('q.level','basis');
 function streak(){
   let t=today(), n=0;
@@ -2423,10 +2485,19 @@ function renderPick(){
   document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===roundSize));
   document.querySelectorAll('#segnew button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===newPerDay));
   $('autoSpeak').checked=autoSpeak; $('autoRow').hidden=!TTS;
+  document.querySelectorAll('#segdir button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===dirMode));
+  $('dirHint').textContent=DIR_HINT[dirMode]||'';
   if(typeof bkStatus==='function') bkStatus();
   renderWho();
 }
-document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); } });
+document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); } });
+document.querySelectorAll('#segdir button').forEach(b=>b.onclick=()=>{
+  dirMode=b.dataset.d; store.set('q.dir',JSON.stringify(dirMode)); renderPick(); });
+$('ttsTest').onclick=()=>{
+  ttsLast=null; $('ttsStat').textContent='spreche …'; $('ttsStat').className='';
+  speak('Hola, ¿cómo está? Pura vida.');
+  setTimeout(()=>{ if(!ttsLast) ttsLast={ok:true,msg:esVoice?esVoice.name+' ('+esVoice.lang+')':'Standardstimme'}; ttsInfo(); },3200);
+};
 $('autoSpeak').onchange=e=>{autoSpeak=e.target.checked;store.set('q.auto',JSON.stringify(autoSpeak))};
 document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{roundSize=+b.dataset.n;store.set('q.size',JSON.stringify(roundSize));renderPick()});
 document.querySelectorAll('#segnew button').forEach(b=>b.onclick=()=>{newPerDay=+b.dataset.n;store.set('q.newcap',JSON.stringify(newPerDay));renderPick()});
@@ -2457,7 +2528,7 @@ function showEmpty(name,cards){
 function nextCard(){
   if(!R.queue.length) return finish();
   const c=R.queue[0], x=st(c.key);
-  const toEs = c.redo ? c.toEs : x.b>=2; // Wiederholung in derselben Richtung wie der Fehlversuch
+  const toEs = c.redo ? c.toEs : chooseDir(c,x); // Wiederholung in derselben Richtung wie der Fehlversuch
   R.toEs=toEs;
   const [de,es]=c.it;
   $('qchip').textContent=toEs?'Ins Spanische':'Ins Deutsche';
@@ -2750,7 +2821,7 @@ addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
 if(SYNC&&SYNC.gist) setTimeout(syncNow,800);
 
 /* --- Lernstand sichern / wiederherstellen --- */
-const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level'];
+const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir'];
 function bkStatus(){
   const last=loadJ('q.backup',null), started=Object.keys(SRS.c).length;
   const days=last===null?null:today()-last;
@@ -2800,7 +2871,7 @@ $('bkFile').onchange=async e=>{
     SRS=srs; if(!SRS.hist) SRS.hist={};
     SRS.gen=gen;                                             // neue Generation: gilt auf allen Geräten
     saveQ(); scheduleSync(true);
-    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',20); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis');
+    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',20); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto');
     renderPick(); bkStatus(); bkMsg('Lernstand vom '+when+' geladen ('+n+' Karten).');
   }catch(err){ bkMsg('Datei konnte nicht gelesen werden: '+err.message,true); }
 };
