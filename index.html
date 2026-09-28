@@ -109,49 +109,264 @@ mark{background:var(--gold);color:var(--bg);border-radius:2px;padding:0 1px}
 
 /* ---------- Abfrage ---------- */
 #quiz{display:none;padding-top:2px}
-.qtop{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-.track{flex:1;height:5px;background:var(--rule);border-radius:3px;overflow:hidden}
-.fill{height:100%;width:0;background:var(--teal);border-radius:3px;transition:width .35s ease}
-.qcount{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--soft);flex:none}
+.screen[hidden]{display:none}
 
+/* Themenwahl */
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:9px;overflow:hidden;background:var(--card)}
+.seg button{border:0;background:none;color:var(--soft);font:600 13px/1 ui-monospace,SFMono-Regular,Menlo,monospace;padding:8px 11px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--teal);color:var(--bg)}
+.seglabel{font-size:11px;color:var(--soft);margin-right:6px}
+.deck{
+  width:100%;text-align:left;cursor:pointer;display:block;
+  background:var(--card);border:1px solid var(--rule);border-radius:12px;
+  padding:11px 13px 10px;margin-bottom:7px;color:var(--ink);box-shadow:var(--shadow);font:inherit;
+}
+.deck:active{transform:scale(.99)}
+.drow{display:flex;align-items:baseline;gap:8px}
+.dname{font-weight:600;font-size:15px;flex:1}
+.deck.hi{border-color:var(--gold)}
+.deck[disabled]{opacity:.45;cursor:default}
+.dmeta{font-size:12px;color:var(--soft);margin-top:3px}
+
+/* Runde */
+.playtop{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.back{background:none;border:0;color:var(--teal);font-size:15px;font-weight:600;padding:6px 2px;cursor:pointer;flex:none}
+.pdeck{flex:1;font-size:13px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-align:right}
+.qtop{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.track{flex:1;height:5px;background:var(--rule);border-radius:3px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--teal);border-radius:3px;transition:width .3s ease}
+.qcount{font:600 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--soft);flex:none}
 .qcard{
   background:var(--card);border:1px solid var(--rule);border-radius:18px;
   box-shadow:var(--shadow);padding:20px 18px 22px;margin-bottom:14px;
-  min-height:210px;display:flex;flex-direction:column;cursor:pointer;
-  transition:border-color .2s;
+  min-height:220px;display:flex;flex-direction:column;cursor:pointer;
 }
 .qcard:active{border-color:var(--teal)}
-.qchip{
-  align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
-  color:var(--teal);border:1px solid var(--teal);border-radius:20px;padding:4px 10px;margin-bottom:auto;
-}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.qchip{font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;
+  color:var(--teal);border:1px solid var(--teal);border-radius:20px;padding:4px 10px}
 .qchip.rev{color:var(--gold);border-color:var(--gold)}
-.qprompt{font-size:22px;font-weight:600;line-height:1.35;padding:20px 0 6px}
+.qchip.redo{color:var(--alert);border-color:var(--alert)}
+.qprompt{font-size:22px;font-weight:600;line-height:1.35;padding:22px 0 8px}
 .qprompt.esdir{font-style:italic;color:var(--teal)}
 .qans{margin-top:auto;padding-top:16px;border-top:1px dashed var(--rule)}
 .qans[hidden]{display:none}
 .qans .txt{font-size:20px;font-weight:600;line-height:1.4;font-style:italic;color:var(--teal)}
 .qans.dedir .txt{font-style:normal;color:var(--ink)}
-.qtap{
-  margin-top:auto;padding-top:16px;border-top:1px dashed var(--rule);
-  font-size:12.5px;color:var(--soft);text-align:center;
-}
+.qtap{margin-top:auto;padding-top:16px;border-top:1px dashed var(--rule);font-size:12.5px;color:var(--soft);text-align:center}
+.qtap[hidden]{display:none}
 .btnrow{display:flex;gap:9px}
-button.act{
-  flex:1;padding:15px 10px;font-size:15px;font-weight:600;border-radius:13px;
-  border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:7px;
-}
+.btnrow[hidden]{display:none}
+button.act{flex:1;padding:15px 10px;font-size:15px;font-weight:600;border-radius:13px;
+  border:1px solid var(--rule);background:var(--card);color:var(--ink);cursor:pointer}
 button.pri{background:var(--teal);border-color:var(--teal);color:var(--bg)}
 button.warn{color:var(--alert);border-color:var(--alert)}
 button.act:active{transform:scale(.98);opacity:.85}
-.qfoot{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-top:18px;font-size:12.5px;color:var(--soft);
+
+/* Rundenende */
+.sumcard{background:var(--card);border:1px solid var(--rule);border-radius:18px;box-shadow:var(--shadow);
+  padding:24px 18px;text-align:center;margin-bottom:14px}
+.sumbig{font:700 44px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--teal)}
+.sumbig span{font-size:22px;color:var(--soft)}
+.sumtxt{font-size:14px;color:var(--soft);margin-top:8px}
+.sumlist{list-style:none;margin:14px 0 0;padding:0;text-align:left}
+.sumlist li{padding:7px 0;border-top:1px solid var(--rule);font-size:14px}
+.sumlist .es{color:var(--alert)}
+.stack{display:flex;flex-direction:column;gap:9px}
+
+/* --- Wiederholungssystem --- */
+.today{display:block;width:100%;text-align:left;cursor:pointer;border:0;border-radius:14px;
+  background:var(--teal);color:var(--bg);padding:15px 16px;margin:0 0 12px;font:inherit}
+.today:active{opacity:.9}
+.today b{display:block;font-size:17px}
+.today span{font-size:13px;opacity:.85}
+.today[disabled]{background:var(--card);color:var(--soft);border:1px solid var(--rule);cursor:default}
+.setrow{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 6px;flex-wrap:wrap}
+.sbar{display:flex;height:5px;border-radius:3px;overflow:hidden;background:var(--rule)}
+.sbar i{display:block;height:100%}
+.sbar .s0{background:var(--rule)} .sbar .s1{background:var(--gold)} .sbar .s2{background:var(--teal)} .sbar .s3{background:var(--tico)}
+.legend2{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;font-size:11.5px;color:var(--soft)}
+.legend2 i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.duebadge{font:600 11.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--bg);background:var(--teal);border-radius:10px;padding:4px 7px}
+.duebadge.none{background:none;color:var(--soft);padding:4px 0}
+.deck .sbar{margin-top:8px;height:3px}
+button.mid{color:var(--gold);border-color:var(--gold)}
+.stagechip{color:var(--soft);border-color:var(--rule)}
+.qchip.leech{color:var(--alert);border-color:var(--alert)}
+.emptybox{background:var(--card);border:1px solid var(--rule);border-radius:18px;padding:24px 18px;text-align:center;margin-bottom:14px}
+.emptybox b{display:block;font-size:18px;margin-bottom:6px}
+.emptybox p{font-size:14px;color:var(--soft);margin:0}
+.sumstats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px;text-align:left}
+.sumstats div{background:var(--bg);border-radius:10px;padding:9px 11px;font-size:12px;color:var(--soft)}
+.sumstats b{display:block;font:700 18px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink)}
+
+/* ---------- UI-Überarbeitung ---------- */
+/* Sprungmarken */
+.jump{display:flex;gap:6px;overflow-x:auto;padding:0 0 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.jump::-webkit-scrollbar{display:none}
+.jump button{flex:none;border:1px solid var(--rule);background:var(--card);color:var(--ink);
+  font-size:12.5px;font-weight:600;border-radius:16px;padding:6px 11px;cursor:pointer;white-space:nowrap}
+.jump button:active{background:var(--teal);color:var(--bg)}
+.jump[hidden]{display:none}
+/* Antippen zum Anhören */
+body.tts #ref .es, body.tts #ref .words b, body.tts #ref td.mono.say{cursor:pointer;text-decoration:underline dotted var(--rule);text-underline-offset:3px}
+.speaking{background:color-mix(in srgb,var(--gold) 28%,transparent);border-radius:3px;transition:background .2s}
+.ttshint{font-size:12px;color:var(--soft);margin:0 0 10px}
+.ttshint[hidden]{display:none}
+/* Startseite der Abfrage */
+.hero{background:var(--card);border:1px solid var(--rule);border-radius:16px;padding:14px 14px 12px;margin:0 0 14px;box-shadow:var(--shadow)}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}
+.kpi b{display:block;font:700 24px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink)}
+.kpi span{font-size:11.5px;color:var(--soft)}
+.kpi.due b{color:var(--teal)} .kpi.streak b{color:var(--gold)}
+.hero .today{margin:0 0 12px;text-align:center}
+.hero .today b{font-size:16px}
+.week{display:flex;gap:4px;align-items:flex-end;height:30px;margin:10px 0 2px}
+.week div{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;height:100%;justify-content:flex-end}
+.week i{display:block;width:100%;border-radius:3px 3px 1px 1px;background:var(--teal);min-height:3px;opacity:.9}
+.week i.zero{background:var(--rule)}
+.week span{font-size:9.5px;color:var(--soft);line-height:1}
+.week div.now span{color:var(--ink);font-weight:700}
+details.settings{background:none;border:0;box-shadow:none;margin:0 0 10px}
+details.settings summary{padding:6px 2px;font-size:13px;font-weight:600;color:var(--soft)}
+details.settings summary::after{font-size:16px}
+details.settings .setrow{padding:4px 2px}
+.toggle{display:flex;align-items:center;justify-content:space-between;padding:6px 2px;font-size:13px;color:var(--soft)}
+.toggle input{width:42px;height:24px;accent-color:var(--teal)}
+.kindseg{display:flex;background:var(--card);border:1px solid var(--rule);border-radius:11px;padding:3px;margin:14px 0 10px}
+.kindseg button{flex:1;white-space:nowrap;border:0;background:none;color:var(--soft);font-weight:600;font-size:14px;padding:8px;border-radius:8px;cursor:pointer}
+.kindseg button[aria-pressed=true]{background:var(--teal);color:var(--bg)}
+.kindseg em{font-style:normal;font-weight:400;opacity:.8;font-size:11.5px}
+.kindseg button{font-size:13.5px;padding:8px 4px}
+.deck{padding:10px 12px 9px}
+.deck .dname{font-size:14.5px}
+/* Karte */
+.qcard.enter{animation:cardIn .22s ease-out}
+@keyframes cardIn{from{opacity:.3;transform:translateY(8px)}to{opacity:1;transform:none}}
+.chips{align-items:center}
+.spk{margin-left:auto;width:38px;height:38px;border-radius:50%;border:1px solid var(--rule);background:var(--bg);
+  color:var(--teal);display:grid;place-items:center;cursor:pointer;flex:none}
+.spk:active{background:var(--teal);color:var(--bg)}
+.spk[disabled]{opacity:.3;cursor:default}
+.spk[hidden]{display:none}
+.spk svg{width:18px;height:18px}
+.judge{display:flex;gap:9px}
+.judge[hidden]{display:none}
+.judge button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:11px 4px}
+.judge small{font:500 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;opacity:.75}
+/* Navigation */
+nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav button{position:relative;gap:4px;padding-top:9px}
+nav button[aria-selected=true]::before{content:"";position:absolute;top:0;left:30%;right:30%;height:2.5px;border-radius:0 0 3px 3px;background:var(--teal)}
+
+/* ---------- Lernstufen ---------- */
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:0 0 12px}
+.lvl{border:1px solid var(--rule);background:var(--card);border-radius:12px;padding:9px 10px 8px;text-align:left;
+  color:var(--ink);cursor:pointer;font:inherit;box-shadow:var(--shadow);min-width:0}
+.lvl b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lvl small{display:block;font-size:11px;color:var(--soft);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lvl .sbar{margin-top:7px;height:4px}
+.lvl .lnum{display:flex;flex-direction:column;gap:3px;margin-top:6px;font:600 10.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--soft)}
+.lvl .lnum em{font-style:normal;color:var(--teal)}
+.lvl[aria-pressed=true]{border-color:var(--teal);box-shadow:inset 0 0 0 1.5px var(--teal)}
+.lvhint{display:flex;gap:10px;align-items:center;justify-content:space-between;background:var(--card);border:1px dashed var(--gold);
+  border-radius:12px;padding:9px 12px;margin:0 0 12px;font-size:13px}
+.lvhint[hidden]{display:none}
+.lvhint button{border:0;background:var(--gold);color:var(--bg);font-weight:600;font-size:12.5px;border-radius:8px;padding:7px 10px;cursor:pointer;flex:none}
+.forecast{display:flex;justify-content:space-between;font-size:12px;color:var(--soft);margin-top:8px;padding-top:8px;border-top:1px solid var(--rule)}
+.forecast b{color:var(--ink);font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.kindseg[hidden]{display:none}
+
+/* ---------- Sicherung ---------- */
+.backup{border-top:1px solid var(--rule);margin-top:8px;padding:10px 2px 4px}
+.bkinfo{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;font-size:13px}
+.bkinfo span{color:var(--soft);font-size:12px}
+.bkinfo span.warn{color:var(--alert)}
+.backup .act{padding:10px;font-size:14px}
+.bkmsg{font-size:12.5px;margin:8px 0 0;color:var(--tico)}
+.bkmsg.err{color:var(--alert)}
+details.settings.nudge summary{color:var(--alert)}
+
+/* ---------- Speichern ---------- */
+.store{border-top:1px solid var(--rule);margin-top:8px;padding:10px 2px 4px}
+.store h4{margin:0 0 8px;font-size:13px}
+.strow{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-size:12.5px;padding:3px 0}
+.strow span:first-child{color:var(--soft)}
+.strow .ok{color:var(--tico)} .strow .warn{color:var(--alert)}
+.store input[type=password]{width:100%;padding:10px 12px;font-size:14px;border:1px solid var(--rule);border-radius:10px;background:var(--card);color:var(--ink);margin:6px 0}
+.store select{width:100%;padding:9px 10px;font-size:13.5px;border:1px solid var(--rule);border-radius:10px;background:var(--card);color:var(--ink);margin:4px 0 6px}
+.store .act{padding:10px;font-size:14px}
+.store .btnrow{margin-top:4px}
+.shint{font-size:11.5px;color:var(--soft);margin:6px 0 2px;line-height:1.45}
+.store [hidden]{display:none!important}
+
+/* ---------- Lernende ---------- */
+.who{display:flex;align-items:center;gap:8px;margin:0 0 10px;min-height:40px}
+.whobtn{display:flex;align-items:center;gap:9px;background:none;border:0;padding:3px 2px;cursor:pointer;color:var(--ink);font:inherit;text-align:left;flex:none}
+.ava{width:34px;height:34px;border-radius:50%;background:var(--teal);color:var(--bg);display:grid;place-items:center;font-weight:700;font-size:15px;flex:none}
+.whobtn b{display:block;font-size:15px;line-height:1.2}
+.whobtn small{display:block;font-size:11.5px;color:var(--soft)}
+.peers{display:flex;gap:6px;margin-left:auto;overflow-x:auto;scrollbar-width:none;min-width:0}
+.peers::-webkit-scrollbar{display:none}
+.peer{display:flex;align-items:center;gap:5px;flex:none;background:var(--card);border:1px solid var(--rule);border-radius:18px;padding:3px 10px 3px 3px;font-size:12px;white-space:nowrap;color:var(--ink)}
+.peer .ava{width:24px;height:24px;font-size:11.5px;background:var(--gold)}
+.peer .pf{width:11px;height:14px;display:inline-block;filter:grayscale(1) opacity(.35)}
+.peer .pf.on{filter:none}
+.peer .pf svg{width:100%;height:100%}
+.peer b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.peer small{color:var(--soft)}
+.whopanel{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:10px 12px;margin:0 0 12px;box-shadow:var(--shadow)}
+.whopanel[hidden]{display:none}
+.prow{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;border-bottom:1px solid var(--rule);padding:8px 2px;cursor:pointer;color:var(--ink);font:inherit;text-align:left}
+.prow .ava{width:28px;height:28px;font-size:13px}
+.prow.cur .ava{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--teal)}
+.prow span{flex:1}
+.prow small{color:var(--soft);font-size:11.5px}
+.whopanel .btnrow{margin-top:10px}
+.whopanel .act{padding:10px 6px;font-size:13.5px}
+#syChoose{display:flex;flex-direction:column;gap:7px;margin-top:6px}
+#syChoose[hidden]{display:none}
+#syChoose .act{padding:11px;font-size:14px;text-align:left}
+#syChoose .act small{color:var(--soft);font-weight:400}
+
+/* ---------- Flamme ---------- */
+.kpi.streak b{display:flex;align-items:center;gap:4px}
+.kflame{width:18px;height:22px;display:inline-block;filter:grayscale(1) opacity(.35);transition:filter .3s}
+.kflame.on{filter:none}
+.kflame svg{width:100%;height:100%}
+#flame{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;
+  background:color-mix(in srgb,var(--bg) 88%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+  padding:calc(24px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom));animation:fadeIn .25s ease-out}
+#flame[hidden]{display:none}
+.fbox{text-align:center;max-width:340px;width:100%}
+.fbig{width:130px;height:162px;margin:0 auto 4px;position:relative;animation:rise .6s cubic-bezier(.2,1.4,.4,1) both}
+.fbig svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 22px rgba(242,140,40,.45))}
+.fbig .fo{transform-origin:50% 100%;animation:flicker 1.6s ease-in-out infinite}
+.fbig .fi{transform-origin:50% 100%;animation:flicker 1.1s ease-in-out infinite reverse}
+.spark{position:absolute;left:50%;top:55%;width:7px;height:7px;border-radius:50%;background:#FFC247;opacity:0;animation:spark 1.1s ease-out .35s both}
+.fnum{font:800 64px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:#F28C28;height:66px;overflow:hidden;position:relative}
+.fnum span{display:block;transition:transform .45s cubic-bezier(.3,1.5,.5,1)}
+.fnum.up span{transform:translateY(-66px)}
+.flbl{font-size:17px;font-weight:700;margin-top:6px}
+.fmsg{font-size:14px;color:var(--soft);margin:8px 0 18px;min-height:20px}
+.fweek{display:flex;justify-content:space-between;background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:12px 10px;margin-bottom:18px}
+.fweek div{display:flex;flex-direction:column;align-items:center;gap:6px;flex:1}
+.fweek span{font-size:11px;color:var(--soft);font-weight:600}
+.fweek i{width:26px;height:26px;border-radius:50%;background:var(--rule);display:grid;place-items:center}
+.fweek i svg{width:14px;height:17px}
+.fweek i.on{background:#FFE3BF}
+.fweek div.now span{color:#E4572E}
+.fweek div.now i.on{animation:pop .5s .9s cubic-bezier(.3,1.8,.5,1) both;box-shadow:0 0 0 2px #F28C28}
+#flame .act{width:100%}
+@keyframes flicker{0%,100%{transform:scale(1,1) skewX(0)}25%{transform:scale(.97,1.04) skewX(1.5deg)}50%{transform:scale(1.02,.97) skewX(-1deg)}75%{transform:scale(.99,1.03) skewX(1deg)}}
+@keyframes rise{from{transform:translateY(40px) scale(.3);opacity:0}to{transform:none;opacity:1}}
+@keyframes spark{0%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(var(--dx),var(--dy)) scale(.3)}}
+@keyframes pop{0%{transform:scale(.4)}100%{transform:scale(1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:reduce){
+  #flame,.fbig,.fbig .fo,.fbig .fi,.spark,.fweek div.now i.on{animation:none!important}
+  .fnum span{transition:none}
 }
-.qfoot button{background:none;border:0;color:var(--soft);font-size:12.5px;text-decoration:underline;cursor:pointer;padding:4px 0}
-.qdone{text-align:center;padding:30px 16px;font-size:15px}
-.qdone b{display:block;font-size:19px;margin-bottom:8px}
 
 /* ---------- Tableiste ---------- */
 nav{
@@ -182,53 +397,184 @@ nav button[aria-selected=true]{color:var(--teal)}
       <input type="search" id="q" placeholder="Suchen — deutsch oder spanisch" autocomplete="off" autocorrect="off" spellcheck="false">
       <button id="clear" aria-label="Suche löschen">✕</button>
     </div>
+    <div class="jump" id="jump"></div>
   </div>
 </header>
 
 <main class="wrap">
+  <p class="ttshint" id="ttshint" hidden>Spanische Wörter und Sätze antippen, um sie zu hören.</p>
   <div id="ref"></div>
   <div id="quiz">
-    <div class="qtop">
-      <div class="track"><div class="fill" id="fill"></div></div>
-      <div class="qcount" id="qcount"></div>
-    </div>
 
-    <div class="qcard" id="card">
-      <div class="qchip" id="qchip">Ins Spanische</div>
-      <div class="qprompt" id="qprompt"></div>
-      <div class="qtap" id="qtap">Tippen zum Aufdecken</div>
-      <div class="qans" id="qans" hidden><div class="txt" id="qanstxt"></div></div>
-    </div>
+    <section class="screen" id="pick">
+      <div class="who">
+        <button class="whobtn" id="whoBtn"><span class="ava" id="whoAva"></span><span><b id="whoName"></b><small id="whoSub"></small></span></button>
+        <div class="peers" id="peers"></div>
+      </div>
+      <div class="whopanel" id="whoPanel" hidden>
+        <div id="whoList"></div>
+        <div class="btnrow"><button class="act" id="whoAdd">+ Profil</button><button class="act" id="whoRen">Umbenennen</button><button class="act warn" id="whoDel">Löschen</button></div>
+        <p class="shint">Jedes Profil hat eigenen Lernstand, eigene Serie und eigene Einstellungen. Grammatik, Wortschatz und Verbtabellen sind für alle gleich.</p>
+      </div>
+      <div class="levels" id="levels"></div>
+      <div class="lvhint" id="lvhint" hidden><span id="lvhintT"></span><button id="lvhintB"></button></div>
+      <div class="hero">
+        <div class="kpis">
+          <div class="kpi due"><b id="kDue">0</b><span>fällig</span></div>
+          <div class="kpi"><b id="kNew">0</b><span>neu für heute</span></div>
+          <div class="kpi streak"><b><span class="kflame" id="kFlame"><svg viewBox="0 0 64 80" aria-hidden="true"><defs>
+<linearGradient id="kf1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E4572E"/><stop offset=".55" stop-color="#F28C28"/><stop offset="1" stop-color="#FFC247"/></linearGradient>
+<linearGradient id="kf2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFB02E"/><stop offset="1" stop-color="#FFF1A8"/></linearGradient></defs>
+<path class="fo" fill="url(#kf1)" d="M32 2c3 12 16 20 20 33 5 16-5 38-20 43C17 73 7 58 10 43c2-10 9-15 12-24 2 7 6 10 8 12 3-10 0-19 2-29z"/>
+<path class="fi" fill="url(#kf2)" d="M32 36c2 7 10 12 11 20 2 10-4 19-11 20-7-1-13-9-11-18 1-6 6-8 7-13 2 3 3 5 4 5 1-5-1-9 0-14z"/></svg></span><span id="kStreak">0</span></b><span id="kStreakL">Tage in Folge</span></div>
+        </div>
+        <button class="today" id="todayBtn"></button>
+        <div class="sbar" id="ovbar"></div>
+        <div class="legend2">
+          <span><i style="background:var(--rule)"></i>Neu</span>
+          <span><i style="background:var(--gold)"></i>Lernphase</span>
+          <span><i style="background:var(--teal)"></i>Gefestigt</span>
+          <span><i style="background:var(--tico)"></i>Sicher</span>
+          <span style="margin-left:auto" id="ovleft"></span>
+        </div>
+        <div class="week" id="week"></div>
+        <div class="forecast"><span>Morgen fällig: <b id="fc1">0</b></span><span>Nächste 7 Tage: <b id="fc7">0</b></span></div>
+      </div>
+      <details class="settings">
+        <summary>Einstellungen</summary>
+        <div class="setrow"><span class="seglabel">Karten pro Runde</span>
+          <div class="seg" id="seg"><button data-n="5">5</button><button data-n="10">10</button><button data-n="20">20</button></div></div>
+        <div class="setrow"><span class="seglabel">Neue Karten pro Tag</span>
+          <div class="seg" id="segnew"><button data-n="10">10</button><button data-n="20">20</button><button data-n="40">40</button></div></div>
+        <label class="toggle" id="autoRow">Spanisch automatisch vorlesen <input type="checkbox" id="autoSpeak" switch></label>
+        <div class="store">
+          <h4>Speichern</h4>
+          <div class="strow"><span>Gerätespeicher</span><span id="stPersist">–</span></div>
+          <div class="strow"><span>Cloud-Sync</span><span id="syStat">aus</span></div>
+          <div id="syOffBox">
+            <input type="password" id="syToken" placeholder="GitHub-Token mit Gist-Recht" autocomplete="off">
+            <button class="act pri" id="syConnect" style="width:100%">Mit GitHub verbinden</button>
+            <p class="shint">Legt ein geheimes Gist „espanol-lernstand.json" an und gleicht danach automatisch ab — beim Öffnen und nach jeder Runde. Auf einem zweiten Gerät denselben Token eingeben.</p>
+          </div>
+          <div id="syChoose" hidden></div>
+          <div id="syOnBox" hidden>
+            <div class="btnrow"><button class="act" id="syNow">Jetzt abgleichen</button><button class="act warn" id="syOff">Trennen</button></div>
+          </div>
+          <div class="strow" style="margin-top:10px"><span>Wiederherstellungspunkte</span><span id="snapN"></span></div>
+          <select id="snapSel"></select>
+          <button class="act" id="snapGo" style="width:100%">Auf diesen Stand zurücksetzen</button>
+        </div>
+        <div class="backup">
+          <div class="bkinfo"><b>Lernstand als Datei</b><span id="bkLast"></span></div>
+          <div class="btnrow"><button class="act" id="bkOut">Sichern</button><button class="act" id="bkIn">Wiederherstellen</button></div>
+          <input type="file" id="bkFile" accept="application/json,.json" hidden>
+          <p class="bkmsg" id="bkMsg" hidden></p>
+        </div>
+      </details>
+      <div id="weakslot"></div>
+      <div class="kindseg" id="kindseg"></div>
+      <div id="decklist"></div>
+    </section>
 
-    <div class="btnrow" id="rowReveal">
-      <button class="act pri" id="reveal">Lösung zeigen</button>
-    </div>
-    <div class="btnrow" id="rowJudge" hidden>
-      <button class="act warn" id="again">Nochmal</button>
-      <button class="act pri" id="got">Saß</button>
-    </div>
+    <section class="screen" id="play" hidden>
+      <div class="playtop">
+        <button class="back" id="back">‹ Themen</button>
+        <div class="pdeck" id="pdeck"></div>
+      </div>
+      <div class="qtop">
+        <div class="track"><div class="fill" id="fill"></div></div>
+        <div class="qcount" id="qcount"></div>
+      </div>
+      <div class="qcard" id="card">
+        <div class="chips">
+          <span class="qchip" id="qchip"></span>
+          <span class="qchip stagechip" id="qstage"></span>
+          <span class="qchip redo" id="qredo" hidden>Wiederholung</span>
+          <span class="qchip leech" id="qleech" hidden>Problemkarte</span>
+          <button class="spk" id="qspk" aria-label="Anhören" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
+        </div>
+        <div class="qprompt" id="qprompt"></div>
+        <div class="qtap" id="qtap">Tippen zum Aufdecken</div>
+        <div class="qans" id="qans" hidden><div class="txt" id="qanstxt"></div></div>
+      </div>
+      <div class="btnrow" id="rowReveal"><button class="act pri" id="reveal">Lösung zeigen</button></div>
+      <div class="judge" id="rowJudge" hidden>
+        <button class="act warn" id="again">Nochmal<small id="iv0"></small></button>
+        <button class="act mid" id="hard">Knapp<small id="iv1"></small></button>
+        <button class="act pri" id="got">Saß<small id="iv2"></small></button>
+      </div>
+    </section>
 
-    <div class="qfoot">
-      <span id="stats"></span>
-      <button id="reset">Fortschritt zurücksetzen</button>
-    </div>
+    <section class="screen" id="empty" hidden>
+      <div class="playtop"><button class="back" id="back2">‹ Themen</button><div class="pdeck" id="edeck"></div></div>
+      <div class="emptybox"><b id="etitle"></b><p id="etext"></p></div>
+      <div class="stack">
+        <button class="act pri" id="moreNew">Weitere neue Karten</button>
+        <button class="act" id="cram">Freies Üben</button>
+      </div>
+    </section>
+
+    <section class="screen" id="sum" hidden>
+      <div class="sumcard">
+        <div class="sumbig" id="sumbig"></div>
+        <div class="sumtxt" id="sumtxt"></div>
+        <div class="sumstats">
+          <div><b id="sToday"></b>heute geübt</div>
+          <div><b id="sRate"></b>heute richtig</div>
+          <div><b id="sLeft"></b>noch heute fällig</div>
+          <div><b id="sTomorrow"></b>morgen fällig</div>
+        </div>
+        <ul class="sumlist" id="sumlist"></ul>
+      </div>
+      <div class="stack">
+        <button class="act pri" id="nextround">Nächste Runde</button>
+        <button class="act" id="topick">Anderes Thema</button>
+      </div>
+    </section>
+
   </div>
 </main>
 
+<div id="flame" hidden role="dialog" aria-label="Lernserie">
+  <div class="fbox">
+    <div class="fbig" id="fbig"><svg viewBox="0 0 64 80" aria-hidden="true"><defs>
+<linearGradient id="bf1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E4572E"/><stop offset=".55" stop-color="#F28C28"/><stop offset="1" stop-color="#FFC247"/></linearGradient>
+<linearGradient id="bf2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FFB02E"/><stop offset="1" stop-color="#FFF1A8"/></linearGradient></defs>
+<path class="fo" fill="url(#bf1)" d="M32 2c3 12 16 20 20 33 5 16-5 38-20 43C17 73 7 58 10 43c2-10 9-15 12-24 2 7 6 10 8 12 3-10 0-19 2-29z"/>
+<path class="fi" fill="url(#bf2)" d="M32 36c2 7 10 12 11 20 2 10-4 19-11 20-7-1-13-9-11-18 1-6 6-8 7-13 2 3 3 5 4 5 1-5-1-9 0-14z"/></svg></div>
+    <div class="fnum" id="fnum"><span id="fn0"></span><span id="fn1"></span></div>
+    <div class="flbl" id="flbl">Tage in Folge</div>
+    <div class="fmsg" id="fmsg"></div>
+    <div class="fweek" id="fweek"></div>
+    <button class="act pri" id="fok">Weiter</button>
+  </div>
+</div>
+
 <nav>
-  <button data-tab="gram" aria-selected="true"><b>¶</b>Grammatik</button>
-  <button data-tab="voc" aria-selected="false"><b>A</b>Wortschatz</button>
-  <button data-tab="verb" aria-selected="false"><b>V</b>Verben</button>
-  <button data-tab="quiz" aria-selected="false"><b>?</b>Abfrage</button>
+  <button data-tab="gram" aria-selected="true"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5"/><path d="M8 7h8M8 11h6"/></svg>Grammatik</button>
+  <button data-tab="voc" aria-selected="false"><svg viewBox="0 0 24 24"><path d="M3 20 8.5 5h1L15 20"/><path d="M5.2 14.5h7.6"/><path d="M15 10h6M18 7v3M16 17c2-1.5 3.5-3.5 4-6"/><path d="M17 13.5c.8 1.3 2 2.5 4 3.5"/></svg>Wortschatz</button>
+  <button data-tab="verb" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11M15 9v11"/></svg>Verben</button>
+  <button data-tab="quiz" aria-selected="false"><svg viewBox="0 0 24 24"><rect x="6" y="3" width="13" height="17" rx="2"/><path d="M4 7v13a2 2 0 0 0 2 2h10"/><path d="M10.5 9.5a2 2 0 1 1 2.6 1.9c-.6.2-1.1.7-1.1 1.4v.4M12 16h.01"/></svg>Abfrage</button>
 </nav>
 
 <script>
 /* ===================== Speicher mit Rückfallebene ===================== */
 const mem={};
-const store={
+const raw={
   get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]??null}},
-  set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}}
+  set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}},
+  del(k){try{localStorage.removeItem(k)}catch(e){delete mem[k]}},
+  keys(){try{return Object.keys(localStorage)}catch(e){return Object.keys(mem)}}
 };
+/* Lernende: Jedes Profil hat eigenen Lernstand. Profil 1 nutzt die bisherigen Schlüssel
+   (keine Migration nötig), weitere Profile einen Präfix. Globale Schlüssel beginnen nicht mit „q.". */
+let PROFILES=null; try{PROFILES=JSON.parse(raw.get('app.profiles')||'null')}catch(e){}
+if(!Array.isArray(PROFILES)||!PROFILES.length) PROFILES=[{id:'p1',name:'Ich'}];
+let CUR=raw.get('app.current')||PROFILES[0].id;
+if(!PROFILES.some(x=>x.id===CUR)) CUR=PROFILES[0].id;
+const pfx=id=>id==='p1'?'':'P:'+id+':';
+const nsk=k=>/^q\./.test(k)?pfx(CUR)+k:k;
+const store={ get:k=>raw.get(nsk(k)), set:(k,v)=>raw.set(nsk(k),v) };
 
 /* ===================== Thema ===================== */
 const html=document.documentElement;
@@ -382,6 +728,16 @@ const GRAM=[
 <li><span class="es">Usted tiene razón.</span> <span class="gloss">Sie haben recht.</span></li>
 </ul>`},
 
+{g:'Verben',t:'Fünf Bausteine',h:`
+<p>Damit deckst du drei Zeitformen ab, ohne sie zu lernen.</p>
+<ul class="phr">
+<li><span class="es">ir a</span> + Inf. <span class="gloss">Zukunft — Nosotros vamos a viajar.</span></li>
+<li><span class="es">estar</span> + <span class="mono">-ando/-iendo</span> <span class="gloss">gerade — Yo estoy buscando el hotel.</span></li>
+<li><span class="es">tener que</span> + Inf. <span class="gloss">müssen — Nosotros tenemos que salir.</span></li>
+<li><span class="es">poder</span> + Inf. <span class="gloss">können — ¿Usted puede repetir?</span></li>
+<li><span class="es">acabar de</span> + Inf. <span class="gloss">gerade eben — Yo acabo de llegar.</span></li>
+</ul>
+<p><b>Gerundium:</b> <span class="mono">-ar → -ando</span>, <span class="mono">-er/-ir → -iendo</span>. Unregelmäßig: <span class="mono">ir → yendo · decir → diciendo · dormir → durmiendo · pedir → pidiendo · oír → oyendo</span></p>`},
 {g:'Verben',t:'Vergangenheit — Indefinido & Imperfecto',h:`
 <p><b>Indefinido</b> — abgeschlossene Einzelhandlung, bringt die Geschichte voran.<br>
 <b>Imperfecto</b> — Zustand, Gewohnheit, Kulisse, „damals war es so".</p>
@@ -468,16 +824,6 @@ const GRAM=[
 <li><span class="es">Que tenga un buen día.</span> <span class="gloss">Einen schönen Tag noch.</span></li>
 </ul>`},
 
-{g:'Verben',t:'Fünf Bausteine',h:`
-<p>Damit deckst du drei Zeitformen ab, ohne sie zu lernen.</p>
-<ul class="phr">
-<li><span class="es">ir a</span> + Inf. <span class="gloss">Zukunft — Nosotros vamos a viajar.</span></li>
-<li><span class="es">estar</span> + <span class="mono">-ando/-iendo</span> <span class="gloss">gerade — Yo estoy buscando el hotel.</span></li>
-<li><span class="es">tener que</span> + Inf. <span class="gloss">müssen — Nosotros tenemos que salir.</span></li>
-<li><span class="es">poder</span> + Inf. <span class="gloss">können — ¿Usted puede repetir?</span></li>
-<li><span class="es">acabar de</span> + Inf. <span class="gloss">gerade eben — Yo acabo de llegar.</span></li>
-</ul>
-<p><b>Gerundium:</b> <span class="mono">-ar → -ando</span>, <span class="mono">-er/-ir → -iendo</span>. Unregelmäßig: <span class="mono">ir → yendo · decir → diciendo · dormir → durmiendo · pedir → pidiendo · oír → oyendo</span></p>`},
 
 {g:'Substantive & Adjektive',t:'Substantiv, Artikel, Plural',h:`
 <table>
@@ -559,7 +905,7 @@ const GRAM=[
 ];
 
 const VOC=[
-{g:"Grundwortschatz",t:"Begrüßung & Höflichkeit",h:`
+{g:"A1 · Grundwortschatz",t:"Begrüßung & Höflichkeit",h:`
 <p class="words"><b>hola</b> <span>hallo</span> · <b>buenos días</b> <span>guten Morgen</span> · <b>buenas tardes</b> <span>guten Tag, ab mittags</span> · <b>buenas noches</b> <span>guten Abend, gute Nacht</span> · <b>adiós</b> <span>tschüss</span> · <b>hasta luego</b> <span>bis später</span> · <b>hasta mañana</b> <span>bis morgen</span> · <b>nos vemos</b> <span>man sieht sich</span> · <b>bienvenido</b> <span>willkommen</span></p>
 <p class="words"><b>por favor</b> <span>bitte</span> · <b>gracias</b> <span>danke</span> · <b>muchas gracias</b> <span>vielen Dank</span> · <b>de nada</b> <span>gern geschehen</span> · <b>perdón</b> <span>Entschuldigung</span> · <b>disculpe</b> <span>entschuldigen Sie</span> · <b>mucho gusto</b> <span>freut mich</span> · <b>igualmente</b> <span>gleichfalls</span></p>
 <ul class="phr">
@@ -574,12 +920,12 @@ const VOC=[
 <li><span class="es">No entiendo.</span> <span class="gloss">Ich verstehe nicht.</span></li>
 </ul>
 <div class="note t"><span class="tag">Tico</span>Auf <i>gracias</i> antwortet man in Costa Rica mit <b>con mucho gusto</b>, nicht mit <i>de nada</i>. Und <b>pura vida</b> ersetzt praktisch jede Begrüßung und Verabschiedung.</div>`},
-{g:"Grundwortschatz",t:"Bindewörter",h:`<p class="words"><b>y</b> <span>und</span> · <b>o</b> <span>oder</span> · <b>pero</b> <span>aber</span> · <b>porque</b> <span>weil</span> · <b>que</b> <span>dass</span> · <b>si</b> <span>wenn, falls</span> · <b>también</b> <span>auch</span> · <b>tampoco</b> <span>auch nicht</span> · <b>entonces</b> <span>dann, also</span> · <b>pues</b> <span>nun, also</span> · <b>aunque</b> <span>obwohl</span> · <b>además</b> <span>außerdem</span> · <b>por eso</b> <span>deshalb</span> · <b>sin embargo</b> <span>jedoch</span> · <b>mientras</b> <span>während</span></p>`},
-{g:"Grundwortschatz",t:"Menge & Grad",h:`<p class="words"><b>muy</b> <span>sehr</span> · <b>mucho</b> <span>viel</span> · <b>poco</b> <span>wenig</span> · <b>demasiado</b> <span>zu viel</span> · <b>bastante</b> <span>ziemlich</span> · <b>más</b> <span>mehr</span> · <b>menos</b> <span>weniger</span> · <b>todo</b> <span>alles</span> · <b>nada</b> <span>nichts</span> · <b>algo</b> <span>etwas</span> · <b>alguien</b> <span>jemand</span> · <b>nadie</b> <span>niemand</span> · <b>otro</b> <span>ein anderer</span> · <b>mismo</b> <span>derselbe</span> · <b>cada</b> <span>jeder</span> · <b>solo</b> <span>nur</span> · <b>casi</b> <span>fast</span> · <b>medio</b> <span>halb</span></p>`},
-{g:"Grundwortschatz",t:"Ort",h:`<p class="words"><b>aquí</b> <span>hier</span> · <b>allí, ahí</b> <span>dort</span> · <b>cerca</b> <span>nah</span> · <b>lejos</b> <span>weit</span> · <b>arriba</b> <span>oben</span> · <b>abajo</b> <span>unten</span> · <b>dentro</b> <span>drinnen</span> · <b>fuera</b> <span>draußen</span> · <b>al lado de</b> <span>neben</span> · <b>enfrente de</b> <span>gegenüber</span> · <b>detrás de</b> <span>hinter</span> · <b>delante de</b> <span>vor</span> · <b>entre</b> <span>zwischen</span> · <b>a la derecha</b> <span>rechts</span> · <b>a la izquierda</b> <span>links</span> · <b>derecho</b> <span>geradeaus</span> · <b>al norte / sur / este / oeste</b> <span>nördlich / südlich / östlich / westlich</span></p>`},
-{g:"Grundwortschatz",t:"Zeit",h:`<p class="words"><b>ahora</b> <span>jetzt</span> · <b>hoy</b> <span>heute</span> · <b>mañana</b> <span>morgen und Vormittag</span> · <b>ayer</b> <span>gestern</span> · <b>luego, después</b> <span>später, danach</span> · <b>antes</b> <span>vorher</span> · <b>siempre</b> <span>immer</span> · <b>nunca</b> <span>nie</span> · <b>a veces</b> <span>manchmal</span> · <b>ya</b> <span>schon</span> · <b>todavía</b> <span>noch</span> · <b>temprano</b> <span>früh</span> · <b>tarde</b> <span>spät</span> · <b>pronto</b> <span>bald</span> · <b>hasta</b> <span>bis</span> · <b>desde</b> <span>seit</span> · <b>el día</b> <span>Tag</span> · <b>la semana</b> <span>Woche</span> · <b>el mes</b> <span>Monat</span> · <b>el año</b> <span>Jahr</span> · <b>la hora</b> <span>Stunde, Uhrzeit</span></p>`},
-{g:"Grundwortschatz",t:"Reagieren",h:`<p class="words"><b>claro</b> <span>klar</span> · <b>listo</b> <span>okay, fertig</span> · <b>de acuerdo</b> <span>einverstanden</span> · <b>por supuesto</b> <span>selbstverständlich</span> · <b>tal vez</b> <span>vielleicht</span> · <b>¿verdad?</b> <span>oder?, stimmt's?</span> · <b>lo siento</b> <span>tut mir leid</span> · <b>no importa</b> <span>macht nichts</span> · <b>con permiso</b> <span>Entschuldigung, beim Vorbeigehen</span> · <b>¡qué bien!</b> <span>wie schön!</span> · <b>¡qué lástima!</b> <span>wie schade!</span> · <b>¡salud!</b> <span>Prost! / Gesundheit!</span></p>`},
-{g:"Grundwortschatz",t:"Häufige Adjektive",h:`
+{g:"A1 · Grundwortschatz",t:"Bindewörter",h:`<p class="words"><b>y</b> <span>und</span> · <b>o</b> <span>oder</span> · <b>pero</b> <span>aber</span> · <b>porque</b> <span>weil</span> · <b>que</b> <span>dass</span> · <b>si</b> <span>wenn, falls</span> · <b>también</b> <span>auch</span> · <b>tampoco</b> <span>auch nicht</span> · <b>entonces</b> <span>dann, also</span> · <b>pues</b> <span>nun, also</span> · <b>aunque</b> <span>obwohl</span> · <b>además</b> <span>außerdem</span> · <b>por eso</b> <span>deshalb</span> · <b>sin embargo</b> <span>jedoch</span> · <b>mientras</b> <span>während</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Menge & Grad",h:`<p class="words"><b>muy</b> <span>sehr</span> · <b>mucho</b> <span>viel</span> · <b>poco</b> <span>wenig</span> · <b>demasiado</b> <span>zu viel</span> · <b>bastante</b> <span>ziemlich</span> · <b>más</b> <span>mehr</span> · <b>menos</b> <span>weniger</span> · <b>todo</b> <span>alles</span> · <b>nada</b> <span>nichts</span> · <b>algo</b> <span>etwas</span> · <b>alguien</b> <span>jemand</span> · <b>nadie</b> <span>niemand</span> · <b>otro</b> <span>ein anderer</span> · <b>mismo</b> <span>derselbe</span> · <b>cada</b> <span>jeder</span> · <b>solo</b> <span>nur</span> · <b>casi</b> <span>fast</span> · <b>medio</b> <span>halb</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Ort",h:`<p class="words"><b>aquí</b> <span>hier</span> · <b>allí, ahí</b> <span>dort</span> · <b>cerca</b> <span>nah</span> · <b>lejos</b> <span>weit</span> · <b>arriba</b> <span>oben</span> · <b>abajo</b> <span>unten</span> · <b>dentro</b> <span>drinnen</span> · <b>fuera</b> <span>draußen</span> · <b>al lado de</b> <span>neben</span> · <b>enfrente de</b> <span>gegenüber</span> · <b>detrás de</b> <span>hinter</span> · <b>delante de</b> <span>vor</span> · <b>entre</b> <span>zwischen</span> · <b>a la derecha</b> <span>rechts</span> · <b>a la izquierda</b> <span>links</span> · <b>derecho</b> <span>geradeaus</span> · <b>al norte / sur / este / oeste</b> <span>nördlich / südlich / östlich / westlich</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Zeit",h:`<p class="words"><b>ahora</b> <span>jetzt</span> · <b>hoy</b> <span>heute</span> · <b>mañana</b> <span>morgen und Vormittag</span> · <b>ayer</b> <span>gestern</span> · <b>luego, después</b> <span>später, danach</span> · <b>antes</b> <span>vorher</span> · <b>siempre</b> <span>immer</span> · <b>nunca</b> <span>nie</span> · <b>a veces</b> <span>manchmal</span> · <b>ya</b> <span>schon</span> · <b>todavía</b> <span>noch</span> · <b>temprano</b> <span>früh</span> · <b>tarde</b> <span>spät</span> · <b>pronto</b> <span>bald</span> · <b>hasta</b> <span>bis</span> · <b>desde</b> <span>seit</span> · <b>el día</b> <span>Tag</span> · <b>la semana</b> <span>Woche</span> · <b>el mes</b> <span>Monat</span> · <b>el año</b> <span>Jahr</span> · <b>la hora</b> <span>Stunde, Uhrzeit</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Reagieren",h:`<p class="words"><b>claro</b> <span>klar</span> · <b>listo</b> <span>okay, fertig</span> · <b>de acuerdo</b> <span>einverstanden</span> · <b>por supuesto</b> <span>selbstverständlich</span> · <b>tal vez</b> <span>vielleicht</span> · <b>¿verdad?</b> <span>oder?, stimmt's?</span> · <b>lo siento</b> <span>tut mir leid</span> · <b>no importa</b> <span>macht nichts</span> · <b>con permiso</b> <span>Entschuldigung, beim Vorbeigehen</span> · <b>¡qué bien!</b> <span>wie schön!</span> · <b>¡qué lástima!</b> <span>wie schade!</span> · <b>¡salud!</b> <span>Prost! / Gesundheit!</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Häufige Adjektive",h:`
 <table>
 <tr><td class="mono">bueno / malo</td><td class="de">gut / schlecht</td></tr>
 <tr><td class="mono">grande / pequeño</td><td class="de">groß / klein</td></tr>
@@ -605,10 +951,11 @@ const VOC=[
 <tr><td class="mono">primero</td><td class="de">erster</td></tr>
 </table>
 <div class="note"><span class="tag">Falle</span><i>largo</i> heißt <b>lang</b>, nicht „groß" — der falsche Freund zum englischen <i>large</i>. Und <i>embarazada</i> heißt <b>schwanger</b>, nicht „verlegen".</div>`},
-{g:"Grundwortschatz",t:"Farben",h:`
+{g:"A1 · Grundwortschatz",t:"Farben",h:`
 <p class="words"><b>rojo</b> <span>rot</span> · <b>azul</b> <span>blau</span> · <b>verde</b> <span>grün</span> · <b>amarillo</b> <span>gelb</span> · <b>naranja</b> <span>orange</span> · <b>negro</b> <span>schwarz</span> · <b>blanco</b> <span>weiß</span> · <b>gris</b> <span>grau</span> · <b>café, marrón</b> <span>braun</span> · <b>rosado</b> <span>rosa</span> · <b>morado</b> <span>lila</span> · <b>claro / oscuro</b> <span>hell / dunkel</span></p>
 <p>Farben sind Adjektive und richten sich nach dem Substantiv: <span class="es">un carro rojo, una camisa roja, unos zapatos negros.</span> Die auf <span class="mono">-e</span> oder Konsonant bleiben unverändert: <i>verde, azul, gris.</i></p>`},
-{g:"Grundwortschatz",t:"Die 40 Verben",h:`
+{g:"A1 · Grundwortschatz",t:"Die wichtigsten Verben",h:`
+<p class="gloss">Alle Formen jedes Verbs stehen im Tab <b>Verben</b>.</p>
 <table>
 <tr><td class="mono">ser / estar</td><td class="de">sein</td><td class="mono">poder</td><td class="de">können</td></tr>
 <tr><td class="mono">tener</td><td class="de">haben</td><td class="mono">querer</td><td class="de">wollen</td></tr>
@@ -633,11 +980,11 @@ const VOC=[
 <tr><td class="mono">quedarse</td><td class="de">bleiben</td><td class="mono">funcionar</td><td class="de">funktionieren</td></tr>
 </table>
 <div class="note"><span class="tag">Falle</span><i>saber</i> = Fakten wissen. <i>conocer</i> = Personen und Orte kennen. <span class="es">Sé dónde está, pero no conozco el lugar.</span> <span class="gloss">Ich weiß, wo es ist, aber ich kenne den Ort nicht.</span></div>`},
-{g:"Zahlen, Datum, Uhrzeit",t:"Zahlen",h:`
+{g:"A1 · Zahlen, Datum, Uhrzeit",t:"Zahlen",h:`
 <p class="words"><b>1–15 einzeln:</b> uno <span>1</span> · dos <span>2</span> · tres <span>3</span> · cuatro <span>4</span> · cinco <span>5</span> · seis <span>6</span> · siete <span>7</span> · ocho <span>8</span> · nueve <span>9</span> · diez <span>10</span> · once <span>11</span> · doce <span>12</span> · trece <span>13</span> · catorce <span>14</span> · quince <span>15</span></p>
 <p class="words"><b>ab 16 gebaut:</b> dieciséis <span>16</span> · diecisiete <span>17</span> · veinte <span>20</span> · veintiuno <span>21</span> · treinta y uno <span>31</span> · cuarenta <span>40</span> · cincuenta <span>50</span> · sesenta <span>60</span> · setenta <span>70</span> · ochenta <span>80</span> · noventa <span>90</span> · cien <span>100</span> · doscientos <span>200</span> · <b>quinientos</b> <span>500, unregelmäßig</span> · mil <span>1000</span></p>
 <div class="note t"><span class="tag">Tico</span>Gezahlt wird in <b>colones</b>, meist in Tausendern: <i>cinco mil colones</i> ≈ 9 €. US-Dollar werden fast überall angenommen, das Wechselgeld kommt in Colones zurück.</div>`},
-{g:"Zahlen, Datum, Uhrzeit",t:"Wochentage, Monate, Datum",h:`
+{g:"A1 · Zahlen, Datum, Uhrzeit",t:"Wochentage, Monate, Datum",h:`
 <p class="words"><b>lunes</b> <span>Montag</span> · <b>martes</b> <span>Dienstag</span> · <b>miércoles</b> <span>Mittwoch</span> · <b>jueves</b> <span>Donnerstag</span> · <b>viernes</b> <span>Freitag</span> · <b>sábado</b> <span>Samstag</span> · <b>domingo</b> <span>Sonntag</span></p>
 <p class="words"><b>el fin de semana</b> <span>Wochenende</span> · <b>entre semana</b> <span>unter der Woche</span> · <b>anteayer</b> <span>vorgestern</span> · <b>pasado mañana</b> <span>übermorgen</span> · <b>el día festivo</b> <span>Feiertag</span></p>
 <table>
@@ -655,7 +1002,7 @@ const VOC=[
 <li><span class="es">Llegamos el 3 de marzo.</span> <span class="gloss">Wir kommen am 3. März an.</span></li>
 </ul>
 <div class="note"><span class="tag">Falle</span>Wochentage und Monate schreibt man <b>klein</b>. Beim Datum stehen normale Zahlen, keine Ordnungszahlen — nur der Erste macht eine Ausnahme: <span class="es">el primero de mayo</span>. Der Artikel <i>el</i> ersetzt das deutsche „am": <i>el lunes</i>, nicht <i>en lunes</i>.</div>`},
-{g:"Zahlen, Datum, Uhrzeit",t:"Uhrzeit",h:`
+{g:"A1 · Zahlen, Datum, Uhrzeit",t:"Uhrzeit",h:`
 <table>
 <tr><td class="mono">¿Qué hora es?</td><td class="de">Wie spät ist es?</td></tr>
 <tr><td class="mono">Es la una.</td><td class="de">Es ist eins.</td></tr>
@@ -673,7 +1020,7 @@ const VOC=[
 <li><span class="es">Desde las nueve hasta las cinco.</span> <span class="gloss">Von neun bis fünf.</span></li>
 </ul>
 <div class="note"><span class="tag">Falle</span>Nur „eins" bekommt den Singular: <i>es la una</i>, alles andere <i>son las…</i> Für die Uhrzeit steht immer <b>ser</b>, nie <i>estar</i>. Costa Rica rechnet in 12 Stunden mit <span class="mono">a.m.</span> und <span class="mono">p.m.</span> — „18 Uhr" versteht niemand.</div>`},
-{g:"Zahlen, Datum, Uhrzeit",t:"Jahreszeiten & Wetter",h:`
+{g:"A1 · Zahlen, Datum, Uhrzeit",t:"Jahreszeiten & Wetter",h:`
 <p class="words"><b>la primavera</b> <span>Frühling</span> · <b>el verano</b> <span>Sommer</span> · <b>el otoño</b> <span>Herbst</span> · <b>el invierno</b> <span>Winter</span></p>
 <p><b>Wetter</b> — fast alles mit <span class="mono">hacer</span> gebaut:</p>
 <table>
@@ -687,7 +1034,7 @@ const VOC=[
 </table>
 <p class="words"><b>la lluvia</b> <span>Regen</span> · <b>el aguacero</b> <span>Platzregen</span> · <b>la tormenta</b> <span>Gewitter</span> · <b>la nube</b> <span>Wolke</span> · <b>húmedo</b> <span>feucht, schwül</span> · <b>la sombra</b> <span>Schatten</span> · <b>el paraguas</b> <span>Regenschirm</span> · <b>la temperatura</b> <span>Temperatur</span></p>
 <div class="note t"><span class="tag">Tico</span>Costa Rica kennt keine vier Jahreszeiten, sondern zwei: <b>verano</b> <span class="gloss">Trockenzeit, Dezember bis April</span> und <b>invierno</b> <span class="gloss">Regenzeit, Mai bis November</span>. Wenn ein Tico von „Winter" spricht, meint er Regen, nicht Kälte. In der Regenzeit fällt der Guss meist nachmittags — vormittags planen.</div>`},
-{g:"Situationen",t:"Restaurant",h:`
+{g:"A1–A2 · Situationen",t:"Restaurant",h:`
 <p class="words"><b>el desayuno</b> <span>Frühstück</span> · <b>el almuerzo</b> <span>Mittagessen</span> · <b>la cena</b> <span>Abendessen</span> · <b>la carta</b> <span>Speisekarte</span> · <b>el plato</b> <span>Gericht, Teller</span> · <b>la bebida</b> <span>Getränk</span> · <b>la propina</b> <span>Trinkgeld</span> · <b>la cuenta</b> <span>Rechnung</span></p>
 <p class="words"><b>el agua</b> <span>Wasser</span> · <b>el café</b> <span>Kaffee</span> · <b>el jugo</b> <span>Saft</span> · <b>la cerveza</b> <span>Bier</span> · <b>el vino</b> <span>Wein</span> · <b>la leche</b> <span>Milch</span> · <b>sin gas / con gas</b> <span>still / mit Kohlensäure</span></p>
 <p class="words"><b>el pollo</b> <span>Huhn</span> · <b>la carne</b> <span>Fleisch</span> · <b>el pescado</b> <span>Fisch</span> · <b>los camarones</b> <span>Garnelen</span> · <b>el arroz</b> <span>Reis</span> · <b>los frijoles</b> <span>Bohnen</span> · <b>la ensalada</b> <span>Salat</span> · <b>las verduras</b> <span>Gemüse</span> · <b>la fruta</b> <span>Obst</span> · <b>el pan</b> <span>Brot</span> · <b>el queso</b> <span>Käse</span> · <b>los huevos</b> <span>Eier</span> · <b>el postre</b> <span>Nachtisch</span></p>
@@ -701,7 +1048,7 @@ const VOC=[
 <li><span class="es">La cuenta, por favor.</span> <span class="gloss">Die Rechnung, bitte.</span></li>
 </ul>
 <div class="note t"><span class="tag">Tico</span><b>casado</b> <span class="gloss">Standard-Mittagsteller mit Reis, Bohnen, Salat, Fleisch, Kochbanane</span> · <b>gallo pinto</b> <span class="gloss">Frühstück aus Reis und Bohnen</span> · <b>soda</b> <span class="gloss">kleines günstiges Lokal, dort esst ihr am besten</span> · <b>refresco natural</b> <span class="gloss">frisch gemixter Saft, con agua oder con leche</span> · <b>olla de carne</b> <span class="gloss">Rindfleischeintopf mit Wurzelgemüse</span></div>`},
-{g:"Situationen",t:"Unterkunft",h:`
+{g:"A1–A2 · Situationen",t:"Unterkunft",h:`
 <p class="words"><b>la habitación, el cuarto</b> <span>Zimmer</span> · <b>la llave</b> <span>Schlüssel</span> · <b>la cama</b> <span>Bett</span> · <b>la toalla</b> <span>Handtuch</span> · <b>la ducha</b> <span>Dusche</span> · <b>el baño</b> <span>Bad, Toilette</span> · <b>el aire acondicionado</b> <span>Klimaanlage</span> · <b>el ventilador</b> <span>Ventilator</span> · <b>la reserva</b> <span>Buchung</span> · <b>la recepción</b> <span>Rezeption</span> · <b>la piscina</b> <span>Schwimmbad</span> · <b>la caja fuerte</b> <span>Safe</span> · <b>la contraseña</b> <span>Passwort</span> · <b>la sábana</b> <span>Bettlaken</span> · <b>el mosquitero</b> <span>Moskitonetz</span></p>
 <ul class="phr">
 <li><span class="es">Tenemos una reserva a nombre de…</span> <span class="gloss">Wir haben eine Buchung auf den Namen…</span></li>
@@ -709,8 +1056,8 @@ const VOC=[
 <li><span class="es">No funciona el aire acondicionado.</span> <span class="gloss">Die Klimaanlage funktioniert nicht.</span></li>
 <li><span class="es">¿Está incluido el desayuno?</span> <span class="gloss">Ist das Frühstück inbegriffen?</span></li>
 </ul>`},
-{g:"Situationen",t:"Unterwegs",h:`
-<p class="words"><b>el aeropuerto</b> <span>Flughafen</span> · <b>el vuelo</b> <span>Flug</span> · <b>la maleta</b> <span>Koffer</span> · <b>el equipaje</b> <span>Gepäck</span> · <b>el bus</b> <span>Bus</span> · <b>la parada</b> <span>Haltestelle</span> · <b>el tiquete</b> <span>Ticket</span> · <b>el carro</b> <span>Auto</span> · <b>alquilar</b> <span>mieten</span> · <b>la gasolina</b> <span>Benzin</span> · <b>la carretera</b> <span>Landstraße</span> · <b>el camino</b> <span>Weg</span> · <b>el puente</b> <span>Brücke</span> · <b>la lluvia</b> <span>Regen</span> · <b>el barro</b> <span>Schlamm</span> · <b>la tarjeta</b> <span>Karte</span> · <b>el peaje</b> <span>Maut</span> · <b>la bomba</b> <span>Tankstelle, in Costa Rica</span></p>
+{g:"A1–A2 · Situationen",t:"Unterwegs",h:`
+<p class="words"><b>el aeropuerto</b> <span>Flughafen</span> · <b>el vuelo</b> <span>Flug</span> · <b>la maleta</b> <span>Koffer</span> · <b>el equipaje</b> <span>Gepäck</span> · <b>el bus</b> <span>Bus</span> · <b>la parada</b> <span>Haltestelle</span> · <b>el tiquete</b> <span>Ticket</span> · <b>el carro</b> <span>Auto</span> · <b>alquilar</b> <span>mieten</span> · <b>la gasolina</b> <span>Benzin</span> · <b>la carretera</b> <span>Landstraße</span> · <b>el camino</b> <span>Weg</span> · <b>el puente</b> <span>Brücke</span> · <b>el barro</b> <span>Schlamm</span> · <b>la tarjeta</b> <span>Karte</span> · <b>el peaje</b> <span>Maut</span> · <b>la bomba</b> <span>Tankstelle, in Costa Rica</span></p>
 <ul class="phr">
 <li><span class="es">¿Dónde está la parada del bus?</span> <span class="gloss">Wo ist die Bushaltestelle?</span></li>
 <li><span class="es">¿Este bus va a Monteverde?</span> <span class="gloss">Fährt dieser Bus nach Monteverde?</span></li>
@@ -719,7 +1066,7 @@ const VOC=[
 <li><span class="es">Estamos perdidos.</span> <span class="gloss">Wir haben uns verlaufen.</span></li>
 </ul>
 <div class="note t"><span class="tag">Tico</span>Adressen laufen ohne Straßennamen über Landmarken: <span class="es">200 metros al sur de la iglesia.</span> <span class="gloss">200 Meter südlich der Kirche.</span> Eine <b>cuadra</b> ist ein Häuserblock und zählt als 100 Meter.</div>`},
-{g:"Situationen",t:"Einkaufen & Geld",h:`
+{g:"A1–A2 · Situationen",t:"Einkaufen & Geld",h:`
 <p class="words"><b>la tienda</b> <span>Laden</span> · <b>el supermercado</b> <span>Supermarkt</span> · <b>el mercado</b> <span>Markt</span> · <b>la caja</b> <span>Kasse</span> · <b>el efectivo</b> <span>Bargeld</span> · <b>el cambio</b> <span>Wechselgeld</span> · <b>el recibo</b> <span>Kassenbon</span> · <b>la bolsa</b> <span>Tüte</span> · <b>el descuento</b> <span>Rabatt</span> · <b>la oferta</b> <span>Angebot</span> · <b>la talla</b> <span>Kleidergröße</span> · <b>el número</b> <span>Schuhgröße</span> · <b>el banco</b> <span>Bank</span> · <b>el cajero automático</b> <span>Geldautomat</span> · <b>la tarjeta de crédito</b> <span>Kreditkarte</span> · <b>el impuesto</b> <span>Steuer</span></p>
 <p class="words"><b>la camisa</b> <span>Hemd</span> · <b>la camiseta</b> <span>T-Shirt</span> · <b>el pantalón</b> <span>Hose</span> · <b>el vestido</b> <span>Kleid</span> · <b>los zapatos</b> <span>Schuhe</span> · <b>las sandalias</b> <span>Sandalen</span> · <b>el sombrero</b> <span>Hut</span> · <b>el traje de baño</b> <span>Badeanzug, Badehose</span> · <b>la chaqueta</b> <span>Jacke</span></p>
 <ul class="phr">
@@ -732,7 +1079,7 @@ const VOC=[
 <li><span class="es">Es muy caro. ¿Hay algo más barato?</span> <span class="gloss">Das ist sehr teuer. Gibt es etwas Günstigeres?</span></li>
 </ul>
 <div class="note t"><span class="tag">Tico</span>In Costa Rica wird kaum gehandelt — Preise sind meist fest, anders als in Mexiko oder Marokko. Auf Kunsthandwerksmärkten ist ein höflicher Versuch trotzdem in Ordnung. Kleine <b>sodas</b> und <b>pulperías</b> nehmen oft nur Bargeld.</div>`},
-{g:"Situationen",t:"Natur & Ausflüge",h:`
+{g:"A1–A2 · Situationen",t:"Natur & Ausflüge",h:`
 <p class="words"><b>la playa</b> <span>Strand</span> · <b>el mar</b> <span>Meer</span> · <b>la ola</b> <span>Welle</span> · <b>la arena</b> <span>Sand</span> · <b>el bosque</b> <span>Wald</span> · <b>la selva</b> <span>Dschungel</span> · <b>el volcán</b> <span>Vulkan</span> · <b>la catarata</b> <span>Wasserfall</span> · <b>el río</b> <span>Fluss</span> · <b>el sendero</b> <span>Wanderweg</span> · <b>la caminata</b> <span>Wanderung</span> · <b>el parque nacional</b> <span>Nationalpark</span> · <b>la entrada</b> <span>Eintritt</span> · <b>el guía</b> <span>Führer</span> · <b>el horario</b> <span>Öffnungszeiten</span> · <b>el protector solar</b> <span>Sonnencreme</span> · <b>el repelente</b> <span>Mückenschutz</span> · <b>la marea</b> <span>Gezeiten</span></p>
 <p class="words"><b>el mono</b> <span>Affe</span> · <b>el perezoso</b> <span>Faultier</span> · <b>el tucán</b> <span>Tukan</span> · <b>la rana</b> <span>Frosch</span> · <b>la tortuga</b> <span>Schildkröte</span> · <b>el cocodrilo</b> <span>Krokodil</span> · <b>la mariposa</b> <span>Schmetterling</span> · <b>el pájaro</b> <span>Vogel</span> · <b>el mosquito</b> <span>Mücke</span> · <b>la serpiente</b> <span>Schlange</span> · <b>el colibrí</b> <span>Kolibri</span></p>
 <ul class="phr">
@@ -741,28 +1088,24 @@ const VOC=[
 <li><span class="es">¿Hace falta reservar?</span> <span class="gloss">Muss man reservieren?</span></li>
 <li><span class="es">¿Es seguro nadar aquí?</span> <span class="gloss">Ist es sicher, hier zu schwimmen?</span></li>
 </ul>`},
-{g:"Situationen",t:"Körper & Gesundheit",h:`
+{g:"A1–A2 · Situationen",t:"Gesundheit & Notfall",h:`
 <p class="words"><b>la cabeza</b> <span>Kopf</span> · <b>el ojo</b> <span>Auge</span> · <b>la nariz</b> <span>Nase</span> · <b>la boca</b> <span>Mund</span> · <b>el diente</b> <span>Zahn</span> · <b>la oreja</b> <span>Ohr</span> · <b>el cuello</b> <span>Hals, Nacken</span> · <b>la garganta</b> <span>Rachen</span> · <b>el hombro</b> <span>Schulter</span> · <b>el brazo</b> <span>Arm</span> · <b>la mano</b> <span>Hand</span> · <b>el dedo</b> <span>Finger</span> · <b>la espalda</b> <span>Rücken</span> · <b>el estómago</b> <span>Magen, Bauch</span> · <b>la pierna</b> <span>Bein</span> · <b>la rodilla</b> <span>Knie</span> · <b>el pie</b> <span>Fuß</span> · <b>la piel</b> <span>Haut</span> · <b>el corazón</b> <span>Herz</span></p>
 <p><b>Beschwerden</b></p>
 <p class="words"><b>el dolor</b> <span>Schmerz</span> · <b>la fiebre</b> <span>Fieber</span> · <b>la tos</b> <span>Husten</span> · <b>el resfriado</b> <span>Erkältung</span> · <b>la diarrea</b> <span>Durchfall</span> · <b>la náusea</b> <span>Übelkeit</span> · <b>la picadura</b> <span>Insektenstich</span> · <b>la herida</b> <span>Wunde</span> · <b>la quemadura de sol</b> <span>Sonnenbrand</span> · <b>la alergia</b> <span>Allergie</span> · <b>la pastilla</b> <span>Tablette</span> · <b>la receta</b> <span>Rezept</span> · <b>el seguro</b> <span>Versicherung</span></p>
+<p><b>Hilfe holen</b> — Notruf Costa Rica: <b>911</b></p>
+<p class="words"><b>la farmacia</b> <span>Apotheke</span> · <b>el médico</b> <span>Arzt</span> · <b>el hospital</b> <span>Krankenhaus</span> · <b>la ambulancia</b> <span>Krankenwagen</span> · <b>la policía</b> <span>Polizei</span> · <b>la emergencia</b> <span>Notfall</span></p>
 <ul class="phr">
+<li><span class="es">Necesito un médico.</span> <span class="gloss">Ich brauche einen Arzt.</span></li>
+<li><span class="es">¿Me puede ayudar?</span> <span class="gloss">Können Sie mir helfen?</span></li>
+<li><span class="es">¡Cuidado!</span> <span class="gloss">Vorsicht!</span></li>
+<li><span class="es">Me siento mal.</span> <span class="gloss">Mir geht es schlecht.</span></li>
 <li><span class="es">Me duele la cabeza.</span> <span class="gloss">Mir tut der Kopf weh.</span></li>
 <li><span class="es">Me duelen los pies.</span> <span class="gloss">Mir tun die Füße weh.</span></li>
 <li><span class="es">Tengo fiebre desde ayer.</span> <span class="gloss">Ich habe seit gestern Fieber.</span></li>
 <li><span class="es">¿Tiene algo para las picaduras?</span> <span class="gloss">Haben Sie etwas gegen Insektenstiche?</span></li>
 </ul>
 <div class="note"><span class="tag">Falle</span>Körperteile bekommen den <b>bestimmten Artikel</b>, nicht das Possessivpronomen: <i>me duele <b>la</b> cabeza</i>, nicht <i>mi cabeza</i>. Und <i>doler</i> läuft wie <i>gustar</i> — der schmerzende Körperteil ist das Subjekt.</div>`},
-{g:"Situationen",t:"Notfall",h:`
-<p class="words"><b>la farmacia</b> <span>Apotheke</span> · <b>el médico</b> <span>Arzt</span> · <b>el hospital</b> <span>Krankenhaus</span> · <b>la policía</b> <span>Polizei</span> · <b>la emergencia</b> <span>Notfall</span> · <b>la fiebre</b> <span>Fieber</span> · <b>la cabeza</b> <span>Kopf</span> · <b>el estómago</b> <span>Magen, Bauch</span> · <b>la garganta</b> <span>Hals</span> · <b>la quemadura de sol</b> <span>Sonnenbrand</span> · <b>el seguro</b> <span>Versicherung</span></p>
-<ul class="phr">
-<li><span class="es">Necesito un médico.</span> <span class="gloss">Ich brauche einen Arzt.</span></li>
-<li><span class="es">Me duele la cabeza.</span> <span class="gloss">Mir tut der Kopf weh.</span></li>
-<li><span class="es">Me siento mal.</span> <span class="gloss">Mir geht es schlecht.</span></li>
-<li><span class="es">¿Me puede ayudar?</span> <span class="gloss">Können Sie mir helfen?</span></li>
-<li><span class="es">¡Cuidado!</span> <span class="gloss">Vorsicht!</span></li>
-</ul>
-<p><b>Notruf Costa Rica: 911.</b></p>`},
-{g:"Situationen",t:"Familie & Menschen",h:`
+{g:"A1–A2 · Situationen",t:"Familie & Menschen",h:`
 <p class="words"><b>la familia</b> <span>Familie</span> · <b>el padre</b> <span>Vater</span> · <b>la madre</b> <span>Mutter</span> · <b>los padres</b> <span>Eltern</span> · <b>el hijo / la hija</b> <span>Sohn / Tochter</span> · <b>el hermano / la hermana</b> <span>Bruder / Schwester</span> · <b>el abuelo / la abuela</b> <span>Großvater / Großmutter</span> · <b>el tío / la tía</b> <span>Onkel / Tante</span> · <b>el primo / la prima</b> <span>Cousin / Cousine</span> · <b>el sobrino</b> <span>Neffe</span> · <b>los suegros</b> <span>Schwiegereltern</span></p>
 <p class="words"><b>el amigo / la amiga</b> <span>Freund / Freundin</span> · <b>el novio / la novia</b> <span>Partner / Partnerin, auch Bräutigam / Braut</span> · <b>el niño / la niña</b> <span>Junge / Mädchen</span> · <b>el hombre</b> <span>Mann</span> · <b>la mujer</b> <span>Frau</span> · <b>el señor / la señora</b> <span>Herr / Dame</span> · <b>la gente</b> <span>Leute</span> · <b>el vecino</b> <span>Nachbar</span></p>
 <ul class="phr">
@@ -771,7 +1114,7 @@ const VOC=[
 <li><span class="es">Viajamos con mi familia.</span> <span class="gloss">Wir reisen mit meiner Familie.</span></li>
 </ul>
 <div class="note"><span class="tag">Falle</span><i>la gente</i> ist grammatisch <b>Singular</b>: <span class="es">La gente es muy amable.</span> <span class="gloss">Die Leute sind sehr freundlich.</span></div>`},
-{g:"Situationen",t:"Hochzeitsreise",h:`
+{g:"A1–A2 · Situationen",t:"Hochzeitsreise",h:`
 <p class="words"><b>mi esposo</b> <span>mein Mann</span> · <b>mi esposa</b> <span>meine Frau</span> · <b>la luna de miel</b> <span>Flitterwochen</span> · <b>la boda</b> <span>Hochzeit</span> · <b>recién casados</b> <span>frisch verheiratet</span> · <b>el anillo</b> <span>Ring</span> · <b>la pareja</b> <span>Paar, Partner</span></p>
 <ul class="phr">
 <li><span class="es">Estamos de luna de miel.</span> <span class="gloss">Wir sind auf Hochzeitsreise.</span></li>
@@ -779,7 +1122,7 @@ const VOC=[
 <li><span class="es">¿Nos puede tomar una foto?</span> <span class="gloss">Können Sie ein Foto von uns machen?</span></li>
 <li><span class="es">¡Felicidades!</span> <span class="gloss">Herzlichen Glückwunsch!</span></li>
 </ul>`},
-{g:"Ausdrucksweise",t:"Redewendungen",h:`
+{g:"A2 · Ausdrucksweise",t:"Redewendungen",h:`
 <p>Feste Wendungen, die im Gespräch ständig fallen. Wörtlich übersetzen führt hier meist in die Irre.</p>
 <table>
 <tr><td class="mono">¿Qué tal?</td><td class="de">Wie läuft's?</td></tr>
@@ -819,7 +1162,7 @@ const VOC=[
 <tr><td class="mono">no tener pelos en la lengua</td><td class="de">kein Blatt vor den Mund nehmen</td></tr>
 <tr><td class="mono">ser pan comido</td><td class="de">ein Kinderspiel sein</td></tr>
 </table>`},
-{g:"Ausdrucksweise",t:"Tico-Spanisch",h:`
+{g:"A2 · Ausdrucksweise",t:"Tico-Spanisch",h:`
 <table>
 <tr><td class="mono">pura vida</td><td class="de">hallo, danke, bitte, alles gut — geht immer</td></tr>
 <tr><td class="mono">con mucho gusto</td><td class="de">gern geschehen — nicht <i>de nada</i></td></tr>
@@ -828,7 +1171,7 @@ const VOC=[
 <tr><td class="mono">tuanis</td><td class="de">cool, super</td></tr>
 <tr><td class="mono">¡qué chiva!</td><td class="de">wie geil!</td></tr>
 <tr><td class="mono">buena nota</td><td class="de">netter Kerl, sympathisch</td></tr>
-<tr><td class="mono">salado</td><td class="de">Pech gehabt</td></tr>
+<tr><td class="mono">¡qué salado!</td><td class="de">so ein Pech!</td></tr>
 <tr><td class="mono">pura paja</td><td class="de">Blödsinn, Gelaber</td></tr>
 <tr><td class="mono">¡upe!</td><td class="de">Ruf an der Haustür statt Klopfen</td></tr>
 <tr><td class="mono">tico / tica</td><td class="de">Costa-Ricaner / -in</td></tr>
@@ -839,7 +1182,6 @@ const VOC=[
 <tr><td class="mono">chunche</td><td class="de">Dingsbums</td></tr>
 <tr><td class="mono">soda</td><td class="de">kleines Speiselokal</td></tr>
 <tr><td class="mono">pulpería</td><td class="de">Tante-Emma-Laden</td></tr>
-<tr><td class="mono">bomba</td><td class="de">Tankstelle</td></tr>
 <tr><td class="mono">Chepe</td><td class="de">Spitzname für San José</td></tr>
 <tr><td class="mono">brete</td><td class="de">Arbeit, Job</td></tr>
 <tr><td class="mono">harina, plata</td><td class="de">Geld</td></tr>
@@ -849,6 +1191,162 @@ const VOC=[
 </table>
 <div class="note t"><span class="tag">Tico</span>Ticos duzen mit <b>vos</b>, nicht mit <i>tú</i> — endbetont: <i>vos hablás, comés, vivís</i>, und <i>vos sos</i>. Aktiv brauchst du das nicht, <b>usted</b> ist immer höflich und richtig. Wundere dich nur nicht über <span class="es">¿De dónde sos?</span> <span class="gloss">Woher kommst du?</span></div>
 <div class="note"><span class="tag">Falle</span><b>mae</b> heißt „Alter, Kumpel" und fällt unter Jüngeren in jedem zweiten Satz. Als Gast klingt es aufgesetzt — verstehen ja, selbst benutzen erst, wenn ihr jemanden gut kennt. Dasselbe gilt für den Rest des Slangs: <i>pura vida</i> und <i>con mucho gusto</i> kannst du bedenkenlos sagen, alles andere hörst du erstmal nur.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Gefühle & Stimmung",h:`
+<p class="words"><b>contento</b> <span>zufrieden, froh</span> · <b>emocionado</b> <span>begeistert, aufgeregt</span> · <b>nervioso</b> <span>nervös</span> · <b>preocupado</b> <span>besorgt</span> · <b>enojado</b> <span>wütend</span> · <b>sorprendido</b> <span>überrascht</span> · <b>orgulloso</b> <span>stolz</span> · <b>agradecido</b> <span>dankbar</span> · <b>enamorado</b> <span>verliebt</span> · <b>relajado</b> <span>entspannt</span> · <b>estresado</b> <span>gestresst</span> · <b>asustado</b> <span>erschrocken</span> · <b>decepcionado</b> <span>enttäuscht</span> · <b>avergonzado</b> <span>beschämt</span> · <b>celoso</b> <span>eifersüchtig</span> · <b>aburrido</b> <span>gelangweilt</span></p>
+<p><b>Gefühle als Substantiv</b></p>
+<p class="words"><b>la alegría</b> <span>Freude</span> · <b>el miedo</b> <span>Angst</span> · <b>la sorpresa</b> <span>Überraschung</span> · <b>la tristeza</b> <span>Traurigkeit</span> · <b>el amor</b> <span>Liebe</span></p>
+<ul class="phr">
+<li><span class="es">Estamos muy emocionados.</span> <span class="gloss">Wir sind ganz aufgeregt.</span></li>
+<li><span class="es">Estamos enamorados.</span> <span class="gloss">Wir sind verliebt.</span></li>
+<li><span class="es">Me siento muy relajado aquí.</span> <span class="gloss">Ich fühle mich hier sehr entspannt.</span></li>
+<li><span class="es">No se preocupe.</span> <span class="gloss">Machen Sie sich keine Sorgen.</span></li>
+<li><span class="es">¡Qué dicha!</span> <span class="gloss">Wie schön! Was für ein Glück!</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Gefühle sind Zustände und stehen mit <b>estar</b>: <span class="es">estoy contento, está enojada</span>. Mit <i>ser</i> kippt die Bedeutung: <i>es aburrido</i> = er ist langweilig.</div>
+<div class="note t"><span class="tag">Tico</span><b>¡Qué dicha!</b> ist typisch costa-ricanisch für „wie schön" — und <b>estar bravo</b> heißt in Costa Rica <i>wütend</i>, nicht „brav".</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Menschen beschreiben",h:`
+<p><b>Charakter</b></p>
+<p class="words"><b>amable</b> <span>freundlich</span> · <b>simpático</b> <span>sympathisch</span> · <b>antipático</b> <span>unsympathisch</span> · <b>divertido</b> <span>lustig</span> · <b>serio</b> <span>ernst</span> · <b>tímido</b> <span>schüchtern</span> · <b>abierto</b> <span>offen</span> · <b>generoso</b> <span>großzügig</span> · <b>paciente</b> <span>geduldig</span> · <b>impaciente</b> <span>ungeduldig</span> · <b>trabajador</b> <span>fleißig</span> · <b>perezoso</b> <span>faul</span> · <b>inteligente</b> <span>klug</span></p>
+<p><b>Aussehen</b></p>
+<p class="words"><b>delgado</b> <span>schlank</span> · <b>fuerte</b> <span>kräftig, stark</span> · <b>el pelo</b> <span>Haar</span> · <b>rubio</b> <span>blond</span> · <b>moreno</b> <span>dunkelhaarig, braun gebrannt</span> · <b>canoso</b> <span>grauhaarig</span> · <b>calvo</b> <span>glatzköpfig</span> · <b>la barba</b> <span>Bart</span> · <b>los anteojos</b> <span>Brille</span> · <b>guapo</b> <span>gut aussehend</span> · <b>parecerse a</b> <span>ähnlich sehen</span></p>
+<ul class="phr">
+<li><span class="es">Mi esposa es muy simpática.</span> <span class="gloss">Meine Frau ist sehr sympathisch.</span></li>
+<li><span class="es">Es alto y tiene barba.</span> <span class="gloss">Er ist groß und hat einen Bart.</span></li>
+<li><span class="es">Los ticos son muy amables.</span> <span class="gloss">Die Costa-Ricaner sind sehr freundlich.</span></li>
+<li><span class="es">Se parece a su madre.</span> <span class="gloss">Er sieht seiner Mutter ähnlich.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><i>perezoso</i> heißt <b>faul</b> — und <i>el perezoso</i>, das Faultier, ist wörtlich „der Faule". Brille ist in Lateinamerika <b>los anteojos</b>, <i>las gafas</i> klingt nach Spanien.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Beruf & Arbeitsalltag",h:`
+<p class="words"><b>el trabajo</b> <span>Arbeit</span> · <b>trabajar</b> <span>arbeiten</span> · <b>la empresa</b> <span>Firma</span> · <b>la oficina</b> <span>Büro</span> · <b>el jefe / la jefa</b> <span>Chef / Chefin</span> · <b>el compañero de trabajo</b> <span>Kollege</span> · <b>el cliente</b> <span>Kunde</span> · <b>la reunión</b> <span>Besprechung</span> · <b>el turno</b> <span>Schicht</span> · <b>las vacaciones</b> <span>Urlaub</span> · <b>jubilado</b> <span>in Rente</span> · <b>la universidad</b> <span>Universität</span> · <b>estudiar</b> <span>studieren, lernen</span></p>
+<p><b>Berufe</b></p>
+<p class="words"><b>el anestesiólogo</b> <span>Anästhesist</span> · <b>el enfermero / la enfermera</b> <span>Pfleger / Pflegerin</span> · <b>el abogado</b> <span>Anwalt</span> · <b>el maestro</b> <span>Lehrer, Grundschule</span> · <b>el profesor</b> <span>Lehrer, Dozent</span> · <b>el ingeniero</b> <span>Ingenieur</span> · <b>el arquitecto</b> <span>Architekt</span> · <b>el cocinero</b> <span>Koch</span> · <b>el salonero</b> <span>Kellner</span> · <b>el vendedor</b> <span>Verkäufer</span> · <b>el chofer</b> <span>Fahrer</span> · <b>el agricultor</b> <span>Landwirt</span> · <b>el programador</b> <span>Programmierer</span></p>
+<ul class="phr">
+<li><span class="es">¿A qué se dedica?</span> <span class="gloss">Was machen Sie beruflich?</span></li>
+<li><span class="es">Soy anestesiólogo.</span> <span class="gloss">Ich bin Anästhesist.</span></li>
+<li><span class="es">Trabajo en un hospital.</span> <span class="gloss">Ich arbeite in einem Krankenhaus.</span></li>
+<li><span class="es">Estamos de vacaciones.</span> <span class="gloss">Wir sind im Urlaub.</span></li>
+<li><span class="es">Mañana tengo turno de noche.</span> <span class="gloss">Morgen habe ich Nachtschicht.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Beim Beruf steht <b>kein Artikel</b>: <span class="es">Soy anestesiólogo</span>, nicht <i>soy un anestesiólogo</i> — außer mit Adjektiv: <i>es un médico excelente</i>.</div>
+<div class="note t"><span class="tag">Tico</span>Der Kellner heißt in Costa Rica <b>salonero</b>. <i>Mesero</i> verstehen alle, <i>camarero</i> klingt nach Spanien.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Freizeit & Sport",h:`
+<p class="words"><b>el tiempo libre</b> <span>Freizeit</span> · <b>el pasatiempo</b> <span>Hobby</span> · <b>leer</b> <span>lesen</span> · <b>cocinar</b> <span>kochen</span> · <b>bailar</b> <span>tanzen</span> · <b>cantar</b> <span>singen</span> · <b>pintar</b> <span>malen</span> · <b>pescar</b> <span>angeln</span> · <b>surfear</b> <span>surfen</span> · <b>bucear</b> <span>tauchen</span> · <b>andar en bicicleta</b> <span>Rad fahren</span> · <b>el ciclismo</b> <span>Radsport</span> · <b>correr</b> <span>laufen, rennen</span> · <b>entrenar</b> <span>trainieren</span> · <b>hacer ejercicio</b> <span>Sport treiben</span> · <b>el gimnasio</b> <span>Fitnessstudio</span></p>
+<p class="words"><b>el fútbol</b> <span>Fußball</span> · <b>el partido</b> <span>Spiel, Match</span> · <b>el equipo</b> <span>Mannschaft</span> · <b>ganar</b> <span>gewinnen</span> · <b>perder</b> <span>verlieren</span> · <b>empatar</b> <span>unentschieden spielen</span> · <b>la música</b> <span>Musik</span> · <b>el concierto</b> <span>Konzert</span> · <b>la película</b> <span>Film</span> · <b>el cine</b> <span>Kino</span> · <b>la fiesta</b> <span>Feier, Party</span> · <b>el baile</b> <span>Tanz</span></p>
+<ul class="phr">
+<li><span class="es">¿Qué le gusta hacer en su tiempo libre?</span> <span class="gloss">Was machen Sie gern in Ihrer Freizeit?</span></li>
+<li><span class="es">Me gusta andar en bicicleta.</span> <span class="gloss">Ich fahre gern Rad.</span></li>
+<li><span class="es">¿Vamos a bailar?</span> <span class="gloss">Gehen wir tanzen?</span></li>
+<li><span class="es">¿Quién ganó el partido?</span> <span class="gloss">Wer hat das Spiel gewonnen?</span></li>
+<li><span class="es">Entreno tres veces por semana.</span> <span class="gloss">Ich trainiere dreimal pro Woche.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Fußball ist Religion: <b>la Sele</b> ist die Nationalmannschaft, eine <b>mejenga</b> ein spontanes Kickspiel. Wer nach Saprissa oder Liga fragt, hat sofort ein Gesprächsthema.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Wohnen & Haushalt",h:`
+<p class="words"><b>la casa</b> <span>Haus</span> · <b>el apartamento</b> <span>Wohnung</span> · <b>la cocina</b> <span>Küche, Herd</span> · <b>la sala</b> <span>Wohnzimmer</span> · <b>el comedor</b> <span>Esszimmer</span> · <b>el jardín</b> <span>Garten</span> · <b>la terraza</b> <span>Terrasse</span> · <b>el balcón</b> <span>Balkon</span> · <b>la puerta</b> <span>Tür</span> · <b>la ventana</b> <span>Fenster</span> · <b>el piso</b> <span>Boden, Stockwerk</span> · <b>la escalera</b> <span>Treppe</span> · <b>la pared</b> <span>Wand</span> · <b>el techo</b> <span>Dach, Decke</span></p>
+<p><b>Einrichtung & Haushalt</b></p>
+<p class="words"><b>la mesa</b> <span>Tisch</span> · <b>la silla</b> <span>Stuhl</span> · <b>el sofá</b> <span>Sofa</span> · <b>el ropero</b> <span>Kleiderschrank</span> · <b>la refri</b> <span>Kühlschrank</span> · <b>la lavadora</b> <span>Waschmaschine</span> · <b>la basura</b> <span>Müll</span> · <b>limpiar</b> <span>putzen</span> · <b>lavar</b> <span>waschen</span> · <b>prender</b> <span>einschalten</span> · <b>apagar</b> <span>ausschalten</span> · <b>la luz</b> <span>Licht, Strom</span></p>
+<ul class="phr">
+<li><span class="es">¿Puede prender el aire, por favor?</span> <span class="gloss">Können Sie die Klimaanlage einschalten?</span></li>
+<li><span class="es">Se fue la luz.</span> <span class="gloss">Der Strom ist ausgefallen.</span></li>
+<li><span class="es">¿Dónde se bota la basura?</span> <span class="gloss">Wo wirft man den Müll hin?</span></li>
+<li><span class="es">La habitación está en el segundo piso.</span> <span class="gloss">Das Zimmer ist im zweiten Stock.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Einschalten heißt in Lateinamerika <b>prender</b> (<i>encender</i> ist förmlicher), Müll wegwerfen <b>botar</b>. Stromausfälle bei Gewittern sind normal: <span class="es">se fue la luz</span>.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Handy & Technik",h:`
+<p class="words"><b>el celular</b> <span>Handy</span> · <b>el cargador</b> <span>Ladegerät</span> · <b>la batería</b> <span>Akku</span> · <b>cargar</b> <span>laden</span> · <b>el enchufe</b> <span>Steckdose</span> · <b>el adaptador</b> <span>Adapter</span> · <b>la señal</b> <span>Empfang</span> · <b>el chip</b> <span>SIM-Karte</span> · <b>los datos</b> <span>mobile Daten</span> · <b>la recarga</b> <span>Guthaben aufladen</span> · <b>la llamada</b> <span>Anruf</span> · <b>llamar</b> <span>anrufen</span> · <b>el mensaje</b> <span>Nachricht</span> · <b>mandar</b> <span>schicken</span> · <b>el correo</b> <span>E-Mail</span> · <b>la computadora</b> <span>Computer</span> · <b>la aplicación</b> <span>App</span> · <b>descargar</b> <span>herunterladen</span></p>
+<ul class="phr">
+<li><span class="es">Se me acabó la batería.</span> <span class="gloss">Mein Akku ist leer.</span></li>
+<li><span class="es">¿Dónde puedo cargar el celular?</span> <span class="gloss">Wo kann ich das Handy laden?</span></li>
+<li><span class="es">No tengo señal.</span> <span class="gloss">Ich habe keinen Empfang.</span></li>
+<li><span class="es">¿Dónde compro un chip?</span> <span class="gloss">Wo kaufe ich eine SIM-Karte?</span></li>
+<li><span class="es">Le mando un mensaje por WhatsApp.</span> <span class="gloss">Ich schicke Ihnen eine WhatsApp.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Costa Rica nutzt Steckdosen nach US-Norm (Typ A/B, 110 Volt) — für deutsche Stecker braucht ihr einen <b>adaptador</b>. Absprachen mit Unterkünften und Guides laufen fast immer über WhatsApp.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"In der Stadt",h:`
+<p class="words"><b>la ciudad</b> <span>Stadt</span> · <b>el pueblo</b> <span>Dorf, Kleinstadt</span> · <b>el barrio</b> <span>Viertel</span> · <b>el centro</b> <span>Zentrum</span> · <b>la calle</b> <span>Straße</span> · <b>la avenida</b> <span>Allee, Hauptstraße</span> · <b>la esquina</b> <span>Ecke</span> · <b>la plaza</b> <span>Platz</span> · <b>el parque</b> <span>Park</span> · <b>la iglesia</b> <span>Kirche</span> · <b>el museo</b> <span>Museum</span> · <b>el edificio</b> <span>Gebäude</span> · <b>la terminal de buses</b> <span>Busbahnhof</span> · <b>el semáforo</b> <span>Ampel</span> · <b>la salida</b> <span>Ausgang</span></p>
+<p class="words"><b>cruzar</b> <span>überqueren</span> · <b>doblar</b> <span>abbiegen</span> · <b>subir</b> <span>hinaufgehen, einsteigen</span> · <b>bajar</b> <span>hinuntergehen, aussteigen</span> · <b>seguir recto</b> <span>geradeaus weitergehen</span></p>
+<ul class="phr">
+<li><span class="es">¿Cómo llego al centro?</span> <span class="gloss">Wie komme ich ins Zentrum?</span></li>
+<li><span class="es">Doble a la derecha en la esquina.</span> <span class="gloss">Biegen Sie an der Ecke rechts ab.</span></li>
+<li><span class="es">Siga recto dos cuadras.</span> <span class="gloss">Gehen Sie zwei Blocks geradeaus.</span></li>
+<li><span class="es">Está a tres cuadras de aquí.</span> <span class="gloss">Es ist drei Blocks von hier.</span></li>
+<li><span class="es">¿Dónde me bajo?</span> <span class="gloss">Wo muss ich aussteigen?</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><i>la parada</i> ist die Haltestelle, <b>la terminal</b> der Busbahnhof — für Fernbusse nach Monteverde oder zur Küste braucht ihr die <i>terminal</i>.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Zeitangaben & Häufigkeit",h:`
+<p class="words"><b>anoche</b> <span>gestern Abend</span> · <b>esta mañana</b> <span>heute Morgen</span> · <b>esta noche</b> <span>heute Abend</span> · <b>todos los días</b> <span>jeden Tag</span> · <b>cada dos días</b> <span>jeden zweiten Tag</span> · <b>a menudo</b> <span>oft</span> · <b>de vez en cuando</b> <span>ab und zu</span> · <b>casi nunca</b> <span>fast nie</span> · <b>enseguida</b> <span>sofort</span> · <b>ahorita</b> <span>gleich, jetzt</span> · <b>al rato</b> <span>nachher</span> · <b>dentro de</b> <span>in, binnen</span> · <b>durante</b> <span>während</span> · <b>a tiempo</b> <span>pünktlich</span> · <b>atrasado</b> <span>verspätet</span> · <b>la próxima vez</b> <span>nächstes Mal</span> · <b>la última vez</b> <span>letztes Mal</span></p>
+<ul class="phr">
+<li><span class="es">Llegamos hace tres días.</span> <span class="gloss">Wir sind vor drei Tagen angekommen.</span></li>
+<li><span class="es">Salimos dentro de una hora.</span> <span class="gloss">Wir fahren in einer Stunde los.</span></li>
+<li><span class="es">El bus viene atrasado.</span> <span class="gloss">Der Bus hat Verspätung.</span></li>
+<li><span class="es">La próxima vez vamos al Caribe.</span> <span class="gloss">Nächstes Mal fahren wir in die Karibik.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>„vor drei Tagen" ist <b>hace</b> + Zeitraum: <i>hace tres días</i>. „in einer Stunde" ist <b>dentro de</b> — <i>en una hora</i> heißt eher „innerhalb einer Stunde".</div>
+<div class="note t"><span class="tag">Tico</span><b>ahorita</b> kann „jetzt sofort" oder „irgendwann gleich" bedeuten — und die <i>hora tica</i> ist entspannt. Bei Touren und Bussen gilt trotzdem die Uhr.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Küche & Speisen",h:`
+<p><b>Zubereitung</b></p>
+<p class="words"><b>a la plancha</b> <span>gegrillt, von der Platte</span> · <b>frito</b> <span>frittiert</span> · <b>asado</b> <span>gebraten, gegrillt</span> · <b>al horno</b> <span>aus dem Ofen</span> · <b>crudo</b> <span>roh</span> · <b>bien cocido</b> <span>durchgegart</span> · <b>la sal</b> <span>Salz</span> · <b>la pimienta</b> <span>Pfeffer</span> · <b>el azúcar</b> <span>Zucker</span> · <b>el aceite</b> <span>Öl</span> · <b>el ajo</b> <span>Knoblauch</span> · <b>la cebolla</b> <span>Zwiebel</span> · <b>el tomate</b> <span>Tomate</span> · <b>el hielo</b> <span>Eis, Eiswürfel</span></p>
+<p><b>Obst & Typisches</b></p>
+<p class="words"><b>el aguacate</b> <span>Avocado</span> · <b>el plátano</b> <span>Kochbanane</span> · <b>el banano</b> <span>Banane</span> · <b>la piña</b> <span>Ananas</span> · <b>el mango</b> <span>Mango</span> · <b>la papaya</b> <span>Papaya</span> · <b>la sandía</b> <span>Wassermelone</span> · <b>el coco</b> <span>Kokosnuss</span> · <b>la guanábana</b> <span>Stachelannone</span> · <b>el cas</b> <span>Cas-Guave</span> · <b>el maíz</b> <span>Mais</span> · <b>la tortilla</b> <span>Maisfladen</span> · <b>los patacones</b> <span>frittierte Kochbananen</span> · <b>los maduros</b> <span>süße gebratene Kochbananen</span> · <b>el chifrijo</b> <span>Reis-Bohnen-Schweinefleisch-Schale</span></p>
+<p><b>Auf dem Tisch</b></p>
+<p class="words"><b>el vaso</b> <span>Glas</span> · <b>la taza</b> <span>Tasse</span> · <b>el tenedor</b> <span>Gabel</span> · <b>el cuchillo</b> <span>Messer</span> · <b>la cuchara</b> <span>Löffel</span> · <b>la servilleta</b> <span>Serviette</span> · <b>la botella</b> <span>Flasche</span></p>
+<ul class="phr">
+<li><span class="es">¿Me regala un café, por favor?</span> <span class="gloss">Einen Kaffee, bitte.</span></li>
+<li><span class="es">¿Me trae un vaso de agua sin hielo?</span> <span class="gloss">Bringen Sie mir ein Glas Wasser ohne Eis?</span></li>
+<li><span class="es">Sin cebolla, por favor.</span> <span class="gloss">Ohne Zwiebeln, bitte.</span></li>
+<li><span class="es">¿Qué lleva este plato?</span> <span class="gloss">Was ist in diesem Gericht?</span></li>
+<li><span class="es">Está demasiado salado.</span> <span class="gloss">Es ist zu salzig.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span><b>¿Me regala…?</b> heißt wörtlich „schenken Sie mir…", ist aber die höflichste Art zu bestellen — bezahlt wird trotzdem. <b>plátano</b> ist die Kochbanane, die Obstbanane heißt <b>banano</b>. Auf jedem Tisch steht <b>Salsa Lizano</b>.</div>`},
+{g:"Aufbau B1 · Reise & Gespräch",t:"Mit dem Mietwagen",h:`
+<p class="words"><b>manejar</b> <span>Auto fahren</span> · <b>la licencia de conducir</b> <span>Führerschein</span> · <b>el volante</b> <span>Lenkrad</span> · <b>la llanta</b> <span>Reifen</span> · <b>el freno</b> <span>Bremse</span> · <b>el motor</b> <span>Motor</span> · <b>el diésel</b> <span>Diesel</span> · <b>la gasolinera</b> <span>Tankstelle</span> · <b>el parqueo</b> <span>Parkplatz</span> · <b>parquear</b> <span>parken</span> · <b>la presa</b> <span>Stau</span> · <b>el hueco</b> <span>Schlagloch</span> · <b>la curva</b> <span>Kurve</span> · <b>la multa</b> <span>Strafzettel</span> · <b>el taller</b> <span>Werkstatt</span> · <b>el mecánico</b> <span>Mechaniker</span> · <b>la grúa</b> <span>Abschleppwagen</span> · <b>el choque</b> <span>Unfall, Zusammenstoß</span> · <b>la doble tracción</b> <span>Allradantrieb</span> · <b>adelantar</b> <span>überholen</span></p>
+<p><b>Schilder</b></p>
+<p class="words"><b>Alto</b> <span>Stopp</span> · <b>Ceda el paso</b> <span>Vorfahrt gewähren</span> · <b>Una vía</b> <span>Einbahnstraße, einspuriger Abschnitt</span> · <b>Despacio</b> <span>Langsam</span> · <b>Prohibido adelantar</b> <span>Überholverbot</span></p>
+<ul class="phr">
+<li><span class="es">Lleno de súper, por favor.</span> <span class="gloss">Volltanken mit Super, bitte.</span></li>
+<li><span class="es">Tenemos una llanta pinchada.</span> <span class="gloss">Wir haben einen Platten.</span></li>
+<li><span class="es">¿Dónde puedo parquear?</span> <span class="gloss">Wo kann ich parken?</span></li>
+<li><span class="es">¿El camino está en buen estado?</span> <span class="gloss">Ist die Straße in gutem Zustand?</span></li>
+<li><span class="es">¿Se necesita doble tracción?</span> <span class="gloss">Braucht man Allrad?</span></li>
+<li><span class="es">Hay mucha presa.</span> <span class="gloss">Es ist viel Stau.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>In Costa Rica heißt der Stau <b>presa</b> und der Parkplatz <b>parqueo</b>. Tankstellen sind bedient — man sagt nur Sorte und Menge. Viele Brücken sind <i>de una vía</i>: Wer das <i>Ceda</i>-Schild hat, wartet. Nachts wegen Schlaglöchern und fehlender Beleuchtung möglichst nicht fahren.</div>`},
+{g:"Aufbau B1 · Reise & Gespräch",t:"Tiere & Natur Costa Ricas",h:`
+<p><b>Tiere</b></p>
+<p class="words"><b>la ballena</b> <span>Wal</span> · <b>el delfín</b> <span>Delfin</span> · <b>el tiburón</b> <span>Hai</span> · <b>la tortuga baula</b> <span>Lederschildkröte</span> · <b>la iguana</b> <span>Leguan</span> · <b>el pizote</b> <span>Nasenbär</span> · <b>la lapa roja</b> <span>Hellroter Ara</span> · <b>el mono congo</b> <span>Brüllaffe</span> · <b>el mono carablanca</b> <span>Kapuzineraffe</span> · <b>la danta</b> <span>Tapir</span> · <b>el quetzal</b> <span>Quetzal</span> · <b>el murciélago</b> <span>Fledermaus</span> · <b>la araña</b> <span>Spinne</span> · <b>la hormiga</b> <span>Ameise</span></p>
+<p><b>Landschaft & Aktivitäten</b></p>
+<p class="words"><b>el bosque nuboso</b> <span>Nebelwald</span> · <b>la neblina</b> <span>Nebel</span> · <b>el manglar</b> <span>Mangrovenwald</span> · <b>el arrecife</b> <span>Riff</span> · <b>la isla</b> <span>Insel</span> · <b>la bahía</b> <span>Bucht</span> · <b>el cráter</b> <span>Krater</span> · <b>las aguas termales</b> <span>heiße Quellen</span> · <b>el mirador</b> <span>Aussichtspunkt</span> · <b>el puente colgante</b> <span>Hängebrücke</span> · <b>el canopy</b> <span>Seilrutsche</span> · <b>la corriente</b> <span>Strömung</span> · <b>el esnórquel</b> <span>Schnorcheln</span> · <b>el kayak</b> <span>Kajak</span> · <b>el tour</b> <span>geführter Ausflug</span></p>
+<ul class="phr">
+<li><span class="es">¿Dónde se pueden ver ballenas?</span> <span class="gloss">Wo kann man Wale sehen?</span></li>
+<li><span class="es">¿Hay corriente fuerte aquí?</span> <span class="gloss">Gibt es hier starke Strömung?</span></li>
+<li><span class="es">Vimos un mono congo.</span> <span class="gloss">Wir haben einen Brüllaffen gesehen.</span></li>
+<li><span class="es">¿A qué hora sale el tour?</span> <span class="gloss">Wann startet die Tour?</span></li>
+<li><span class="es">¿Está incluido el transporte?</span> <span class="gloss">Ist der Transport inbegriffen?</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Den Brüllaffen hört ihr, bevor ihr ihn seht: <b>el congo</b>. An vielen Pazifikstränden gibt es gefährliche Rückströmungen — <b>corriente de resaca</b> — und selten Rettungsschwimmer. Einheimische fragen, bevor ihr ins Wasser geht.</div>`},
+{g:"Aufbau B1 · Reise & Gespräch",t:"Probleme lösen",h:`
+<p class="words"><b>el problema</b> <span>Problem</span> · <b>la queja</b> <span>Beschwerde</span> · <b>quejarse</b> <span>sich beschweren</span> · <b>reclamar</b> <span>reklamieren</span> · <b>el reembolso</b> <span>Rückerstattung</span> · <b>cancelar</b> <span>stornieren, absagen</span> · <b>cambiar</b> <span>wechseln, umtauschen</span> · <b>roto</b> <span>kaputt</span> · <b>no sirve</b> <span>funktioniert nicht</span> · <b>el ruido</b> <span>Lärm</span> · <b>olvidar</b> <span>vergessen</span> · <b>robar</b> <span>stehlen</span> · <b>la billetera</b> <span>Geldbeutel</span> · <b>el pasaporte</b> <span>Reisepass</span> · <b>la denuncia</b> <span>Anzeige</span> · <b>la embajada</b> <span>Botschaft</span> · <b>el error</b> <span>Fehler</span></p>
+<ul class="phr">
+<li><span class="es">La ducha no sirve.</span> <span class="gloss">Die Dusche funktioniert nicht.</span></li>
+<li><span class="es">Hay mucho ruido en la habitación.</span> <span class="gloss">Im Zimmer ist es sehr laut.</span></li>
+<li><span class="es">Quisiera cambiar de habitación.</span> <span class="gloss">Ich würde gern das Zimmer wechseln.</span></li>
+<li><span class="es">Creo que hay un error en la cuenta.</span> <span class="gloss">Ich glaube, in der Rechnung ist ein Fehler.</span></li>
+<li><span class="es">Perdí mi pasaporte.</span> <span class="gloss">Ich habe meinen Pass verloren.</span></li>
+<li><span class="es">Me robaron la billetera.</span> <span class="gloss">Mir wurde der Geldbeutel gestohlen.</span></li>
+<li><span class="es">¿Me puede devolver el dinero?</span> <span class="gloss">Können Sie mir das Geld zurückgeben?</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>„Mir wurde gestohlen" baut man mit <b>unpersönlichem Plural</b>: <span class="es">me robaron…</span> — wörtlich „sie haben mir … gestohlen".</div>
+<div class="note t"><span class="tag">Tico</span><b>no sirve</b> ist die Standardformel für „funktioniert nicht". Beschwerden kommen in Costa Rica freundlich und indirekt am besten an — erst <i>disculpe</i>, dann das Problem.</div>`},
+{g:"Aufbau B1 · Reise & Gespräch",t:"Meinung & Gespräch",h:`
+<p class="words"><b>creo que</b> <span>ich glaube, dass</span> · <b>pienso que</b> <span>ich denke, dass</span> · <b>me parece que</b> <span>mir scheint, dass</span> · <b>en mi opinión</b> <span>meiner Meinung nach</span> · <b>depende</b> <span>kommt darauf an</span> · <b>por un lado</b> <span>einerseits</span> · <b>por otro lado</b> <span>andererseits</span> · <b>en cambio</b> <span>hingegen</span> · <b>por lo tanto</b> <span>deshalb</span> · <b>o sea</b> <span>also, das heißt</span> · <b>es decir</b> <span>das heißt</span> · <b>a pesar de</b> <span>trotz</span> · <b>de hecho</b> <span>tatsächlich</span> · <b>la verdad es que</b> <span>ehrlich gesagt</span> · <b>seguramente</b> <span>sicherlich</span> · <b>me da igual</b> <span>ist mir egal</span> · <b>prefiero</b> <span>ich bevorzuge</span></p>
+<ul class="phr">
+<li><span class="es">Creo que sí. / Creo que no.</span> <span class="gloss">Ich glaube schon. / Ich glaube nicht.</span></li>
+<li><span class="es">Me parece muy bien.</span> <span class="gloss">Das finde ich sehr gut.</span></li>
+<li><span class="es">Depende del clima.</span> <span class="gloss">Das hängt vom Wetter ab.</span></li>
+<li><span class="es">¿Usted qué opina?</span> <span class="gloss">Was meinen Sie?</span></li>
+<li><span class="es">Por un lado es caro, por otro lado vale la pena.</span> <span class="gloss">Einerseits ist es teuer, andererseits lohnt es sich.</span></li>
+<li><span class="es">La verdad es que me encanta este país.</span> <span class="gloss">Ehrlich gesagt liebe ich dieses Land.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Verneinte Meinung verlangt den Subjuntivo: <span class="es">creo que es caro</span>, aber <span class="es">no creo que sea caro</span>. Im Zweifel die bejahte Form wählen.</div>`}
 ];
 
 const VERBS=[
@@ -900,128 +1398,655 @@ const VERBS=[
 {g:"Regelmäßig",t:"vivir",sub:"leben, wohnen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">vivo</td><td class="mono">viví</td><td class="mono">vivía</td></tr><tr><td class="de">tú</td><td class="mono">vives</td><td class="mono">viviste</td><td class="mono">vivías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">vive</td><td class="mono">vivió</td><td class="mono">vivía</td></tr><tr><td class="de">nos.</td><td class="mono">vivimos</td><td class="mono">vivimos</td><td class="mono">vivíamos</td></tr><tr><td class="de">vos.</td><td class="mono">vivís</td><td class="mono">vivisteis</td><td class="mono">vivíais</td></tr><tr><td class="de">ellos</td><td class="mono">viven</td><td class="mono">vivieron</td><td class="mono">vivían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">viviré</td><td class="mono">viviría</td><td class="mono">viva</td></tr><tr><td class="de">tú</td><td class="mono">vivirás</td><td class="mono">vivirías</td><td class="mono">vivas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">vivirá</td><td class="mono">viviría</td><td class="mono">viva</td></tr><tr><td class="de">nos.</td><td class="mono">viviremos</td><td class="mono">viviríamos</td><td class="mono">vivamos</td></tr><tr><td class="de">vos.</td><td class="mono">viviréis</td><td class="mono">viviríais</td><td class="mono">viváis</td></tr><tr><td class="de">ellos</td><td class="mono">vivirán</td><td class="mono">vivirían</td><td class="mono">vivan</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡viva! <span class="gloss">usted</span> · ¡vivan! <span class="gloss">ustedes</span> · ¡vive! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">viviendo</td></tr><tr><td class="de">Partizip</td><td class="mono">vivido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
 ];
 
-const QUIZ=[
-["Guten Morgen, wie geht es Ihnen?","Buenos días, ¿cómo está?"],
-["Ich heiße Philipp, wir sind aus Deutschland.","Me llamo Philipp, somos de Alemania."],
-["Wir sind auf Hochzeitsreise.","Estamos de luna de miel."],
-["Was kostet das?","¿Cuánto cuesta?"],
-["Die Rechnung, bitte.","La cuenta, por favor."],
-["Ich verstehe nicht, können Sie das wiederholen?","No entiendo, ¿puede repetir?"],
-["Wo ist die Bushaltestelle?","¿Dónde está la parada del bus?"],
-["Ich habe Hunger. Wo gibt es ein gutes Restaurant?","Tengo hambre. ¿Dónde hay un buen restaurante?"],
-["Meine Frau ist müde, sie will schlafen.","Mi esposa está cansada, quiere dormir."],
-["Wir müssen morgen zum Flughafen fahren.","Tenemos que ir al aeropuerto mañana."],
-["Ein Tisch für zwei, bitte.","Una mesa para dos, por favor."],
-["Was empfehlen Sie mir?","¿Qué me recomienda?"],
-["Haben Sie etwas Vegetarisches?","¿Tiene algo vegetariano?"],
-["Ich hätte gern einen Kaffee ohne Zucker.","Quisiera un café sin azúcar."],
-["Es hat sehr gut geschmeckt, danke.","Estaba muy rico, gracias."],
-["Kann man mit Karte bezahlen?","¿Se puede pagar con tarjeta?"],
-["Wir haben eine Buchung auf den Namen Müller.","Tenemos una reserva a nombre de Müller."],
-["Die Klimaanlage funktioniert nicht.","No funciona el aire acondicionado."],
-["Ist das Frühstück inbegriffen?","¿Está incluido el desayuno?"],
-["Wie lautet das WLAN-Passwort?","¿Cuál es la contraseña del wifi?"],
-["Um wie viel Uhr ist der Check-out?","¿A qué hora es el check-out?"],
-["Wir haben uns verlaufen.","Estamos perdidos."],
-["Fährt dieser Bus nach Monteverde?","¿Este bus va a Monteverde?"],
-["Wie lange dauert es?","¿Cuánto tiempo toma?"],
-["Können Sie uns nach San José bringen?","¿Nos puede llevar a San José?"],
-["Ich möchte ein Auto mieten.","Quiero alquilar un carro."],
-["Um wie viel Uhr öffnet der Park?","¿A qué hora abre el parque?"],
-["Was kostet der Eintritt pro Person?","¿Cuánto cuesta la entrada por persona?"],
-["Muss man reservieren?","¿Hace falta reservar?"],
-["Ist es sicher, hier zu schwimmen?","¿Es seguro nadar aquí?"],
-["Können Sie ein Foto von uns machen?","¿Nos puede tomar una foto?"],
-["Wir mögen die Strände sehr.","Nos gustan mucho las playas."],
-["Mir gefällt dieses Hotel.","Me gusta este hotel."],
-["Ich mag Fisch, aber meine Frau bevorzugt Huhn.","Me gusta el pescado, pero mi esposa prefiere el pollo."],
-["Ich brauche einen Arzt.","Necesito un médico."],
-["Mir tut der Kopf weh.","Me duele la cabeza."],
-["Mir geht es schlecht.","Me siento mal."],
-["Wo ist die nächste Apotheke?","¿Dónde está la farmacia más cercana?"],
-["Ich bin allergisch gegen Garnelen.","Soy alérgico a los camarones."],
-["Ich bin vierunddreißig Jahre alt.","Tengo treinta y cuatro años."],
-["Uns ist warm und wir haben Durst.","Tenemos calor y sed."],
-["Ich habe es eilig.","Tengo prisa."],
-["Wir werden nach Costa Rica reisen.","Vamos a viajar a Costa Rica."],
-["Ich suche gerade das Hotel.","Estoy buscando el hotel."],
-["Ich bin gerade angekommen.","Acabo de llegar."],
-["Wir können morgen kommen.","Podemos venir mañana."],
-["Ich weiß nicht, wo es ist.","No sé dónde está."],
-["Ich kenne diesen Ort nicht.","No conozco este lugar."],
-["Es gibt viele Touristen hier.","Hay muchos turistas aquí."],
-["Es gibt kein Problem.","No hay ningún problema."],
-["Ich sehe niemanden.","No veo a nadie."],
-["Wir essen nie Fleisch.","Nunca comemos carne."],
-["Das ist für meine Frau.","Esto es para mi esposa."],
-["Danke für alles.","Gracias por todo."],
-["Wir laufen am Strand entlang.","Caminamos por la playa."],
-["Zehn Dollar pro Person.","Diez dólares por persona."],
-["Können Sie mir helfen?","¿Me puede ayudar?"],
-["Könnten Sie langsamer sprechen?","¿Podría hablar más despacio?"],
-["Einen Moment bitte.","Espere un momento, por favor."],
-["Gestern waren wir am Strand.","Ayer fuimos a la playa."],
-["Es war heiß und das Hotel war schön.","Hacía calor y el hotel era bonito."],
-["Wir haben vor zwei Wochen geheiratet.","Nos casamos hace dos semanas."],
-["Einen schönen Tag noch.","Que tenga un buen día."],
-["Sprechen Sie Englisch?","¿Usted habla inglés?"],
-["Woher kommen Sie?","¿De dónde es usted?"],
-["Dieser Strand ist schöner als der andere.","Esta playa es más bonita que la otra."],
-["Das ist das beste Restaurant der Stadt.","Este es el mejor restaurante de la ciudad."],
-["Der Kaffee ist kalt.","El café está frío."],
-["Wir sind müde, aber glücklich.","Estamos cansados, pero felices."]
-,
-["Wie läuft's?","¿Qué tal?"],
-["Kein Problem, nicht schlimm.","No pasa nada."],
-["So lala.","Más o menos."],
-["Nach und nach.","Poco a poco."],
-["Keine Ahnung.","Ni idea."],
-["Im Ernst?","¿En serio?"],
-["Für alle Fälle nehme ich eine Jacke mit.","Por si acaso llevo una chaqueta."],
-["Es lohnt sich.","Vale la pena."],
-["Ich habe Lust auf einen Kaffee.","Tengo ganas de un café."],
-["Ich vermisse meine Familie.","Echo de menos a mi familia."],
-["Wollen wir eine Runde drehen?","¿Damos una vuelta?"],
-["Wir sind einverstanden.","Estamos de acuerdo."],
-["Das kostet ein Vermögen.","Eso cuesta un ojo de la cara."],
-["Ich bin völlig erledigt.","Estoy hecho polvo."],
-["Danke — Antwort auf Costa-Ricanisch.","Con mucho gusto."],
-["Wo ist die nächste Tankstelle?","¿Dónde está la bomba más cercana?"],
-["Ich möchte mich sonnen.","Quiero tomar el sol."],
-["Vorsicht, pass auf!","¡Ojo!"],
-["Ach so, verstehe.","Ya veo."],
-["Wie schade!","¡Qué lástima!"],
-["Prost!","¡Salud!"],
-["Gibt es hier einen kleinen Laden?","¿Hay una pulpería aquí?"],
-["Wie viel Uhr ist es?","¿Qué hora es?"],
-["Können Sie das aufschreiben?","¿Me lo puede escribir?"],
-["Ich lerne noch Spanisch.","Todavía estoy aprendiendo español."]
-,
-["Welcher Tag ist heute?","¿Qué día es hoy?"],
-["Heute ist Donnerstag.","Hoy es jueves."],
-["Wir kommen am dritten März an.","Llegamos el 3 de marzo."],
-["Wie spät ist es?","¿Qué hora es?"],
-["Es ist halb vier.","Son las tres y media."],
-["Um acht Uhr morgens.","A las ocho de la mañana."],
-["Wann fährt der Bus ab?","¿A qué hora sale el bus?"],
-["Es regnet gerade.","Está lloviendo."],
-["Es ist sehr warm heute.","Hace mucho calor hoy."],
-["Ich schaue mich nur um.","Solo estoy mirando."],
-["Kann ich es anprobieren?","¿Me lo puedo probar?"],
-["Haben Sie Wechselgeld?","¿Tiene cambio?"],
-["Gibt es etwas Günstigeres?","¿Hay algo más barato?"],
-["Mir tun die Füße weh.","Me duelen los pies."],
-["Haben Sie etwas gegen Insektenstiche?","¿Tiene algo para las picaduras?"],
-["Ich habe seit gestern Fieber.","Tengo fiebre desde ayer."],
-["Das ist meine Frau.","Esta es mi esposa."],
-["Haben Sie Kinder?","¿Tiene hijos?"],
-["Die Leute sind sehr freundlich.","La gente es muy amable."],
-["Sprechen Sie Englisch?","¿Habla inglés?"],
-["Ich spreche ein bisschen Spanisch.","Hablo un poco de español."],
-["Gehen Sie geradeaus weiter.","Siga derecho."],
-["Machen Sie sich keine Sorgen.","No se preocupe."],
-["Ich hätte gern einen Kaffee.","Me gustaría un café."],
-["Waren Sie schon einmal in Deutschland?","¿Ha estado alguna vez en Alemania?"]
+const SENT_DECKS=[
+{
+"id": "begr",
+"name": "Begrüßung & Kennenlernen",
+"items": [
+[
+"Guten Morgen, wie geht es Ihnen?",
+"Buenos días, ¿cómo está?"
+],
+[
+"Ich heiße Philipp, wir sind aus Deutschland.",
+"Me llamo Philipp, somos de Alemania."
+],
+[
+"Sprechen Sie Englisch?",
+"¿Usted habla inglés?"
+],
+[
+"Woher kommen Sie?",
+"¿De dónde es usted?"
+],
+[
+"Das ist meine Frau.",
+"Esta es mi esposa."
+],
+[
+"Haben Sie Kinder?",
+"¿Tiene hijos?"
+],
+[
+"Ich spreche ein bisschen Spanisch.",
+"Hablo un poco de español."
+],
+[
+"Waren Sie schon einmal in Deutschland?",
+"¿Ha estado alguna vez en Alemania?"
+],
+[
+"Einen schönen Tag noch.",
+"Que tenga un buen día."
+],
+[
+"Freut mich.",
+"Mucho gusto."
+],
+[
+"Wie heißen Sie?",
+"¿Cómo se llama usted?"
+],
+[
+"Gut, danke. Und Ihnen?",
+"Bien, gracias. ¿Y usted?"
+],
+[
+"Bis morgen!",
+"¡Hasta mañana!"
+]
+]
+},
+{
+"id": "verst",
+"name": "Verständigung",
+"items": [
+[
+"Ich verstehe nicht, können Sie das wiederholen?",
+"No entiendo, ¿puede repetir?"
+],
+[
+"Können Sie mir helfen?",
+"¿Me puede ayudar?"
+],
+[
+"Könnten Sie langsamer sprechen?",
+"¿Podría hablar más despacio?"
+],
+[
+"Einen Moment bitte.",
+"Espere un momento, por favor."
+],
+[
+"Können Sie das aufschreiben?",
+"¿Me lo puede escribir?"
+],
+[
+"Ich lerne noch Spanisch.",
+"Todavía estoy aprendiendo español."
+],
+[
+"Ich weiß nicht, wo es ist.",
+"No sé dónde está."
+],
+[
+"Ich kenne diesen Ort nicht.",
+"No conozco este lugar."
+],
+[
+"Wie sagt man das auf Spanisch?",
+"¿Cómo se dice eso en español?"
+],
+[
+"Was bedeutet das?",
+"¿Qué significa eso?"
+],
+[
+"Ich verstehe nicht.",
+"No entiendo."
+]
+]
+},
+{
+"id": "rest",
+"name": "Restaurant",
+"items": [
+[
+"Die Rechnung, bitte.",
+"La cuenta, por favor."
+],
+[
+"Ich habe Hunger. Wo gibt es ein gutes Restaurant?",
+"Tengo hambre. ¿Dónde hay un buen restaurante?"
+],
+[
+"Ein Tisch für zwei, bitte.",
+"Una mesa para dos, por favor."
+],
+[
+"Was empfehlen Sie mir?",
+"¿Qué me recomienda?"
+],
+[
+"Haben Sie etwas Vegetarisches?",
+"¿Tiene algo vegetariano?"
+],
+[
+"Ich hätte gern einen Kaffee ohne Zucker.",
+"Quisiera un café sin azúcar."
+],
+[
+"Es hat sehr gut geschmeckt, danke.",
+"Estaba muy rico, gracias."
+],
+[
+"Ich hätte gern einen Kaffee.",
+"Me gustaría un café."
+],
+[
+"Der Kaffee ist kalt.",
+"El café está frío."
+],
+[
+"Das ist das beste Restaurant der Stadt.",
+"Este es el mejor restaurante de la ciudad."
+],
+[
+"Ich mag Fisch, aber meine Frau bevorzugt Huhn.",
+"Me gusta el pescado, pero mi esposa prefiere el pollo."
+],
+[
+"Prost!",
+"¡Salud!"
+],
+[
+"Die Speisekarte, bitte.",
+"La carta, por favor."
+],
+[
+"Noch ein Bier, bitte.",
+"Otra cerveza, por favor."
+],
+[
+"Ist das scharf?",
+"¿Es picante?"
+]
+]
+},
+{
+"id": "unter",
+"name": "Unterkunft",
+"items": [
+[
+"Wir haben eine Buchung auf den Namen Müller.",
+"Tenemos una reserva a nombre de Müller."
+],
+[
+"Die Klimaanlage funktioniert nicht.",
+"No funciona el aire acondicionado."
+],
+[
+"Ist das Frühstück inbegriffen?",
+"¿Está incluido el desayuno?"
+],
+[
+"Wie lautet das WLAN-Passwort?",
+"¿Cuál es la contraseña del wifi?"
+],
+[
+"Um wie viel Uhr ist der Check-out?",
+"¿A qué hora es el check-out?"
+],
+[
+"Mir gefällt dieses Hotel.",
+"Me gusta este hotel."
+],
+[
+"Haben Sie ein Zimmer frei?",
+"¿Tiene una habitación libre?"
+],
+[
+"Für zwei Nächte.",
+"Para dos noches."
+],
+[
+"Können wir das Zimmer sehen?",
+"¿Podemos ver la habitación?"
+],
+[
+"Es gibt kein warmes Wasser.",
+"No hay agua caliente."
+]
+]
+},
+{
+"id": "weg",
+"name": "Unterwegs",
+"items": [
+[
+"Wo ist die Bushaltestelle?",
+"¿Dónde está la parada del bus?"
+],
+[
+"Wir müssen morgen zum Flughafen fahren.",
+"Tenemos que ir al aeropuerto mañana."
+],
+[
+"Wir haben uns verlaufen.",
+"Estamos perdidos."
+],
+[
+"Fährt dieser Bus nach Monteverde?",
+"¿Este bus va a Monteverde?"
+],
+[
+"Wie lange dauert es?",
+"¿Cuánto tiempo toma?"
+],
+[
+"Können Sie uns nach San José bringen?",
+"¿Nos puede llevar a San José?"
+],
+[
+"Ich möchte ein Auto mieten.",
+"Quiero alquilar un carro."
+],
+[
+"Wo ist die nächste Tankstelle?",
+"¿Dónde está la bomba más cercana?"
+],
+[
+"Wann fährt der Bus ab?",
+"¿A qué hora sale el bus?"
+],
+[
+"Gehen Sie geradeaus weiter.",
+"Siga derecho."
+],
+[
+"Ich suche gerade das Hotel.",
+"Estoy buscando el hotel."
+],
+[
+"Wie komme ich zum Strand?",
+"¿Cómo llego a la playa?"
+],
+[
+"Ist es weit von hier?",
+"¿Está lejos de aquí?"
+]
+]
+},
+{
+"id": "kauf",
+"name": "Einkaufen & Geld",
+"items": [
+[
+"Was kostet das?",
+"¿Cuánto cuesta?"
+],
+[
+"Kann man mit Karte bezahlen?",
+"¿Se puede pagar con tarjeta?"
+],
+[
+"Zehn Dollar pro Person.",
+"Diez dólares por persona."
+],
+[
+"Gibt es hier einen kleinen Laden?",
+"¿Hay una pulpería aquí?"
+],
+[
+"Ich schaue mich nur um.",
+"Solo estoy mirando."
+],
+[
+"Kann ich es anprobieren?",
+"¿Me lo puedo probar?"
+],
+[
+"Haben Sie Wechselgeld?",
+"¿Tiene cambio?"
+],
+[
+"Gibt es etwas Günstigeres?",
+"¿Hay algo más barato?"
+],
+[
+"Nehmen Sie Dollar?",
+"¿Acepta dólares?"
+],
+[
+"Wo gibt es einen Geldautomaten?",
+"¿Dónde hay un cajero automático?"
+]
+]
+},
+{
+"id": "natur",
+"name": "Ausflüge & Natur",
+"items": [
+[
+"Um wie viel Uhr öffnet der Park?",
+"¿A qué hora abre el parque?"
+],
+[
+"Was kostet der Eintritt pro Person?",
+"¿Cuánto cuesta la entrada por persona?"
+],
+[
+"Muss man reservieren?",
+"¿Hace falta reservar?"
+],
+[
+"Ist es sicher, hier zu schwimmen?",
+"¿Es seguro nadar aquí?"
+],
+[
+"Wir laufen am Strand entlang.",
+"Caminamos por la playa."
+],
+[
+"Ich möchte mich sonnen.",
+"Quiero tomar el sol."
+],
+[
+"Dieser Strand ist schöner als der andere.",
+"Esta playa es más bonita que la otra."
+],
+[
+"Gestern waren wir am Strand.",
+"Ayer fuimos a la playa."
+],
+[
+"Es gibt viele Touristen hier.",
+"Hay muchos turistas aquí."
+],
+[
+"Wir möchten einen Vulkan sehen.",
+"Queremos ver un volcán."
+],
+[
+"Gibt es hier Affen?",
+"¿Hay monos aquí?"
+],
+[
+"Brauchen wir einen Führer?",
+"¿Necesitamos un guía?"
+]
+]
+},
+{
+"id": "zeit",
+"name": "Zeit, Datum, Wetter",
+"items": [
+[
+"Welcher Tag ist heute?",
+"¿Qué día es hoy?"
+],
+[
+"Heute ist Donnerstag.",
+"Hoy es jueves."
+],
+[
+"Wir kommen am dritten März an.",
+"Llegamos el 3 de marzo."
+],
+[
+"Wie spät ist es?",
+"¿Qué hora es?"
+],
+[
+"Es ist halb vier.",
+"Son las tres y media."
+],
+[
+"Um acht Uhr morgens.",
+"A las ocho de la mañana."
+],
+[
+"Es regnet gerade.",
+"Está lloviendo."
+],
+[
+"Es ist sehr warm heute.",
+"Hace mucho calor hoy."
+],
+[
+"Es war heiß und das Hotel war schön.",
+"Hacía calor y el hotel era bonito."
+],
+[
+"Morgen um neun.",
+"Mañana a las nueve."
+],
+[
+"Montags ist geschlossen.",
+"Los lunes está cerrado."
+],
+[
+"In der Regenzeit regnet es nachmittags.",
+"En invierno llueve por la tarde."
+]
+]
+},
+{
+"id": "ges",
+"name": "Gesundheit & Notfall",
+"items": [
+[
+"Ich brauche einen Arzt.",
+"Necesito un médico."
+],
+[
+"Mir tut der Kopf weh.",
+"Me duele la cabeza."
+],
+[
+"Mir geht es schlecht.",
+"Me siento mal."
+],
+[
+"Wo ist die nächste Apotheke?",
+"¿Dónde está la farmacia más cercana?"
+],
+[
+"Ich bin allergisch gegen Garnelen.",
+"Soy alérgico a los camarones."
+],
+[
+"Mir tun die Füße weh.",
+"Me duelen los pies."
+],
+[
+"Haben Sie etwas gegen Insektenstiche?",
+"¿Tiene algo para las picaduras?"
+],
+[
+"Ich habe seit gestern Fieber.",
+"Tengo fiebre desde ayer."
+],
+[
+"Rufen Sie einen Krankenwagen!",
+"¡Llame a una ambulancia!"
+],
+[
+"Ich habe einen Sonnenbrand.",
+"Tengo una quemadura de sol."
+]
+]
+},
+{
+"id": "hoch",
+"name": "Hochzeitsreise & Smalltalk",
+"items": [
+[
+"Wir sind auf Hochzeitsreise.",
+"Estamos de luna de miel."
+],
+[
+"Können Sie ein Foto von uns machen?",
+"¿Nos puede tomar una foto?"
+],
+[
+"Wir mögen die Strände sehr.",
+"Nos gustan mucho las playas."
+],
+[
+"Wir haben vor zwei Wochen geheiratet.",
+"Nos casamos hace dos semanas."
+],
+[
+"Wir sind müde, aber glücklich.",
+"Estamos cansados, pero felices."
+],
+[
+"Die Leute sind sehr freundlich.",
+"La gente es muy amable."
+],
+[
+"Meine Frau ist müde, sie will schlafen.",
+"Mi esposa está cansada, quiere dormir."
+],
+[
+"Das ist für meine Frau.",
+"Esto es para mi esposa."
+],
+[
+"Danke für alles.",
+"Gracias por todo."
+],
+[
+"Ich vermisse meine Familie.",
+"Echo de menos a mi familia."
+],
+[
+"Costa Rica gefällt uns sehr.",
+"Nos encanta Costa Rica."
+]
+]
+},
+{
+"id": "gram",
+"name": "Grammatik-Muster",
+"items": [
+[
+"Ich bin vierunddreißig Jahre alt.",
+"Tengo treinta y cuatro años."
+],
+[
+"Uns ist warm und wir haben Durst.",
+"Tenemos calor y sed."
+],
+[
+"Ich habe es eilig.",
+"Tengo prisa."
+],
+[
+"Wir werden nach Costa Rica reisen.",
+"Vamos a viajar a Costa Rica."
+],
+[
+"Ich bin gerade angekommen.",
+"Acabo de llegar."
+],
+[
+"Wir können morgen kommen.",
+"Podemos venir mañana."
+],
+[
+"Es gibt kein Problem.",
+"No hay ningún problema."
+],
+[
+"Ich sehe niemanden.",
+"No veo a nadie."
+],
+[
+"Wir essen nie Fleisch.",
+"Nunca comemos carne."
+],
+[
+"Machen Sie sich keine Sorgen.",
+"No se preocupe."
+]
+]
+},
+{
+"id": "rede",
+"name": "Redewendungen & Tico",
+"items": [
+[
+"Wie läuft's?",
+"¿Qué tal?"
+],
+[
+"Kein Problem, nicht schlimm.",
+"No pasa nada."
+],
+[
+"So lala.",
+"Más o menos."
+],
+[
+"Nach und nach.",
+"Poco a poco."
+],
+[
+"Keine Ahnung.",
+"Ni idea."
+],
+[
+"Im Ernst?",
+"¿En serio?"
+],
+[
+"Für alle Fälle nehme ich eine Jacke mit.",
+"Por si acaso llevo una chaqueta."
+],
+[
+"Es lohnt sich.",
+"Vale la pena."
+],
+[
+"Ich habe Lust auf einen Kaffee.",
+"Tengo ganas de un café."
+],
+[
+"Wollen wir eine Runde drehen?",
+"¿Damos una vuelta?"
+],
+[
+"Wir sind einverstanden.",
+"Estamos de acuerdo."
+],
+[
+"Das kostet ein Vermögen.",
+"Eso cuesta un ojo de la cara."
+],
+[
+"Ich bin völlig erledigt.",
+"Estoy hecho polvo."
+],
+[
+"Gern geschehen! (typisch Costa Rica)",
+"Con mucho gusto."
+],
+[
+"Vorsicht, pass auf!",
+"¡Ojo!"
+],
+[
+"Ach so, verstehe.",
+"Ya veo."
+],
+[
+"Wie schade!",
+"¡Qué lástima!"
+]
+]
+}
 ];
 
 /* ===================== Aufbau ===================== */
@@ -1049,6 +2074,48 @@ build(GRAM,'gram',true);
 build(VOC,'voc',true);
 build(VERBS,'verb',false);
 
+/* ===================== Aussprache ===================== */
+const TTS=('speechSynthesis' in window)&&('SpeechSynthesisUtterance' in window);
+let esVoice=null;
+function pickVoice(){
+  if(!TTS) return;
+  const v=speechSynthesis.getVoices().filter(x=>/^es/i.test(x.lang));
+  const pref=['es-CR','es-MX','es-419','es-US','es-CO','es-ES'];
+  esVoice=pref.map(l=>v.find(x=>x.lang.replace('_','-')===l)).find(Boolean)||v[0]||null;
+}
+if(TTS){ pickVoice(); speechSynthesis.onvoiceschanged=pickVoice; document.body.classList.add('tts'); }
+function speak(text,el){
+  if(!TTS||!text) return;
+  const t=text.replace(/\s*[\/·]\s*/g,', ').replace(/\s+/g,' ').trim();   // „a / b" → „a, b": kurze Sprechpause
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(t);
+  u.lang=esVoice?esVoice.lang:'es-MX'; if(esVoice) u.voice=esVoice; u.rate=.9;
+  if(el){ el.classList.add('speaking'); u.onend=u.onerror=()=>el.classList.remove('speaking'); }
+  speechSynthesis.speak(u);
+}
+// Antippen im Nachschlageteil
+ref.querySelectorAll('.vt td.mono, table td.mono').forEach(td=>{
+  const t=td.textContent.trim(); if(t.length>1 && !/^-/.test(t) && !/[+=→]/.test(t)) td.classList.add('say');
+});
+ref.addEventListener('click',e=>{
+  if(!TTS) return;
+  const el=e.target.closest('.es, .words b, td.mono.say');
+  if(!el || e.target.closest('summary')) return;
+  speak(el.textContent,el);
+});
+
+/* ===================== Sprungmarken ===================== */
+const jumpEl=document.getElementById('jump');
+function renderJump(){
+  const heads=[...document.querySelectorAll('.parthead')].filter(h=>h.dataset.head===tab);
+  jumpEl.innerHTML='';
+  heads.forEach(h=>{const b=document.createElement('button');b.textContent=h.textContent;
+    b.onclick=()=>{const top=h.getBoundingClientRect().top+scrollY-document.querySelector('header').offsetHeight-6;scrollTo({top,behavior:'smooth'})};
+    jumpEl.appendChild(b)});
+  jumpEl.hidden = tab==='quiz' || !!qEl.value.trim() || heads.length<2;
+  document.getElementById('ttshint').hidden = !TTS || tab==='quiz' || tab==='gram';
+}
+
 /* ===================== Tabs ===================== */
 let tab='gram';
 const quizEl=document.getElementById('quiz');
@@ -1062,8 +2129,8 @@ document.querySelectorAll('nav button').forEach(b=>{
     document.getElementById('q').placeholder = tab==='verb'
       ? 'Verb suchen — z. B. volver oder schlafen'
       : 'Suchen — deutsch oder spanisch';
-    if(tab==='quiz'&&!current) nextCard();
-    applyFilter();
+    if(tab==='quiz') quizEnter();
+    applyFilter(); renderJump();
     scrollTo({top:0});
   };
 });
@@ -1073,15 +2140,17 @@ const qEl=document.getElementById('q'), clearBtn=document.getElementById('clear'
 const norm=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
 let empty=null;
 
+let lastTerm='';
 function applyFilter(){
   if(tab==='quiz') return;
   const term=norm(qEl.value.trim());
+  const cleared = lastTerm && !term; lastTerm=term;
   clearBtn.style.display=qEl.value?'block':'none';
   let hits=0;
   document.querySelectorAll('#ref details').forEach(d=>{
     const inTab = d.classList.contains(tab);
     if(!inTab){d.style.display='none';return}
-    if(!term){d.style.display='';d.open=false;hits++;return}
+    if(!term){d.style.display=''; if(cleared) d.open=false; hits++; return}   // Tabwechsel lässt Geöffnetes offen
     const match=norm(d.textContent).includes(term);
     d.style.display=match?'':'none';
     if(match){d.open=true;hits++}
@@ -1093,80 +2162,654 @@ function applyFilter(){
   empty.style.display=hits?'none':'block';
   empty.textContent='Nichts gefunden. Versuch ein kürzeres Stichwort.';
 }
-qEl.addEventListener('input',applyFilter);
-clearBtn.onclick=()=>{qEl.value='';applyFilter();qEl.focus()};
-applyFilter();
+qEl.addEventListener('input',()=>{applyFilter();if(typeof renderJump==='function')renderJump()});
+clearBtn.onclick=()=>{qEl.value='';applyFilter();renderJump();qEl.focus()};
+applyFilter(); renderJump();
 
 /* ===================== Abfrage ===================== */
-let current=null, dir='de';
-const load=k=>{try{return JSON.parse(store.get(k)||'null')}catch(e){return null}};
-let pool=load('pool');
-if(!Array.isArray(pool)||pool.length>QUIZ.length) pool=null;
-if(!pool) pool=QUIZ.map((_,i)=>i);
-let done=load('done')||[];
-// Nach Erweiterung der Satzliste: neue Sätze nachtragen
-QUIZ.forEach((_,i)=>{ if(!pool.includes(i)&&!done.includes(i)) pool.push(i); });
-
+/*  Leitner-System mit Fälligkeitsdaten
+    Stufe 0 = neu · 1–2 Lernphase · 3–4 gefestigt · 5–6 sicher
+    Stufe 0–1: Spanisch → Deutsch (wiedererkennen)
+    ab Stufe 2: Deutsch → Spanisch (selbst abrufen)                       */
 const $=id=>document.getElementById(id);
-function save(){store.set('pool',JSON.stringify(pool));store.set('done',JSON.stringify(done))}
+const loadJ=(k,d)=>{try{const v=JSON.parse(store.get(k)||'null');return v??d}catch(e){return d}};
+const INT=[0,1,3,7,14,30,60,120,240];  // Tage bis zur nächsten Abfrage, je erreichter Stufe (7–8: Langzeit)
+const MAX=8, REDO_GAP=3, REDO_MAX=2, LEECH=4;
+const today=()=>{const n=Date.now();return Math.floor((n-new Date(n).getTimezoneOffset()*6e4)/864e5)};
+const stageOf=b=>b===0?0:b<=2?1:b<=4?2:3;
+const STAGE=['Neu','Lernphase','Gefestigt','Sicher'];
 
+let roundSize=loadJ('q.size',10), newPerDay=loadJ('q.newcap',20);
+let SRS=loadJ('q.srs',null);
+if(!SRS){                                // Übernahme des alten Fortschritts
+  const t=today(); SRS={c:{},day:{d:t,n:0,ok:0,nw:0}};
+  loadJ('q.done',[]).forEach((k,i)=>SRS.c[k]={b:3,due:t+(i%4),l:0});
+  loadJ('q.weak',[]).forEach(k=>SRS.c[k]={b:1,due:t,l:1});
+}
+if(!SRS.hist) SRS.hist={};
+const saveQ=()=>store.set('q.srs',JSON.stringify(SRS));
+let deckKind=loadJ('q.kind','s'), autoSpeak=loadJ('q.auto',false);
+let level=loadJ('q.level','basis');
+function streak(){
+  let t=today(), n=0;
+  if(!SRS.hist[t]) t--;                       // heute noch nicht geübt → Serie zählt bis gestern
+  while(SRS.hist[t]){ n++; t--; }
+  return n;
+}
+const day=()=>{ if(SRS.day.d!==today()) SRS.day={d:today(),n:0,ok:0,nw:0}; return SRS.day; };
+const st=k=>SRS.c[k]||{b:0,due:0,l:0};
+const isNew=c=>st(c.key).b===0;
+const isDue=c=>{const x=st(c.key);return x.b>0&&x.due<=today()};
+const isWeak=c=>{const x=st(c.key);return x.b>0&&((x.l>0&&x.b<=2)||x.l>=LEECH)};
+const newLeft=()=>Math.max(0,newPerDay-day().nw);
+
+/* --- Vokabelstapel aus den Wortschatzblöcken --- */
+function wordsFrom(html,withPhr){
+  const box=document.createElement('div'); box.innerHTML=html;
+  const pairs=[];
+  if(withPhr) box.querySelectorAll('ul.phr li').forEach(li=>{      // Aufbau: Beispielsätze mit abfragen
+    const es=li.querySelector('.es'), de=li.querySelector('.gloss');
+    if(es&&de) pairs.push([de.textContent.trim(),es.textContent.trim()]);
+  });
+  box.querySelectorAll('p.words').forEach(p=>{
+    p.innerHTML.split(' · ').forEach(seg=>{
+      const t=document.createElement('div'); t.innerHTML=seg;
+      t.querySelectorAll('b').forEach(b=>{ if(/:\s*$/.test(b.textContent)) b.remove(); });
+      const sp=t.querySelector('span'); if(!sp) return;
+      const de=sp.textContent.trim(); sp.remove();
+      t.querySelectorAll('br').forEach(x=>x.remove());
+      const es=t.textContent.replace(/\s+/g,' ').trim();
+      if(es && de && !/^\d+$/.test(es)) pairs.push([de,es]);
+    });
+  });
+  box.querySelectorAll('table tr').forEach(tr=>{
+    const td=[...tr.children];
+    for(let i=0;i+1<td.length;i++){
+      if(td[i].classList.contains('mono') && td[i+1].classList.contains('de')){
+        const es=td[i].textContent.trim(), de=td[i+1].textContent.trim();
+        if(es && de) pairs.push([de,es]); i++;
+      }
+    }
+  });
+  const seen=new Set();
+  return pairs.filter(p=>!seen.has(p[1])&&seen.add(p[1]));
+}
+const nk=x=>x.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[¿?¡!.,]/g,'').trim();
+const SENT_KEYS=new Set(SENT_DECKS.flatMap(d=>d.items.map(it=>nk(it[1]))));
+/* Lernstufen. Eine neue Stufe = neue Kapitel im Wortschatz, deren Gruppe mit dem Präfix beginnt,
+   plus ein Eintrag hier. Reihenfolge = Reihenfolge, in der die Tagesrunde „Alle" Neues bringt. */
+const LEVELS=[
+  {id:'basis',  name:'Grundlagen', sub:'A1–A2 · Reise',     test:g=>!/^Aufbau/.test(g)},
+  {id:'aufbau', name:'Aufbau',     sub:'A2–B1 · Kapitel', test:g=>/^Aufbau/.test(g)},
+];
+const levelOf=g=>(LEVELS.find(L=>L.test(g))||LEVELS[0]).id;
+const levelRank=id=>LEVELS.findIndex(L=>L.id===id)+1;
+if(!['alle',...LEVELS.map(l=>l.id)].includes(level)) level='basis';   // unbekannte gespeicherte Stufe
+const WORD_DECKS=VOC.map((b,i)=>{const lv=levelOf(b.g), adv=lv!=='basis'; return {id:'w'+i,name:b.t,kind:'w',lv,lvl:levelRank(lv),
+  items:wordsFrom(b.h,adv)
+    .filter(([de,es])=>!SENT_KEYS.has(nk(es)))            // steht schon als Satzkarte
+    .map(([de,es])=>[de.split(' — ')[0],es])}})            // Erklärung nach „—" gehört nicht in die Frage
+  .filter(d=>d.items.length>=4);
+SENT_DECKS.forEach(d=>{d.kind='s'; d.lv='basis'; d.lvl=1;});
+const ALL=[...SENT_DECKS,...WORD_DECKS];
+const cardsOf=d=>d.items.map(it=>({it,key:d.kind+':'+it[1],deck:d.name,lvl:d.lvl||1,lv:d.lv||'basis'}));
+// Gleiche Karte in mehreren Stapeln (z. B. „la cuenta") nur einmal zählen und abfragen
+const allCards=()=>{const seen=new Set();return ALL.flatMap(cardsOf).filter(c=>!seen.has(c.key)&&seen.add(c.key))};
+
+/* --- Rundenzusammenstellung --- */
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+function buildRound(cards,cap){
+  const due=cards.filter(isDue).sort((x,y)=>st(x.key).due-st(y.key).due||st(x.key).b-st(y.key).b);
+  const fresh=shuffle(cards.filter(isNew)).sort((a,b)=>a.lvl-b.lvl);   // Grundlagen vor Aufbau
+  // Fällige haben Vorrang, aber mindestens 30 % der Runde bleiben für Neues reserviert
+  let nNew=Math.min(fresh.length,cap,Math.max(roundSize-due.length,Math.ceil(roundSize*.3)));
+  const nDue=Math.min(due.length,roundSize-nNew);
+  nNew=Math.min(fresh.length,cap,roundSize-nDue);
+  const A=due.slice(0,nDue), B=fresh.slice(0,nNew), out=[];
+  while(A.length||B.length){ if(A.length)out.push(A.shift()); if(A.length)out.push(A.shift()); if(B.length)out.push(B.shift()); }
+  return out;
+}
+function cramRound(cards){
+  return cards.filter(c=>st(c.key).b>0)
+    .sort((x,y)=>st(x.key).b-st(y.key).b||st(x.key).due-st(y.key).due).slice(0,roundSize);
+}
+
+/* --- Themenwahl --- */
+function stageBar(cards){
+  const n=[0,0,0,0]; cards.forEach(c=>n[stageOf(st(c.key).b)]++);
+  const t=cards.length||1;
+  return '<div class="sbar">'+n.map((v,i)=>v?'<i class="s'+i+'" style="width:'+(v/t*100)+'%"></i>':'').join('')+'</div>';
+}
+function deckRow(name,getCards,opts={}){
+  const cards=getCards(), due=cards.filter(isDue).length, fresh=cards.filter(isNew).length;
+  const learned=cards.length-fresh;
+  const b=document.createElement('button');
+  b.className='deck'+(opts.hi?' hi':'');
+  if(!cards.length) b.disabled=true;
+  const badge = due ? '<span class="duebadge">'+due+' fällig</span>' : '<span class="duebadge none">'+(fresh?'':'✓')+'</span>';
+  b.innerHTML='<div class="drow"><span class="dname">'+name+'</span>'+badge+'</div>'+
+    '<div class="dmeta">'+(opts.meta || (fresh+' neu · '+learned+' gelernt'))+'</div>'+stageBar(cards);
+  b.onclick=()=>startRound(name,getCards,'normal');
+  return b;
+}
+const scopeCards=()=>allCards().filter(c=>level==='alle'||c.lv===level);
+const levelName=()=>level==='alle'?'Alle Stufen':LEVELS.find(l=>l.id===level).name;
+function deckGroups(){                       // Stapelgruppen je gewählter Stufe
+  const W=lv=>WORD_DECKS.filter(d=>d.lv===lv);
+  if(level==='basis') return [{k:'s',name:'Sätze',decks:SENT_DECKS},{k:'w',name:'Wörter',decks:W('basis')}];
+  if(level!=='alle')  return [{k:level,name:'Kapitel',decks:W(level)}];
+  return [{k:'s',name:'Sätze',decks:SENT_DECKS},...LEVELS.map(L=>({k:L.id==='basis'?'w':L.id,name:L.name,decks:W(L.id)}))];
+}
+/* --- Lernende --- */
+const curProfile=()=>PROFILES.find(x=>x.id===CUR);
+const initial=n=>(n||'?').trim().charAt(0).toUpperCase();
+const saveProfiles=()=>raw.set('app.profiles',JSON.stringify(PROFILES));
+function streakOf(hist){ let t=today(), n=0; if(!hist[t]) t--; while(hist[t]){ n++; t--; } return n; }
+function summaryOf(srs,name,src){
+  const h=(srs&&srs.hist)||{};
+  return {name,src,streak:streakOf(h),today:h[today()]||0,begun:Object.keys((srs&&srs.c)||{}).length};
+}
+function peerList(){                                   // andere Profile: lokal auf diesem Gerät + aus der Cloud
+  const map=new Map(), me=curProfile().name.toLowerCase();
+  PROFILES.filter(x=>x.id!==CUR).forEach(x=>{ let srs=null; try{srs=JSON.parse(raw.get(pfx(x.id)+'q.srs')||'null')}catch(e){}
+    map.set(x.name.toLowerCase(),summaryOf(srs,x.name,'lokal')); });
+  let remote=[]; try{remote=JSON.parse(raw.get('app.peers')||'[]')}catch(e){}
+  remote.forEach(r=>{ const k=r.name.toLowerCase(); if(k!==me && (!map.has(k)||map.get(k).begun===0)) map.set(k,r); });
+  return [...map.values()];
+}
+function renderWho(){
+  const me=curProfile();
+  $('whoAva').textContent=initial(me.name); $('whoName').textContent=me.name;
+  $('whoSub').textContent=PROFILES.length>1?'Profil wechseln':'Profil hinzufügen';
+  const flame=$('kFlame').innerHTML.replace(/kf(\d)/g,'pk$1');
+  $('peers').innerHTML='';
+  peerList().forEach(x=>{ const el=document.createElement('div'); el.className='peer';
+    el.innerHTML='<span class="ava"></span><span class="nm"></span><span class="pf'+(x.today?' on':'')+'">'+flame+'</span><b>'+x.streak+'</b>'+(x.today?'<small>· heute '+x.today+'</small>':'');
+    el.querySelector('.ava').textContent=initial(x.name); el.querySelector('.nm').textContent=x.name;
+    el.title=x.name+': '+x.streak+' Tage in Folge, heute '+x.today+' Karten, '+x.begun+' begonnen';
+    $('peers').appendChild(el); });
+  const L=$('whoList'); L.innerHTML='';
+  PROFILES.forEach(x=>{ let n=0; try{n=Object.keys(JSON.parse(raw.get(pfx(x.id)+'q.srs')||'{"c":{}}').c).length}catch(e){}
+    const b=document.createElement('button'); b.className='prow'+(x.id===CUR?' cur':'');
+    b.innerHTML='<span class="ava"></span><span></span><small>'+(x.id===CUR?'aktiv':n+' Karten')+'</small>';
+    b.children[0].textContent=initial(x.name); b.children[1].textContent=x.name;
+    b.onclick=()=>{ if(x.id!==CUR) switchProfile(x.id); }; L.appendChild(b); });
+  $('whoDel').disabled=PROFILES.length<2;
+}
+function switchProfile(id){
+  raw.set('app.current',id);
+  if(TTS) speechSynthesis.cancel();
+  location.reload();                                   // sauberer Neustart mit dem Lernstand des Profils
+}
+$('whoBtn').onclick=()=>{ $('whoPanel').hidden=!$('whoPanel').hidden; renderWho(); };
+$('whoAdd').onclick=()=>{
+  const name=(prompt('Name des neuen Profils:')||'').trim(); if(!name) return;
+  if(PROFILES.some(x=>x.name.toLowerCase()===name.toLowerCase())){ alert('Dieses Profil gibt es schon.'); return; }
+  const id='p'+Date.now().toString(36);
+  PROFILES.push({id,name}); saveProfiles();
+  if(SYNC&&SYNC.token) raw.set(pfx(id)+'q.sync',JSON.stringify({token:SYNC.token}));   // Cloud-Zugang vormerken
+  raw.set(pfx(id)+'q.level',JSON.stringify(level));
+  switchProfile(id);
+};
+$('whoRen').onclick=()=>{
+  const me=curProfile(), name=(prompt('Neuer Name:',me.name)||'').trim(); if(!name||name===me.name) return;
+  if(PROFILES.some(x=>x.id!==CUR&&x.name.toLowerCase()===name.toLowerCase())){ alert('Dieser Name ist vergeben.'); return; }
+  me.name=name; saveProfiles(); renderWho(); scheduleSync();
+};
+$('whoDel').onclick=()=>{
+  if(PROFILES.length<2) return;
+  const me=curProfile();
+  if(!confirm('Profil „'+me.name+'" mit seinem Lernstand auf diesem Gerät löschen? Eine Cloud-Kopie bleibt auf GitHub erhalten.')) return;
+  raw.keys().filter(k=> me.id==='p1' ? /^q\./.test(k) : k.startsWith(pfx(me.id))).forEach(raw.del);
+  PROFILES=PROFILES.filter(x=>x.id!==me.id); saveProfiles();
+  switchProfile(PROFILES[0].id);
+};
+
+function setLevel(id){ level=id; store.set('q.level',JSON.stringify(id)); renderPick(); scrollTo({top:0}); }
+function renderPick(){
+  const all=scopeCards(), due=all.filter(isDue).length, fresh=all.filter(isNew).length;
+  const nNew=Math.min(fresh,newLeft()), sk=streak(), t=today();
+  // Stufenkacheln
+  const uniq=f=>{const seen=new Set();return allCards().filter(c=>f(c)&&!seen.has(c.key)&&seen.add(c.key))};
+  const tiles=[...LEVELS.map(L=>({id:L.id,name:L.name,sub:L.sub,cards:uniq(c=>c.lv===L.id)})),
+               {id:'alle',name:'Alle',sub:'gemischt',cards:allCards()}];
+  $('levels').innerHTML='';
+  tiles.forEach(T=>{const b=document.createElement('button');b.className='lvl';b.setAttribute('aria-pressed',T.id===level);
+    const begun=T.cards.filter(c=>!isNew(c)).length, dn=T.cards.filter(isDue).length;
+    b.innerHTML='<b>'+T.name+'</b><small>'+T.sub+'</small>'+stageBar(T.cards)+
+      '<div class="lnum"><span>'+begun+'/'+T.cards.length+'</span>'+(dn?'<em>'+dn+' fällig</em>':'<span>&nbsp;</span>')+'</div>';
+    b.onclick=()=>setLevel(T.id); $('levels').appendChild(b)});
+  // Hinweis auf nächste Stufe
+  const cur=LEVELS.findIndex(l=>l.id===level), nxt=LEVELS[cur+1];
+  if(cur>=0 && nxt){
+    const c=tiles[cur].cards, begun=c.filter(x=>!isNew(x)).length, nx=tiles[cur+1].cards;
+    const ready=begun/c.length>=.8 && nx.every(isNew);
+    $('lvhint').hidden=!ready;
+    if(ready){ $('lvhintT').textContent=Math.round(begun/c.length*100)+' % der '+LEVELS[cur].name+' begonnen — bereit für '+nxt.name+'?';
+      $('lvhintB').textContent='Zu '+nxt.name; $('lvhintB').onclick=()=>setLevel(nxt.id); }
+  } else $('lvhint').hidden=true;
+  // Kopfkarte (für die gewählte Stufe)
+  $('kDue').textContent=due; $('kNew').textContent=nNew;
+  $('kStreak').textContent=sk; $('kStreakL').textContent=sk===1?'Tag in Folge':'Tage in Folge';
+  $('kFlame').classList.toggle('on',!!SRS.hist[t]);
+  const T=$('todayBtn'), tname='Tagesrunde · '+levelName();
+  T.innerHTML=(due||nNew)?'<b>'+tname+'</b>':'<b>Für heute erledigt</b><span>'+levelName()+' — mehr Neues über die Stapel unten</span>';
+  T.disabled=!(due||nNew);
+  T.onclick=()=>startRound(tname,scopeCards,'normal');
+  $('ovleft').textContent=(all.length-fresh)+' / '+all.length;
+  $('ovbar').outerHTML=stageBar(all).replace('class="sbar"','class="sbar" id="ovbar"');
+  // Wochengrafik (Lernserie gilt stufenübergreifend)
+  const days=[...Array(7)].map((_,i)=>t-6+i), mx=Math.max(1,...days.map(x=>SRS.hist[x]||0));
+  const WD=['So','Mo','Di','Mi','Do','Fr','Sa'];
+  $('week').innerHTML=days.map(x=>{const v=SRS.hist[x]||0, dt=new Date(x*864e5);
+    return '<div class="'+(x===t?'now':'')+'" title="'+v+' Karten"><i class="'+(v?'':'zero')+'" style="height:'+(v?Math.max(12,v/mx*100):10)+'%"></i><span>'+WD[dt.getUTCDay()]+'</span></div>'}).join('');
+  // Vorschau
+  const dueOn=(lo,hi)=>all.filter(c=>{const x=st(c.key);return x.b>0&&x.due>lo&&x.due<=hi}).length;
+  $('fc1').textContent=dueOn(t,t+1); $('fc7').textContent=dueOn(t,t+7);
+  // Wackelkandidaten (innerhalb der Stufe)
+  const W=$('weakslot'); W.innerHTML='';
+  const weakGet=()=>scopeCards().filter(isWeak), nw=weakGet().length;
+  if(nw) W.appendChild(deckRow('Wackelkandidaten',weakGet,{hi:true,meta:nw+(nw===1?' Karte':' Karten')+' · Fehler in der Lernphase oder Problemkarte'}));
+  // Stapelgruppen
+  const G=deckGroups();
+  if(!G.some(g=>g.k===deckKind)) deckKind=G[0].k;
+  const dueIn=list=>{const seen=new Set();return list.flatMap(cardsOf).filter(c=>!seen.has(c.key)&&seen.add(c.key)&&isDue(c)).length};
+  const K=$('kindseg'); K.innerHTML=''; K.hidden=G.length<2;
+  G.forEach(g=>{const b=document.createElement('button');const n=dueIn(g.decks);
+    b.innerHTML=g.name+(n?' <em>· '+n+'</em>':''); b.setAttribute('aria-pressed',g.k===deckKind); b.dataset.k=g.k;
+    b.onclick=()=>{deckKind=g.k;store.set('q.kind',JSON.stringify(deckKind));renderPick()}; K.appendChild(b)});
+  const L=$('decklist'); L.innerHTML='';
+  G.find(g=>g.k===deckKind).decks.forEach(dk=>L.appendChild(deckRow(dk.name,()=>cardsOf(dk))));
+  document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===roundSize));
+  document.querySelectorAll('#segnew button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===newPerDay));
+  $('autoSpeak').checked=autoSpeak; $('autoRow').hidden=!TTS;
+  if(typeof bkStatus==='function') bkStatus();
+  renderWho();
+}
+document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); } });
+$('autoSpeak').onchange=e=>{autoSpeak=e.target.checked;store.set('q.auto',JSON.stringify(autoSpeak))};
+document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{roundSize=+b.dataset.n;store.set('q.size',JSON.stringify(roundSize));renderPick()});
+document.querySelectorAll('#segnew button').forEach(b=>b.onclick=()=>{newPerDay=+b.dataset.n;store.set('q.newcap',JSON.stringify(newPerDay));renderPick()});
+function show(id){['pick','play','sum','empty'].forEach(x=>$(x).hidden=(x!==id)); scrollTo({top:0});}
+
+/* --- Runde --- */
+let R=null;
+function startRound(name,getCards,mode){
+  const cards=getCards();
+  const list = mode==='cram' ? cramRound(cards) : buildRound(cards, mode==='more'?Infinity:newLeft());
+  R={name,getCards,mode,queue:list.map(c=>({...c,redo:0})),total:list.length,first:0,missed:[]};
+  if(!list.length) return showEmpty(name,cards);
+  $('pdeck').textContent=name+(mode==='cram'?' · freies Üben':'');
+  show('play'); nextCard();
+}
+function showEmpty(name,cards){
+  const fresh=cards.filter(isNew).length, learned=cards.length-fresh;
+  const nextDue=cards.filter(c=>st(c.key).b>0).map(c=>st(c.key).due).sort((a,b)=>a-b)[0];
+  $('edeck').textContent=name;
+  $('etitle').textContent='Nichts fällig';
+  $('etext').textContent = (fresh ? 'Das Tageskontingent für neue Karten ist aufgebraucht. ' : 'Alle Karten dieses Stapels sind gelernt. ')
+    + (nextDue!==undefined ? 'Nächste Fälligkeit in '+(nextDue-today())+' Tag'+(nextDue-today()===1?'':'en')+'.' : '');
+  $('moreNew').hidden=!fresh; $('cram').hidden=!learned;
+  $('moreNew').onclick=()=>startRound(name,R.getCards,'more');
+  $('cram').onclick=()=>startRound(name,R.getCards,'cram');
+  show('empty');
+}
 function nextCard(){
-  if(!pool.length){pool=done.slice();done=[];save()}
-  const i=pool[Math.floor(Math.random()*pool.length)];
-  current=i;
-  dir=Math.random()<0.75?'de':'es';
-  const [de,es]=QUIZ[i];
-
-  const chip=$('qchip');
-  chip.textContent = dir==='de'?'Ins Spanische':'Ins Deutsche';
-  chip.className = dir==='de'?'qchip':'qchip rev';
-
-  const p=$('qprompt');
-  p.textContent = dir==='de'?de:es;
-  p.className = dir==='de'?'qprompt':'qprompt esdir';
-
-  const ansBox=$('qans');
-  ansBox.className = dir==='de'?'qans':'qans dedir';
-  $('qanstxt').textContent = dir==='de'?es:de;
-
-  ansBox.hidden=true;
-  $('qtap').hidden=false;
-  $('rowReveal').hidden=false;
-  $('rowJudge').hidden=true;
-  updStats();
+  if(!R.queue.length) return finish();
+  const c=R.queue[0], x=st(c.key);
+  const toEs = c.redo ? c.toEs : x.b>=2; // Wiederholung in derselben Richtung wie der Fehlversuch
+  R.toEs=toEs;
+  const [de,es]=c.it;
+  $('qchip').textContent=toEs?'Ins Spanische':'Ins Deutsche';
+  $('qchip').className=toEs?'qchip':'qchip rev';
+  $('qstage').textContent=x.b===0?'Neu':'Stufe '+x.b;
+  $('qredo').hidden=!c.redo;
+  $('qleech').hidden=!(x.l>=LEECH);
+  $('qprompt').textContent=toEs?de:es;
+  $('qprompt').className=toEs?'qprompt':'qprompt esdir';
+  $('qans').className=toEs?'qans':'qans dedir';
+  $('qanstxt').textContent=toEs?es:de;
+  $('qans').hidden=true; $('qtap').hidden=false;
+  $('rowReveal').hidden=false; $('rowJudge').hidden=true;
+  // Lautsprecher: Spanisch nur hörbar, wenn es schon sichtbar ist
+  $('qspk').hidden=!TTS; $('qspk').disabled=toEs;
+  $('qspk').onclick=e=>{e.stopPropagation(); speak(es,toEs?$('qanstxt'):$('qprompt'))};
+  if(autoSpeak && !toEs) speak(es,$('qprompt'));
+  [0,1,2].forEach(g=>$('iv'+g).textContent=fmtIvl(nextIvl(c,g)));
+  const card=$('card'); card.classList.remove('enter'); void card.offsetWidth; card.classList.add('enter');
+  const done=R.total-R.queue.filter(q=>!q.redo).length;
+  $('fill').style.width=Math.round(done/R.total*100)+'%';
+  $('qcount').textContent=Math.min(done+1,R.total)+' / '+R.total;
 }
-
-function updStats(){
-  const n=done.length, total=QUIZ.length;
-  $('fill').style.width = Math.round(n/total*100)+'%';
-  $('qcount').textContent = n+' / '+total;
-  $('stats').textContent = pool.length+' offen';
+function nextIvl(c,g){                    // spiegelt die Logik in grade()
+  const x=st(c.key);
+  if(g===0) return 0;
+  if(c.redo) return 1;
+  if(R.mode==='cram') return null;
+  if(g===1){ const b=Math.max(x.b,1); return Math.max(1,Math.ceil(INT[b]/2)); }
+  return INT[Math.min(x.b+1,MAX)];
 }
-
+function fmtIvl(n){
+  if(n===null) return 'unverändert';
+  if(n===0) return 'gleich';
+  if(n===1) return 'morgen';
+  if(n<30) return n+' Tage';
+  return Math.round(n/30)+' Mon.';
+}
 function reveal(){
   if(!$('qans').hidden) return;
-  $('qans').hidden=false;
-  $('qtap').hidden=true;
-  $('rowReveal').hidden=true;
-  $('rowJudge').hidden=false;
+  $('qans').hidden=false; $('qtap').hidden=true;
+  $('qspk').disabled=false;
+  if(autoSpeak && R.toEs) speak(R.queue[0].it[1],$('qanstxt'));
+  $('rowReveal').hidden=true; $('rowJudge').hidden=false;
 }
 $('card').onclick=reveal;
 $('reveal').onclick=e=>{e.stopPropagation();reveal()};
 
-$('got').onclick=()=>{
-  pool=pool.filter(x=>x!==current);
-  if(!done.includes(current)) done.push(current);
-  save(); nextCard();
+/* g: 0 = Nochmal · 1 = Knapp · 2 = Saß */
+function grade(g){
+  if(!R || !R.queue.length || $('play').hidden) return;
+  if(SRS.snapDay!==today()){ if(Object.keys(SRS.c).length) snapshot('Tagesbeginn'); SRS.snapDay=today(); }   // Stand vor dem ersten Lernen des Tages
+  const c=R.queue.shift(), t=today(), x={...st(c.key)}, d=day();
+  const firstTry=!c.redo;
+  if(firstTry){ d.n++; if(g>0) d.ok++; if(x.b===0) d.nw++; if(g>0) R.first++;
+    SRS.hist[t]=(SRS.hist[t]||0)+1;
+    Object.keys(SRS.hist).forEach(k=>{ if(+k<t-120) delete SRS.hist[k]; });   // 4 Monate genügen
+  }
+  if(g===0){
+    if(firstTry){ x.l=(x.l||0)+1; R.missed.push(c); }
+    x.b=1; x.due=t;
+    if(c.redo<REDO_MAX) R.queue.splice(Math.min(REDO_GAP,R.queue.length),0,{...c,redo:c.redo+1,toEs:R.toEs});
+  } else if(!firstTry){
+    x.b=1; x.due=t+1;                                  // neu gelernt → morgen prüfen
+  } else if(R.mode==='cram'){
+    /* freies Üben: Erfolg verschiebt nichts — sonst würden Intervalle künstlich wachsen */
+  } else if(g===1){
+    x.b=Math.max(x.b,1); x.due=t+Math.max(1,Math.ceil(INT[x.b]/2));
+  } else {
+    x.b=Math.min(x.b+1,MAX); x.due=t+INT[x.b];
+  }
+  const prev=SRS.c[c.key];
+  if(!prev || prev.b!==x.b || prev.due!==x.due || prev.l!==x.l){   // nur echte Änderungen zählen beim Abgleich
+    x.u=Date.now(); SRS.c[c.key]=x; saveQ();
+  } else saveQ();                                                // Tagesstatistik trotzdem sichern
+  nextCard();
+}
+$('again').onclick=()=>grade(0);
+$('hard').onclick=()=>grade(1);
+$('got').onclick=()=>grade(2);
+
+function finish(){
+  $('fill').style.width='100%';
+  $('sumbig').innerHTML=R.first+'<span> / '+R.total+'</span>';
+  $('sumtxt').textContent=R.first===R.total?'Alles beim ersten Versuch gewusst.':'beim ersten Versuch gewusst';
+  const all=scopeCards(), d=day(), t=today();
+  $('sToday').textContent=d.n;
+  $('sRate').textContent=d.n?Math.round(d.ok/d.n*100)+' %':'–';
+  $('sLeft').textContent=all.filter(isDue).length;
+  $('sTomorrow').textContent=all.filter(c=>{const x=st(c.key);return x.b>0&&x.due===t+1}).length;
+  const L=$('sumlist'); L.innerHTML='';
+  R.missed.forEach(c=>{const li=document.createElement('li');
+    li.innerHTML='<span class="es"></span> <span class="gloss"></span>';
+    li.children[0].textContent=c.it[1]; li.children[1].textContent='— '+c.it[0]; L.appendChild(li)});
+  show('sum');
+  maybeFlame();
+  scheduleSync();
+}
+
+/* --- Flamme: einmal pro Tag nach der ersten abgeschlossenen Runde --- */
+const MILESTONES={3:'Drei Tage — die Gewohnheit entsteht.',7:'Eine ganze Woche! ¡Qué bien!',14:'Zwei Wochen am Stück. ¡Excelente!',
+  21:'Drei Wochen — jetzt ist es Routine.',30:'Ein Monat! ¡Pura vida!',50:'50 Tage. ¡Increíble!',75:'75 Tage. Costa Rica kann kommen.',100:'100 Tage! ¡Felicidades!'};
+function flameMsg(n){
+  if(MILESTONES[n]) return MILESTONES[n];
+  if(n===1) return SRS.everBroken ? 'Neue Serie gestartet. ¡Vamos!' : 'Der erste Tag deiner Serie. ¡Vamos!';
+  const next=Object.keys(MILESTONES).map(Number).find(m=>m>n);
+  return next ? 'Noch '+(next-n)+(next-n===1?' Tag':' Tage')+' bis '+next+'.' : '¡Sigue así!';
+}
+function maybeFlame(){
+  const t=today();
+  if(!SRS.hist[t] || SRS.flame===t) return;
+  if(SRS.flame!==undefined && SRS.flame<t-1 && !SRS.hist[t-1]) SRS.everBroken=true;
+  SRS.flame=t; saveQ();
+  const n=streak();
+  $('fn0').textContent=Math.max(0,n-1); $('fn1').textContent=n;
+  $('fnum').classList.remove('up');
+  $('flbl').textContent=n===1?'Tag in Folge':'Tage in Folge';
+  $('fmsg').textContent=flameMsg(n);
+  const WD=['So','Mo','Di','Mi','Do','Fr','Sa'], mini=$('kFlame').innerHTML.replace(/kf(\d)/g,'wf$1');
+  $('fweek').innerHTML=[...Array(7)].map((_,i)=>{const x=t-6+i,on=!!SRS.hist[x];
+    return '<div class="'+(x===t?'now':'')+'"><span>'+WD[new Date(x*864e5).getUTCDay()]+'</span><i class="'+(on?'on':'')+'">'+(on?mini:'')+'</i></div>'}).join('');
+  // Funken
+  const box=$('fbig'); box.querySelectorAll('.spark').forEach(e=>e.remove());
+  for(let i=0;i<10;i++){const sp=document.createElement('i');sp.className='spark';
+    const a=Math.PI*2*i/10, r=70+Math.random()*30;
+    sp.style.setProperty('--dx',(Math.cos(a)*r-3)+'px'); sp.style.setProperty('--dy',(Math.sin(a)*r-40)+'px');
+    sp.style.animationDelay=(.3+Math.random()*.2)+'s'; box.appendChild(sp);}
+  $('flame').hidden=false;
+  setTimeout(()=>$('fnum').classList.add('up'),650);
+}
+$('fok').onclick=()=>{$('flame').hidden=true};
+
+/* ===================== Speichern ===================== */
+/* 1. Dauerhaften Speicher anfordern, damit iOS die Daten nicht bei Platzmangel räumt */
+async function askPersist(){
+  const el=$('stPersist');
+  try{
+    if(!(navigator.storage && navigator.storage.persist)){ el.textContent='nicht abfragbar'; return; }
+    const p=(await navigator.storage.persisted()) || (await navigator.storage.persist());
+    el.textContent=p?'dauerhaft geschützt':'kann bei Platzmangel geräumt werden'; el.className=p?'ok':'warn';
+  }catch(e){ el.textContent='nicht abfragbar'; }
+}
+
+/* 2. Wiederherstellungspunkte: automatisch, lokal, die letzten 7 */
+const SNAP_MAX=7;
+function snapshot(reason){
+  const list=loadJ('q.snaps',[]);
+  list.unshift({t:Date.now(),r:reason,n:Object.keys(SRS.c).length,s:JSON.stringify(SRS)});
+  for(let keep=SNAP_MAX; keep>=1; keep--){                 // bei vollem Speicher ältere Punkte opfern
+    try{ localStorage.setItem(nsk('q.snaps'),JSON.stringify(list.slice(0,keep))); return; }catch(e){}
+  }
+}
+function renderSnaps(){
+  const list=loadJ('q.snaps',[]), sel=$('snapSel');
+  $('snapN').textContent=list.length?list.length+' gespeichert':'noch keine';
+  sel.innerHTML=list.map((x,i)=>'<option value="'+i+'">'+new Date(x.t).toLocaleString('de-DE',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})+' · '+x.r+' · '+x.n+' Karten</option>').join('');
+  sel.hidden=$('snapGo').hidden=!list.length;
+}
+$('snapGo').onclick=()=>{
+  const list=loadJ('q.snaps',[]), x=list[+$('snapSel').value]; if(!x) return;
+  if(!confirm('Lernstand auf '+new Date(x.t).toLocaleString('de-DE')+' zurücksetzen? Der jetzige Stand wird vorher als Punkt gesichert.')) return;
+  snapshot('vor Zurücksetzen');
+  const gen=(SRS.gen||0)+1;
+  SRS=JSON.parse(x.s); if(!SRS.hist) SRS.hist={};
+  SRS.gen=gen;                                               // neue Generation: gilt auf allen Geräten
+  saveQ(); renderPick(); renderSnaps(); scheduleSync(true);
 };
-$('again').onclick=()=>{
-  done=done.filter(x=>x!==current);
-  if(!pool.includes(current)) pool.push(current);
-  save(); nextCard();
+
+/* 3. Cloud-Sync über ein geheimes GitHub-Gist */
+const GH='https://api.github.com', LEARN_RE=/^espanol-lernstand.*\.json$/;
+const slug=n=>n.toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss')
+  .normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'profil';
+const fileFor=n=>'espanol-lernstand-'+slug(n)+'.json';
+const myFile=()=>(SYNC&&SYNC.file)||'espanol-lernstand.json';      // alte Einzeldatei bleibt gültig
+const payload=()=>JSON.stringify({app:'espanol-de-bolsillo',v:3,name:curProfile().name,saved:new Date().toISOString(),srs:SRS});
+function learnerFiles(g){
+  return Object.entries(g.files||{}).filter(([f])=>LEARN_RE.test(f)).map(([f,v])=>{
+    let d={}; try{d=JSON.parse(v.content||'{}')}catch(e){}
+    return {file:f,name:d.name||'Profil ohne Namen',n:d.srs?Object.keys(d.srs.c||{}).length:0,srs:d.srs}; });
+}
+let SYNC=loadJ('q.sync',null), syncTimer=null, syncing=false;
+async function gh(path,opt={}){
+  const r=await fetch(GH+path,{...opt,headers:{Authorization:'Bearer '+SYNC.token,Accept:'application/vnd.github+json',
+    ...(opt.body?{'Content-Type':'application/json'}:{})}});
+  if(r.status===401) throw new Error('Token ungültig oder abgelaufen');
+  if(r.status===404) throw new Error('Gist nicht gefunden');
+  if(!r.ok) throw new Error('GitHub antwortet '+r.status);
+  return r.json();
+}
+function mergeRemote(rem){                // pro Karte gewinnt der neuere Stand, Lerntage werden vereinigt
+  let n=0;
+  for(const [k,r] of Object.entries(rem.c||{})){ const l=SRS.c[k]; if(!l || (r.u||0)>(l.u||0)){ SRS.c[k]=r; n++; } }
+  for(const [d,v] of Object.entries(rem.hist||{})){ if((SRS.hist[d]||0)<v){ SRS.hist[d]=v; n++; } }
+  if(rem.flame!==undefined && (SRS.flame===undefined || rem.flame>SRS.flame)) SRS.flame=rem.flame;
+  if(rem.everBroken) SRS.everBroken=true;
+  return n;
+}
+function syncStatus(msg,err){
+  const el=$('syStat'), on=!!(SYNC&&SYNC.gist&&!SYNC.choosing);
+  $('syOffBox').hidden=on; $('syOnBox').hidden=!on;
+  if(msg){ el.textContent=msg; el.className=err?'warn':''; return; }
+  if(SYNC&&SYNC.choosing){ el.textContent='Profil zuordnen'; el.className=''; return; }
+  if(!on){ el.textContent='aus'; el.className='';
+    let shared=null; try{shared=JSON.parse(raw.get('app.gh')||'null')}catch(e){}
+    const tk=(SYNC&&SYNC.token)||(shared&&shared.token);
+    if(tk&&!$('syToken').value) $('syToken').value=tk;       // Zugang eines anderen Profils auf diesem Gerät
+    return; }
+  const m=SYNC.last?Math.round((Date.now()-SYNC.last)/6e4):null;
+  el.textContent=m===null?'verbunden':'abgeglichen '+(m<1?'gerade eben':m<60?'vor '+m+' Min.':m<1440?'vor '+Math.round(m/60)+' Std.':'vor '+Math.round(m/1440)+' Tagen');
+  el.className=SYNC.pending?'warn':'ok';
+  if(SYNC.pending) el.textContent+=' · Änderungen offen';
+}
+async function syncNow(){
+  if(!SYNC||!SYNC.gist||SYNC.choosing||syncing) return;   // ohne Zuordnung nie schreiben
+  syncing=true; syncStatus('gleiche ab …');
+  try{
+    const g=await gh('/gists/'+SYNC.gist), f=g.files&&g.files[myFile()];
+    if(f){
+      const txt=f.truncated ? await (await fetch(f.raw_url)).text() : f.content;
+      const rem=JSON.parse(txt).srs, lg=SRS.gen||0, rg=(rem&&rem.gen)||0;
+      if(rem && rg>lg){                       // anderes Gerät hat zurückgesetzt oder eine Datei geladen: das gilt
+        snapshot('vor Übernahme vom anderen Gerät');
+        const keepDay=SRS.day; SRS=rem; SRS.day=keepDay; if(!SRS.hist) SRS.hist={};
+        saveQ(); if(!$('pick').hidden) renderPick();
+      } else if(rem && rg===lg && mergeRemote(rem)){ saveQ(); if(!$('pick').hidden) renderPick(); }
+      // rg<lg: dieses Gerät hat zurückgesetzt → nur hochladen
+    }
+    // Lernpartner aus den anderen Dateien merken (nur lesen)
+    raw.set('app.peers',JSON.stringify(learnerFiles(g).filter(x=>x.file!==myFile()).map(x=>summaryOf(x.srs,x.name,'cloud'))));
+    await gh('/gists/'+SYNC.gist,{method:'PATCH',body:JSON.stringify({files:{[myFile()]:{content:payload()}}})});
+    if(!$('pick').hidden) renderWho();
+    SYNC.last=Date.now(); SYNC.pending=false; store.set('q.sync',JSON.stringify(SYNC)); syncStatus();
+  }catch(e){
+    SYNC.pending=true; store.set('q.sync',JSON.stringify(SYNC));
+    syncStatus(navigator.onLine===false?'offline · wird nachgeholt':e.message,true);
+  }finally{ syncing=false; if(typeof bkStatus==='function') bkStatus(); }
+}
+function scheduleSync(now){
+  if(!SYNC||!SYNC.gist) return;
+  SYNC.pending=true; store.set('q.sync',JSON.stringify(SYNC));
+  clearTimeout(syncTimer); syncTimer=setTimeout(syncNow, now?0:2500);
+}
+$('syConnect').onclick=async()=>{
+  const token=$('syToken').value.trim(); if(!token) return;
+  SYNC={token}; syncStatus('verbinde …');
+  try{
+    const list=await gh('/gists?per_page=100');
+    const hit=list.find(x=>x.files&&Object.keys(x.files).some(f=>LEARN_RE.test(f)));
+    if(!hit){                                             // erster Lernender überhaupt: Gist anlegen
+      const file=fileFor(curProfile().name);
+      const g=await gh('/gists',{method:'POST',body:JSON.stringify({description:'Español de bolsillo – Lernstand',public:false,
+        files:{[file]:{content:payload()}}})});
+      SYNC.gist=g.id; SYNC.file=file; return finishConnect();
+    }
+    SYNC.gist=hit.id; SYNC.choosing=true;
+    chooseLearner(learnerFiles(await gh('/gists/'+hit.id)));
+  }catch(e){ SYNC=null; store.set('q.sync','null'); syncStatus(e.message,true); $('syOffBox').hidden=false; }
 };
-$('reset').onclick=()=>{
-  pool=QUIZ.map((_,i)=>i); done=[]; save(); nextCard();
+function chooseLearner(L){                              // Wer lernt auf diesem Profil?
+  const box=$('syChoose'); box.innerHTML=''; box.hidden=false; $('syOffBox').hidden=true;
+  syncStatus('Profil zuordnen');
+  const h=document.createElement('p'); h.className='shint'; h.textContent='Im Cloud-Speicher gefunden. Wer lernt auf diesem Profil?'; box.appendChild(h);
+  const mk=(html,cls,fn)=>{const b=document.createElement('button');b.className='act '+cls;b.innerHTML=html;b.onclick=fn;box.appendChild(b);return b;};
+  L.forEach(x=>{ const b=mk('Das bin ich: <b></b> <small></small>','',()=>{SYNC.file=x.file; finishConnect();});
+    b.querySelector('b').textContent=x.name; b.querySelector('small').textContent='· '+x.n+' Karten'; });
+  const me=curProfile().name;
+  const nb=mk('','pri',()=>{ let f=fileFor(me),i=2; while(L.some(x=>x.file===f)) f=fileFor(me+'-'+(i++)); SYNC.file=f; finishConnect(); });
+  nb.textContent='Neu anlegen als „'+me+'"';
+  mk('Abbrechen','',()=>{ SYNC=null; store.set('q.sync','null'); box.hidden=true; syncStatus(); });
+}
+async function finishConnect(){
+  delete SYNC.choosing; $('syChoose').hidden=true;
+  if(Object.keys(SRS.c).length) snapshot('vor erstem Abgleich');
+  store.set('q.sync',JSON.stringify(SYNC)); $('syToken').value='';
+  raw.set('app.gh',JSON.stringify({token:SYNC.token}));      // Zugang für weitere Profile auf diesem Gerät merken
+  await syncNow();
+}
+$('syNow').onclick=()=>syncNow();
+$('syOff').onclick=()=>{
+  if(!confirm('Cloud-Sync trennen? Das Gist bleibt auf GitHub erhalten, dieses Gerät gleicht nur nicht mehr ab.')) return;
+  SYNC=null; store.set('q.sync','null'); syncStatus(); bkStatus();
 };
-updStats();
+// Abgleich beim Öffnen, beim Zurückkehren in die App und wenn das Netz wiederkommt
+document.addEventListener('visibilitychange',()=>{
+  if(!SYNC||!SYNC.gist) return;
+  if(document.visibilityState==='visible' && (!SYNC.last || Date.now()-SYNC.last>5*6e4 || SYNC.pending)) syncNow();
+  if(document.visibilityState==='hidden' && SYNC.pending) syncNow();
+});
+addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
+if(SYNC&&SYNC.gist) setTimeout(syncNow,800);
+
+/* --- Lernstand sichern / wiederherstellen --- */
+const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level'];
+function bkStatus(){
+  const last=loadJ('q.backup',null), started=Object.keys(SRS.c).length;
+  const days=last===null?null:today()-last;
+  const el=$('bkLast');
+  el.textContent = last===null ? 'noch nie gesichert' : days===0 ? 'heute gesichert' : 'vor '+days+(days===1?' Tag':' Tagen');
+  const synced = SYNC && SYNC.last && Date.now()-SYNC.last < 14*864e5;
+  const stale = started>=20 && !synced && (last===null || days>=14);     // Erinnerung erst bei nennenswertem Stand
+  el.className = stale ? 'warn' : '';
+  document.querySelector('details.settings').classList.toggle('nudge',stale);
+}
+function bkMsg(t,err){ const m=$('bkMsg'); m.textContent=t; m.className='bkmsg'+(err?' err':''); m.hidden=false; }
+$('bkOut').onclick=async()=>{
+  const data={app:'espanol-de-bolsillo',v:1,saved:new Date().toISOString(),store:{}};
+  BK_KEYS.forEach(k=>{const v=store.get(k); if(v!==null) data.store[k]=v;});
+  data.store['q.srs']=JSON.stringify(SRS);
+  const name='espanol-lernstand-'+slug(curProfile().name)+'-'+new Date().toISOString().slice(0,10)+'.json';
+  const text=JSON.stringify(data);
+  const done=()=>{store.set('q.backup',JSON.stringify(today())); bkStatus();};
+  try{
+    const file=new File([text],name,{type:'application/json'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file],title:'Español – Lernstand'}); done();
+      bkMsg('Gesichert. Am besten in „Dateien" oder iCloud Drive ablegen.'); return;
+    }
+    const a=document.createElement('a'); a.href=URL.createObjectURL(file); a.download=name;
+    document.body.appendChild(a); a.click(); a.remove(); done();
+    bkMsg('Datei „'+name+'" wurde erzeugt.');
+  }catch(e){
+    if(e && e.name==='AbortError') return;                     // Teilen abgebrochen
+    try{ await navigator.clipboard.writeText(text); done(); bkMsg('Als Text in die Zwischenablage kopiert.'); }
+    catch(_){ bkMsg('Sichern nicht möglich: '+(e&&e.message||e),true); }
+  }
+};
+const readText=f=>f.text?f.text():new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsText(f)});
+$('bkIn').onclick=()=>$('bkFile').click();
+$('bkFile').onchange=async e=>{
+  const f=e.target.files[0]; e.target.value=''; if(!f) return;
+  try{
+    const data=JSON.parse(await readText(f));
+    const srs=JSON.parse(data.store['q.srs']);
+    if(data.app!=='espanol-de-bolsillo' || !srs || typeof srs.c!=='object') throw new Error('keine gültige Sicherung');
+    const n=Object.keys(srs.c).length, when=new Date(data.saved).toLocaleDateString('de-DE');
+    if(!confirm('Sicherung vom '+when+' mit '+n+' begonnenen Karten laden? Der aktuelle Stand wird ersetzt.')) return;
+    snapshot('vor Laden einer Datei');
+    Object.entries(data.store).forEach(([k,v])=>{ if(BK_KEYS.includes(k)) store.set(k,v); });
+    const gen=(SRS.gen||0)+1;
+    SRS=srs; if(!SRS.hist) SRS.hist={};
+    SRS.gen=gen;                                             // neue Generation: gilt auf allen Geräten
+    saveQ(); scheduleSync(true);
+    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',20); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis');
+    renderPick(); bkStatus(); bkMsg('Lernstand vom '+when+' geladen ('+n+' Karten).');
+  }catch(err){ bkMsg('Datei konnte nicht gelesen werden: '+err.message,true); }
+};
+$('flame').onclick=e=>{if(e.target.id==='flame')$('flame').hidden=true};
+$('nextround').onclick=()=>startRound(R.name,R.getCards,R.mode==='cram'?'cram':'normal');
+$('topick').onclick=()=>{renderPick();show('pick')};
+$('back').onclick=()=>{if(TTS)speechSynthesis.cancel();renderPick();show('pick')};
+$('back2').onclick=()=>{renderPick();show('pick')};
+function quizEnter(){ if(!R || !$('pick').hidden || !$('sum').hidden || !$('empty').hidden){ renderPick(); show('pick'); } }
 
 /* ===================== Offline ===================== */
 if('serviceWorker' in navigator){
