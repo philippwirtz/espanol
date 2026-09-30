@@ -2371,13 +2371,21 @@ function summaryOf(srs,name,src){
   const h=(srs&&srs.hist)||{};
   return {name,src,streak:streakOf(h),today:h[today()]||0,begun:Object.keys((srs&&srs.c)||{}).length};
 }
-function peerList(){                                   // andere Profile: lokal auf diesem Gerät + aus der Cloud
-  const map=new Map(), me=curProfile().name.toLowerCase();
+function peerList(){                                   // andere Lernende: lokal + Cloud, der aktuellste Stand gewinnt
+  const mine=(SYNC&&SYNC.gist)?myFile():null, map=new Map();
+  const put=(key,e)=>{ const old=map.get(key);
+    const act=x=>Math.max(-1,...Object.keys(x.hist||{}).map(Number));
+    if(!old || act(e)>act(old) || (act(e)===act(old) && e.begun>old.begun)) map.set(key,e); };
   PROFILES.filter(x=>x.id!==CUR).forEach(x=>{ let srs=null; try{srs=JSON.parse(raw.get(pfx(x.id)+'q.srs')||'null')}catch(e){}
-    map.set(x.name.toLowerCase(),summaryOf(srs,x.name,'lokal')); });
+    const f=fileOfProfile(x.id);
+    if(f&&f===mine) return;                               // dieselbe Person wie ich
+    put(f||('lokal:'+x.id),{name:x.name,hist:(srs&&srs.hist)||{},begun:Object.keys((srs&&srs.c)||{}).length}); });
   let remote=[]; try{remote=JSON.parse(raw.get('app.peers')||'[]')}catch(e){}
-  remote.forEach(r=>{ const k=r.name.toLowerCase(); if(k!==me && (!map.has(k)||map.get(k).begun===0)) map.set(k,r); });
-  return [...map.values()];
+  remote.forEach(r=>{ if(!r.hist||!r.file||r.file===mine) return;   // alte Einträge ohne Lerntage ignorieren
+    put(r.file,{name:r.name,hist:r.hist,begun:r.begun||0}); });
+  const me=curProfile().name.toLowerCase();
+  return [...map.values()].filter(e=>e.name.toLowerCase()!==me||!mine)
+    .map(e=>Object.assign(summaryOf({hist:e.hist,c:{}},e.name,''),{begun:e.begun}));
 }
 function renderWho(){
   const me=curProfile();
@@ -2718,14 +2726,18 @@ async function gh(path,opt={}){
   if(!r.ok) throw new Error('GitHub antwortet '+r.status);
   return r.json();
 }
-function mergeRemote(rem){                // pro Karte gewinnt der neuere Stand, Lerntage werden vereinigt
-  let n=0;
-  for(const [k,r] of Object.entries(rem.c||{})){ const l=SRS.c[k]; if(!l || (r.u||0)>(l.u||0)){ SRS.c[k]=r; n++; } }
-  for(const [d,v] of Object.entries(rem.hist||{})){ if((SRS.hist[d]||0)<v){ SRS.hist[d]=v; n++; } }
-  if(rem.flame!==undefined && (SRS.flame===undefined || rem.flame>SRS.flame)) SRS.flame=rem.flame;
-  if(rem.everBroken) SRS.everBroken=true;
+function mergeInto(T,rem){               // pro Karte gewinnt der neuere Stand, Lerntage werden vereinigt
+  let n=0; T.c=T.c||{}; T.hist=T.hist||{};
+  for(const [k,r] of Object.entries(rem.c||{})){ const l=T.c[k]; if(!l || (r.u||0)>(l.u||0)){ T.c[k]=r; n++; } }
+  for(const [d,v] of Object.entries(rem.hist||{})){ if((T.hist[d]||0)<v){ T.hist[d]=v; n++; } }
+  if(rem.flame!==undefined && (T.flame===undefined || rem.flame>T.flame)) T.flame=rem.flame;
+  if(rem.everBroken) T.everBroken=true;
   return n;
 }
+const mergeRemote=rem=>mergeInto(SRS,rem);
+const fileOfProfile=id=>{ let x=null; try{x=JSON.parse(raw.get(pfx(id)+'q.sync')||'null')}catch(e){}
+  return x&&x.gist ? (x.file||'espanol-lernstand.json') : null; };
+const trimHist=h=>{ const t=today(), o={}; Object.entries(h||{}).forEach(([d,v])=>{ if(+d>t-400) o[d]=v; }); return o; };
 function syncStatus(msg,err){
   const el=$('syStat'), on=!!(SYNC&&SYNC.gist&&!SYNC.choosing);
   $('syOffBox').hidden=on; $('syOnBox').hidden=!on;
@@ -2756,8 +2768,19 @@ async function syncNow(){
       } else if(rem && rg===lg && mergeRemote(rem)){ saveQ(); if(!$('pick').hidden) renderPick(); }
       // rg<lg: dieses Gerät hat zurückgesetzt → nur hochladen
     }
-    // Lernpartner aus den anderen Dateien merken (nur lesen)
-    raw.set('app.peers',JSON.stringify(learnerFiles(g).filter(x=>x.file!==myFile()).map(x=>summaryOf(x.srs,x.name,'cloud'))));
+    // Lernpartner: Lerntage roh merken — Serie und „heute" werden erst beim Anzeigen berechnet
+    const others=learnerFiles(g).filter(x=>x.file!==myFile());
+    raw.set('app.peers',JSON.stringify(others.map(x=>({name:x.name,file:x.file,
+      hist:trimHist(x.srs&&x.srs.hist),begun:x.n}))));
+    // inaktive Profile auf diesem Gerät, die mit einer dieser Dateien verbunden sind, gleich mit auffrischen
+    PROFILES.filter(q=>q.id!==CUR).forEach(q=>{
+      const f=fileOfProfile(q.id), x=f&&others.find(o=>o.file===f); if(!x||!x.srs) return;
+      let loc=null; try{loc=JSON.parse(raw.get(pfx(q.id)+'q.srs')||'null')}catch(e){}
+      if(!loc){ loc={c:{},hist:{}}; }
+      if((x.srs.gen||0)>(loc.gen||0)){ const day=loc.day; loc=JSON.parse(JSON.stringify(x.srs)); if(day) loc.day=day; }
+      else if((x.srs.gen||0)===(loc.gen||0)) mergeInto(loc,x.srs); else return;
+      raw.set(pfx(q.id)+'q.srs',JSON.stringify(loc));
+    });
     await gh('/gists/'+SYNC.gist,{method:'PATCH',body:JSON.stringify({files:{[myFile()]:{content:payload()}}})});
     if(!$('pick').hidden) renderWho();
     SYNC.last=Date.now(); SYNC.pending=false; store.set('q.sync',JSON.stringify(SYNC)); syncStatus();
