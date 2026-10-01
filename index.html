@@ -329,6 +329,18 @@ details.settings.nudge summary{color:var(--alert)}
 #syChoose .act{padding:11px;font-size:14px;text-align:left}
 #syChoose .act small{color:var(--soft);font-weight:400}
 
+/* ---------- Diagnose ---------- */
+.drow2{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--rule);font-size:12.5px}
+.drow2 .ava{width:24px;height:24px;font-size:11px;background:var(--gold)}
+.drow2.me .ava{background:var(--teal)}
+.drow2 .dn{flex:1;min-width:0}
+.drow2 .dn b{display:block;font-size:13px}
+.drow2 .dn small{display:block;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drow2 .tag2{font-size:11px;color:var(--tico);white-space:nowrap}
+.drow2 .tag2.off{color:var(--soft)}
+.drow2 button{border:1px solid var(--alert);color:var(--alert);background:none;border-radius:8px;font-size:11.5px;padding:5px 8px;cursor:pointer}
+.ver{font-size:11px;color:var(--soft);margin:10px 2px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+
 /* ---------- Flamme ---------- */
 .kpi.streak b{display:flex;align-items:center;gap:4px}
 .kflame{width:18px;height:22px;display:inline-block;filter:grayscale(1) opacity(.35);transition:filter .3s}
@@ -468,10 +480,15 @@ nav button[aria-selected=true]{color:var(--teal)}
           <div id="syOnBox" hidden>
             <div class="btnrow"><button class="act" id="syNow">Jetzt abgleichen</button><button class="act warn" id="syOff">Trennen</button></div>
           </div>
+          <div id="diagBox" hidden>
+            <div class="strow" style="margin-top:10px"><span>Lernpartner in der Cloud</span><span id="diagN"></span></div>
+            <div id="diagList"></div>
+          </div>
           <div class="strow" style="margin-top:10px"><span>Wiederherstellungspunkte</span><span id="snapN"></span></div>
           <select id="snapSel"></select>
           <button class="act" id="snapGo" style="width:100%">Auf diesen Stand zurücksetzen</button>
         </div>
+        <p class="ver" id="verInfo"></p>
         <div class="backup">
           <div class="bkinfo"><b>Lernstand als Datei</b><span id="bkLast"></span></div>
           <div class="btnrow"><button class="act" id="bkOut">Sichern</button><button class="act" id="bkIn">Wiederherstellen</button></div>
@@ -2371,21 +2388,29 @@ function summaryOf(srs,name,src){
   const h=(srs&&srs.hist)||{};
   return {name,src,streak:streakOf(h),today:h[today()]||0,begun:Object.keys((srs&&srs.c)||{}).length};
 }
-function peerList(){                                   // andere Lernende: lokal + Cloud, der aktuellste Stand gewinnt
-  const mine=(SYNC&&SYNC.gist)?myFile():null, map=new Map();
-  const put=(key,e)=>{ const old=map.get(key);
-    const act=x=>Math.max(-1,...Object.keys(x.hist||{}).map(Number));
-    if(!old || act(e)>act(old) || (act(e)===act(old) && e.begun>old.begun)) map.set(key,e); };
+const lastDay=h=>Math.max(-1,...Object.keys(h||{}).map(Number));
+const isDefaultName=n=>/^ich$/i.test((n||'').trim());
+function peerEntries(){                                // alle anderen Lernenden mit Herkunft, für Anzeige und Diagnose
+  const mine=(SYNC&&SYNC.gist)?myFile():null, out=[];
   PROFILES.filter(x=>x.id!==CUR).forEach(x=>{ let srs=null; try{srs=JSON.parse(raw.get(pfx(x.id)+'q.srs')||'null')}catch(e){}
-    const f=fileOfProfile(x.id);
-    if(f&&f===mine) return;                               // dieselbe Person wie ich
-    put(f||('lokal:'+x.id),{name:x.name,hist:(srs&&srs.hist)||{},begun:Object.keys((srs&&srs.c)||{}).length}); });
+    const f=fileOfProfile(x.id); if(f&&f===mine) return;
+    out.push({name:x.name,file:f,src:'lokal',hist:(srs&&srs.hist)||{},begun:Object.keys((srs&&srs.c)||{}).length}); });
   let remote=[]; try{remote=JSON.parse(raw.get('app.peers')||'[]')}catch(e){}
-  remote.forEach(r=>{ if(!r.hist||!r.file||r.file===mine) return;   // alte Einträge ohne Lerntage ignorieren
-    put(r.file,{name:r.name,hist:r.hist,begun:r.begun||0}); });
-  const me=curProfile().name.toLowerCase();
-  return [...map.values()].filter(e=>e.name.toLowerCase()!==me||!mine)
-    .map(e=>Object.assign(summaryOf({hist:e.hist,c:{}},e.name,''),{begun:e.begun}));
+  remote.forEach(r=>{ if(!r.hist||!r.file||r.file===mine) return;
+    out.push({name:r.name,file:r.file,src:'cloud',hist:r.hist,begun:r.begun||0}); });
+  // pro Name nur der aktuellste Stand
+  const me=curProfile().name.toLowerCase(), best=new Map();
+  out.forEach(e=>{ const k=e.name.toLowerCase(); const o=best.get(k);
+    if(!o || lastDay(e.hist)>lastDay(o.hist) || (lastDay(e.hist)===lastDay(o.hist)&&e.begun>o.begun)) best.set(k,e); });
+  out.forEach(e=>{ const k=e.name.toLowerCase();
+    e.same = k===me;
+    // gleichnamig mit mir: nur zeigen, solange die Serie läuft (aktive Person) — verwaiste Kopien ausblenden
+    e.shown = best.get(k)===e && (!e.same || streakOf(e.hist)>0);
+    e.why = best.get(k)!==e ? 'ältere Kopie' : e.same ? (e.shown?'gleicher Name wie du':'gleicher Name, inaktiv') : 'angezeigt'; });
+  return out;
+}
+function peerList(){
+  return peerEntries().filter(e=>e.shown).map(e=>Object.assign(summaryOf({hist:e.hist,c:{}},e.name,''),{begun:e.begun}));
 }
 function renderWho(){
   const me=curProfile();
@@ -2498,7 +2523,7 @@ function renderPick(){
   if(typeof bkStatus==='function') bkStatus();
   renderWho();
 }
-document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); } });
+document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); renderDiag(); } });
 document.querySelectorAll('#segdir button').forEach(b=>b.onclick=()=>{
   dirMode=b.dataset.d; store.set('q.dir',JSON.stringify(dirMode)); renderPick(); });
 $('ttsTest').onclick=()=>{
@@ -2719,7 +2744,7 @@ function learnerFiles(g){
 }
 let SYNC=loadJ('q.sync',null), syncTimer=null, syncing=false;
 async function gh(path,opt={}){
-  const r=await fetch(GH+path,{...opt,headers:{Authorization:'Bearer '+SYNC.token,Accept:'application/vnd.github+json',
+  const r=await fetch(GH+path,{...opt,cache:'no-store',headers:{Authorization:'Bearer '+SYNC.token,Accept:'application/vnd.github+json',
     ...(opt.body?{'Content-Type':'application/json'}:{})}});
   if(r.status===401) throw new Error('Token ungültig oder abgelaufen');
   if(r.status===404) throw new Error('Gist nicht gefunden');
@@ -2782,7 +2807,7 @@ async function syncNow(){
       raw.set(pfx(q.id)+'q.srs',JSON.stringify(loc));
     });
     await gh('/gists/'+SYNC.gist,{method:'PATCH',body:JSON.stringify({files:{[myFile()]:{content:payload()}}})});
-    if(!$('pick').hidden) renderWho();
+    if(!$('pick').hidden){ renderWho(); if(document.querySelector('details.settings').open) renderDiag(); }
     SYNC.last=Date.now(); SYNC.pending=false; store.set('q.sync',JSON.stringify(SYNC)); syncStatus();
   }catch(e){
     SYNC.pending=true; store.set('q.sync',JSON.stringify(SYNC));
@@ -2796,6 +2821,10 @@ function scheduleSync(now){
 }
 $('syConnect').onclick=async()=>{
   const token=$('syToken').value.trim(); if(!token) return;
+  if(isDefaultName(curProfile().name)){                   // „Ich" ist für Lernpartner nicht unterscheidbar
+    const n=(prompt('Wie heißt du? Dein Lernpartner sieht diesen Namen.')||'').trim();
+    if(n && !PROFILES.some(x=>x.id!==CUR&&x.name.toLowerCase()===n.toLowerCase())){ curProfile().name=n; saveProfiles(); renderWho(); }
+  }
   SYNC={token}; syncStatus('verbinde …');
   try{
     const list=await gh('/gists?per_page=100');
@@ -2815,10 +2844,15 @@ function chooseLearner(L){                              // Wer lernt auf diesem 
   syncStatus('Profil zuordnen');
   const h=document.createElement('p'); h.className='shint'; h.textContent='Im Cloud-Speicher gefunden. Wer lernt auf diesem Profil?'; box.appendChild(h);
   const mk=(html,cls,fn)=>{const b=document.createElement('button');b.className='act '+cls;b.innerHTML=html;b.onclick=fn;box.appendChild(b);return b;};
-  L.forEach(x=>{ const b=mk('Das bin ich: <b></b> <small></small>','',()=>{SYNC.file=x.file; finishConnect();});
+  const meN=curProfile().name.toLowerCase();
+  L.sort((a,b)=>(b.name.toLowerCase()===meN)-(a.name.toLowerCase()===meN));
+  L.forEach(x=>{ const same=x.name.toLowerCase()===meN;
+    const b=mk('Das bin ich: <b></b> <small></small>',same?'pri':'',()=>{SYNC.file=x.file; finishConnect();});
     b.querySelector('b').textContent=x.name; b.querySelector('small').textContent='· '+x.n+' Karten'; });
   const me=curProfile().name;
-  const nb=mk('','pri',()=>{ let f=fileFor(me),i=2; while(L.some(x=>x.file===f)) f=fileFor(me+'-'+(i++)); SYNC.file=f; finishConnect(); });
+  if(L.some(x=>x.name.toLowerCase()===meN)){ const w=document.createElement('p'); w.className='shint';
+    w.textContent='Es gibt schon einen Lernstand „'+curProfile().name+'". Bist du das, nimm ihn — sonst entsteht eine zweite, getrennte Datei.'; box.appendChild(w); }
+  const nb=mk('',L.some(x=>x.name.toLowerCase()===meN)?'':'pri',()=>{ let f=fileFor(me),i=2; while(L.some(x=>x.file===f)) f=fileFor(me+'-'+(i++)); SYNC.file=f; finishConnect(); });
   nb.textContent='Neu anlegen als „'+me+'"';
   mk('Abbrechen','',()=>{ SYNC=null; store.set('q.sync','null'); box.hidden=true; syncStatus(); });
 }
@@ -2830,6 +2864,31 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
+const APP_VERSION='2026-09-28 · 5';
+function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
+function renderDiag(){
+  $('verInfo').textContent='App '+APP_VERSION;
+  if(window.caches&&caches.keys) caches.keys().then(k=>{ if(k.length) $('verInfo').textContent='App '+APP_VERSION+' · Offline-Speicher '+k.join(', '); }).catch(()=>{});
+  const on=!!(SYNC&&SYNC.gist&&!SYNC.choosing); $('diagBox').hidden=!on; if(!on) return;
+  const L=$('diagList'); L.innerHTML='';
+  const row=(name,sub,tag,me,off,del)=>{ const r=document.createElement('div'); r.className='drow2'+(me?' me':'');
+    r.innerHTML='<span class="ava"></span><span class="dn"><b></b><small></small></span><span class="tag2'+(off?' off':'')+'"></span>';
+    r.querySelector('.ava').textContent=initial(name); r.querySelector('b').textContent=name; r.querySelector('small').textContent=sub;
+    r.querySelector('.tag2').textContent=tag;
+    if(del){ const b=document.createElement('button'); b.textContent='Löschen'; b.onclick=del; r.appendChild(b); }
+    L.appendChild(r); };
+  row(curProfile().name,myFile()+' · '+relDay(lastDay(SRS.hist))+' · Serie '+streak(),'du',true,false);
+  const E=peerEntries().filter(e=>e.src==='cloud');
+  $('diagN').textContent=E.length?E.length+(E.length===1?' Datei':' Dateien'):'keine';
+  if(!E.length){ const p=document.createElement('p'); p.className='shint';
+    p.textContent='Noch keine andere Person in diesem Gist. Auf dem anderen iPhone denselben Token eingeben und „Neu anlegen" wählen.'; L.appendChild(p); }
+  E.forEach(e=>row(e.name,e.file+' · '+relDay(lastDay(e.hist))+' · Serie '+streakOf(e.hist),e.why,false,!e.shown,
+    (e.shown&&!e.same)?null:async()=>{
+      if(!confirm('Veraltete Datei „'+e.file+'" aus der Cloud löschen? Der aktuellere Lernstand von „'+e.name+'" bleibt erhalten.')) return;
+      try{ await gh('/gists/'+SYNC.gist,{method:'PATCH',body:JSON.stringify({files:{[e.file]:null}})}); await syncNow(); renderDiag(); }
+      catch(err){ syncStatus(err.message,true); }
+    }));
+}
 $('syOff').onclick=()=>{
   if(!confirm('Cloud-Sync trennen? Das Gist bleibt auf GitHub erhalten, dieses Gerät gleicht nur nicht mehr ab.')) return;
   SYNC=null; store.set('q.sync','null'); syncStatus(); bkStatus();
