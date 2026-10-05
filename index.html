@@ -341,6 +341,14 @@ details.settings.nudge summary{color:var(--alert)}
 .drow2 button{border:1px solid var(--alert);color:var(--alert);background:none;border-radius:8px;font-size:11.5px;padding:5px 8px;cursor:pointer}
 .ver{font-size:11px;color:var(--soft);margin:10px 2px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 
+/* ---------- Tagesplan ---------- */
+.goal{display:flex;align-items:center;gap:10px;margin:-4px 0 10px}
+.goal .track{height:6px}
+.goal span{font:600 11.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--soft);white-space:nowrap}
+.goal.done .fill{background:var(--tico)}
+.plannote{font-size:12px;color:var(--soft);margin:-4px 0 10px;padding:7px 10px;background:var(--bg);border-radius:8px}
+.plannote[hidden]{display:none}
+
 /* ---------- Flamme ---------- */
 .kpi.streak b{display:flex;align-items:center;gap:4px}
 .kflame{width:18px;height:22px;display:inline-block;filter:grayscale(1) opacity(.35);transition:filter .3s}
@@ -441,6 +449,8 @@ nav button[aria-selected=true]{color:var(--teal)}
 <path class="fi" fill="url(#kf2)" d="M32 36c2 7 10 12 11 20 2 10-4 19-11 20-7-1-13-9-11-18 1-6 6-8 7-13 2 3 3 5 4 5 1-5-1-9 0-14z"/></svg></span><span id="kStreak">0</span></b><span id="kStreakL">Tage in Folge</span></div>
         </div>
         <button class="today" id="todayBtn"></button>
+        <div class="goal"><div class="track"><div class="fill" id="goalFill"></div></div><span id="goalTxt"></span></div>
+        <p class="plannote" id="planNote" hidden></p>
         <div class="sbar" id="ovbar"></div>
         <div class="legend2">
           <span><i style="background:var(--rule)"></i>Neu</span>
@@ -456,8 +466,11 @@ nav button[aria-selected=true]{color:var(--teal)}
         <summary>Einstellungen</summary>
         <div class="setrow"><span class="seglabel">Karten pro Runde</span>
           <div class="seg" id="seg"><button data-n="5">5</button><button data-n="10">10</button><button data-n="20">20</button></div></div>
-        <div class="setrow"><span class="seglabel">Neue Karten pro Tag</span>
-          <div class="seg" id="segnew"><button data-n="10">10</button><button data-n="20">20</button><button data-n="40">40</button></div></div>
+        <div class="setrow"><span class="seglabel">Lernzeit pro Tag</span>
+          <div class="seg" id="segmin"><button data-n="5">5</button><button data-n="10">10</button><button data-n="15">15</button><button data-n="20">20</button><button data-n="30">30</button></div></div>
+        <div class="setrow"><span class="seglabel">Neue Karten höchstens</span>
+          <div class="seg" id="segnew"><button data-n="0">0</button><button data-n="5">5</button><button data-n="10">10</button><button data-n="20">20</button></div></div>
+        <p class="shint" id="planHint"></p>
         <div class="setrow"><span class="seglabel">Abfragerichtung</span>
           <div class="seg" id="segdir"><button data-d="auto">Auto</button><button data-d="es">→ ES</button><button data-d="de">→ DE</button><button data-d="mix">Mix</button></div></div>
         <p class="shint" id="dirHint"></p>
@@ -534,7 +547,8 @@ nav button[aria-selected=true]{color:var(--teal)}
       <div class="playtop"><button class="back" id="back2">‹ Themen</button><div class="pdeck" id="edeck"></div></div>
       <div class="emptybox"><b id="etitle"></b><p id="etext"></p></div>
       <div class="stack">
-        <button class="act pri" id="moreNew">Weitere neue Karten</button>
+        <button class="act pri" id="extra">Zusatzrunde: weitere Wiederholungen</button>
+        <button class="act" id="moreNew">Weitere neue Karten</button>
         <button class="act" id="cram">Freies Üben</button>
       </div>
     </section>
@@ -2242,7 +2256,7 @@ const today=()=>{const n=Date.now();return Math.floor((n-new Date(n).getTimezone
 const stageOf=b=>b===0?0:b<=2?1:b<=4?2:3;
 const STAGE=['Neu','Lernphase','Gefestigt','Sicher'];
 
-let roundSize=loadJ('q.size',10), newPerDay=loadJ('q.newcap',20);
+let roundSize=loadJ('q.size',10), newPerDay=loadJ('q.newcap',10);
 let SRS=loadJ('q.srs',null);
 if(!SRS){                                // Übernahme des alten Fortschritts
   const t=today(); SRS={c:{},day:{d:t,n:0,ok:0,nw:0}};
@@ -2281,6 +2295,40 @@ const isNew=c=>st(c.key).b===0;
 const isDue=c=>{const x=st(c.key);return x.b>0&&x.due<=today()};
 const isWeak=c=>{const x=st(c.key);return x.b>0&&((x.l>0&&x.b<=2)||x.l>=LEECH)};
 const newLeft=()=>Math.max(0,newPerDay-day().nw);
+/* ---- Tagesplan: Zeitbudget statt „alles Fällige" ----
+   Budget = Minuten × 60 / gemessenes Tempo. Neue Karten nur, wenn die Wiederholungen in den Plan passen
+   und die nächsten Tage nicht schon voll sind. Rückstand wird auf die Folgetage verteilt. */
+let minutes=loadJ('q.minutes',10);
+const PACE_DEF=10, NEW_LOAD=6;           // ~6 Abfragen zieht eine neue Karte im ersten Monat nach sich
+const pace=()=>Math.min(30,Math.max(4,SRS.pace||PACE_DEF));
+const budgetCards=()=>Math.max(10,Math.round(minutes*60/pace()));
+const sustainNew=()=>Math.max(1,Math.round(budgetCards()/NEW_LOAD));
+const lastRev=x=>x.r!==undefined?x.r:x.due-INT[Math.max(0,x.b)];  // Tag der letzten Abfrage (ältere Daten: geschätzt)
+const riskOf=c=>{ const x=st(c.key); return (today()-x.due+1)/Math.max(1,INT[x.b]); };   // je höher, desto eher vergessen
+function load7(){ const t=today(); let n=0; allCards().forEach(c=>{const x=st(c.key); if(x.b>0&&x.due>t&&x.due<=t+7) n++;}); return n; }
+function plan(cards){
+  const d=day(), B=budgetCards(), left=Math.max(0,B-d.n);
+  const due=cards.filter(isDue).sort((a,b)=>riskOf(b)-riskOf(a));
+  const fresh=cards.filter(isNew);
+  const backlog=due.length>left, heavy=load7()/7>B*.8;
+  const cap=Math.max(0,Math.min(newPerDay,sustainNew())-d.nw);
+  const reviews=Math.min(due.length,left);
+  const newOk=(backlog||heavy)?0:Math.max(0,Math.min(fresh.length,cap,left-reviews));
+  return {B,left,due,fresh,reviews,newOk,backlog,heavy,cap};
+}
+/* Rückstand verteilen: einmal täglich, profilweit. Was heute nicht ins Budget passt, rückt auf die Folgetage —
+   das Riskanteste bleibt heute. */
+function spreadBacklog(){
+  const t=today(); if(SRS.spreadDay===t) return 0;
+  SRS.spreadDay=t;
+  const B=budgetCards(), left=Math.max(0,B-day().n);
+  const due=allCards().filter(isDue).sort((a,b)=>riskOf(b)-riskOf(a));
+  const excess=due.slice(left); if(!excess.length){ saveQ(); return 0; }
+  const perDay=Math.max(5,Math.round(B*.4)), now=Date.now();
+  excess.forEach((c,i)=>{ const x={...st(c.key)}; x.due=t+1+Math.floor(i/perDay); x.u=now; SRS.c[c.key]=x; });
+  saveQ(); if(typeof scheduleSync==='function') scheduleSync();
+  return excess.length;
+}
 
 /* --- Vokabelstapel aus den Wortschatzblöcken --- */
 function wordsFrom(html,withPhr){
@@ -2337,15 +2385,18 @@ const allCards=()=>{const seen=new Set();return ALL.flatMap(cardsOf).filter(c=>!
 
 /* --- Rundenzusammenstellung --- */
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-function buildRound(cards,cap){
-  const due=cards.filter(isDue).sort((x,y)=>st(x.key).due-st(y.key).due||st(x.key).b-st(y.key).b);
-  const fresh=shuffle(cards.filter(isNew)).sort((a,b)=>a.lvl-b.lvl);   // Grundlagen vor Aufbau
-  // Fällige haben Vorrang, aber mindestens 30 % der Runde bleiben für Neues reserviert
-  let nNew=Math.min(fresh.length,cap,Math.max(roundSize-due.length,Math.ceil(roundSize*.3)));
-  const nDue=Math.min(due.length,roundSize-nNew);
-  nNew=Math.min(fresh.length,cap,roundSize-nDue);
-  const A=due.slice(0,nDue), B=fresh.slice(0,nNew), out=[];
-  while(A.length||B.length){ if(A.length)out.push(A.shift()); if(A.length)out.push(A.shift()); if(B.length)out.push(B.shift()); }
+function buildRound(cards,mode){
+  const P=plan(cards);
+  if(mode==='extra')                                     // freiwillig über das Budget hinaus: riskanteste Wiederholungen
+    return P.due.slice(0,roundSize);
+  const fresh=shuffle(P.fresh.slice()).sort((a,b)=>a.lvl-b.lvl);   // Grundlagen vor Aufbau
+  if(mode==='more') return fresh.slice(0,roundSize);
+  // Tagesplan: Wiederholungen zuerst; Neues nur, wenn der Plan es zulässt — dann ein Drittel der Runde eingestreut
+  let nNew=Math.min(P.newOk, P.reviews?Math.ceil(roundSize*.3):roundSize);
+  const nDue=Math.min(P.reviews,roundSize-nNew);
+  nNew=Math.min(P.newOk,roundSize-nDue);
+  const A=P.due.slice(0,nDue), N=fresh.slice(0,nNew), out=[];
+  while(A.length||N.length){ if(A.length)out.push(A.shift()); if(A.length)out.push(A.shift()); if(N.length)out.push(N.shift()); }
   return out;
 }
 function cramRound(cards){
@@ -2484,13 +2535,25 @@ function renderPick(){
       $('lvhintB').textContent='Zu '+nxt.name; $('lvhintB').onclick=()=>setLevel(nxt.id); }
   } else $('lvhint').hidden=true;
   // Kopfkarte (für die gewählte Stufe)
-  $('kDue').textContent=due; $('kNew').textContent=nNew;
+  $('kDue').textContent=due; $('kNew').textContent=plan(all).newOk;
   $('kStreak').textContent=sk; $('kStreakL').textContent=sk===1?'Tag in Folge':'Tage in Folge';
   $('kFlame').classList.toggle('on',!!SRS.hist[t]);
+  const P=plan(all), d0=day(), todo=P.reviews+P.newOk, target=d0.n+todo;
   const T=$('todayBtn'), tname='Tagesrunde · '+levelName();
-  T.innerHTML=(due||nNew)?'<b>'+tname+'</b>':'<b>Für heute erledigt</b><span>'+levelName()+' — mehr Neues über die Stapel unten</span>';
-  T.disabled=!(due||nNew);
-  T.onclick=()=>startRound(tname,scopeCards,'normal');
+  const minsLeft=Math.max(1,Math.round(todo*pace()/60));
+  if(todo){ T.innerHTML='<b>'+tname+'</b><span>noch '+todo+' Karten · ≈ '+minsLeft+' Min</span>'; T.disabled=false;
+    T.onclick=()=>startRound(tname,scopeCards,'normal'); }
+  else if(P.due.length){ T.innerHTML='<b>Tagesziel erreicht ✓</b><span>Zusatzrunde: '+P.due.length+' weitere Wiederholungen (freiwillig)</span>'; T.disabled=false;
+    T.onclick=()=>startRound('Zusatzrunde · '+levelName(),scopeCards,'extra'); }
+  else { T.innerHTML='<b>Für heute erledigt ✓</b><span>'+levelName()+' — mehr Neues über die Stapel unten</span>'; T.disabled=true; }
+  const gp=target?Math.min(100,Math.round(d0.n/target*100)):100;
+  $('goalFill').style.width=gp+'%'; document.querySelector('.goal').classList.toggle('done',!todo);
+  $('goalTxt').textContent=todo?d0.n+' / '+target+' Karten':'Tagesziel '+d0.n+' ✓';
+  const full = !P.newOk && P.fresh.length && P.cap>0 && P.reviews && P.reviews>=P.left;
+  const note = P.backlog ? 'Mehr fällig, als in '+minutes+' Min passt — Neues pausiert, der Rest wird auf die nächsten Tage verteilt.'
+    : P.heavy ? 'Die nächsten Tage sind gut gefüllt — neue Karten pausieren kurz, damit es in deiner Lernzeit bleibt.'
+    : full ? 'Heute füllen Wiederholungen deine '+minutes+' Min — Neues pausiert bis morgen.' : '';
+  $('planNote').textContent=note; $('planNote').hidden=!note;
   $('ovleft').textContent=(all.length-fresh)+' / '+all.length;
   $('ovbar').outerHTML=stageBar(all).replace('class="sbar"','class="sbar" id="ovbar"');
   // Wochengrafik (Lernserie gilt stufenübergreifend)
@@ -2517,6 +2580,9 @@ function renderPick(){
   G.find(g=>g.k===deckKind).decks.forEach(dk=>L.appendChild(deckRow(dk.name,()=>cardsOf(dk))));
   document.querySelectorAll('#seg button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===roundSize));
   document.querySelectorAll('#segnew button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===newPerDay));
+  document.querySelectorAll('#segmin button').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.n===minutes));
+  $('planHint').textContent='≈ '+budgetCards()+' Karten in '+minutes+' Min (Ø '+Math.round(pace())+' s pro Karte, gemessen) · '
+    +'davon bis zu '+Math.min(newPerDay,sustainNew())+' neue — mehr würde die Wiederholungen der nächsten Wochen über dein Budget treiben.';
   $('autoSpeak').checked=autoSpeak; $('autoRow').hidden=!TTS;
   document.querySelectorAll('#segdir button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===dirMode));
   $('dirHint').textContent=DIR_HINT[dirMode]||'';
@@ -2534,26 +2600,29 @@ $('ttsTest').onclick=()=>{
 $('autoSpeak').onchange=e=>{autoSpeak=e.target.checked;store.set('q.auto',JSON.stringify(autoSpeak))};
 document.querySelectorAll('#seg button').forEach(b=>b.onclick=()=>{roundSize=+b.dataset.n;store.set('q.size',JSON.stringify(roundSize));renderPick()});
 document.querySelectorAll('#segnew button').forEach(b=>b.onclick=()=>{newPerDay=+b.dataset.n;store.set('q.newcap',JSON.stringify(newPerDay));renderPick()});
+document.querySelectorAll('#segmin button').forEach(b=>b.onclick=()=>{minutes=+b.dataset.n;store.set('q.minutes',JSON.stringify(minutes));SRS.spreadDay=null;spreadBacklog();renderPick()});
 function show(id){['pick','play','sum','empty'].forEach(x=>$(x).hidden=(x!==id)); scrollTo({top:0});}
 
 /* --- Runde --- */
 let R=null;
 function startRound(name,getCards,mode){
   const cards=getCards();
-  const list = mode==='cram' ? cramRound(cards) : buildRound(cards, mode==='more'?Infinity:newLeft());
+  const list = mode==='cram' ? cramRound(cards) : buildRound(cards, mode);
   R={name,getCards,mode,queue:list.map(c=>({...c,redo:0})),total:list.length,first:0,missed:[]};
   if(!list.length) return showEmpty(name,cards);
-  $('pdeck').textContent=name+(mode==='cram'?' · freies Üben':'');
+  $('pdeck').textContent=name+(mode==='cram'?' · freies Üben':mode==='extra'?' · Zusatzrunde':'');
   show('play'); nextCard();
 }
 function showEmpty(name,cards){
-  const fresh=cards.filter(isNew).length, learned=cards.length-fresh;
-  const nextDue=cards.filter(c=>st(c.key).b>0).map(c=>st(c.key).due).sort((a,b)=>a-b)[0];
+  const P=plan(cards), fresh=P.fresh.length, learned=cards.length-fresh, due=P.due.length;
+  const nextDue=cards.filter(c=>st(c.key).b>0&&st(c.key).due>today()).map(c=>st(c.key).due).sort((a,b)=>a-b)[0];
   $('edeck').textContent=name;
-  $('etitle').textContent='Nichts fällig';
-  $('etext').textContent = (fresh ? 'Das Tageskontingent für neue Karten ist aufgebraucht. ' : 'Alle Karten dieses Stapels sind gelernt. ')
-    + (nextDue!==undefined ? 'Nächste Fälligkeit in '+(nextDue-today())+' Tag'+(nextDue-today()===1?'':'en')+'.' : '');
-  $('moreNew').hidden=!fresh; $('cram').hidden=!learned;
+  $('etitle').textContent=due?'Tagesziel erreicht':'Für heute erledigt';
+  $('etext').textContent = due ? due+' weitere Wiederholungen wären fällig — freiwillig. Was liegen bleibt, verteilt die App auf die nächsten Tage.'
+    : (fresh ? (P.backlog||P.heavy ? 'Neue Karten pausieren, damit die Wiederholungen der nächsten Tage in deine Lernzeit passen. ' : 'Das Tageskontingent für neue Karten ist aufgebraucht. ') : 'Alle Karten dieses Stapels sind gelernt. ')
+      + (nextDue!==undefined ? 'Nächste Fälligkeit in '+(nextDue-today())+' Tag'+(nextDue-today()===1?'':'en')+'.' : '');
+  $('extra').hidden=!due; $('moreNew').hidden=!fresh; $('cram').hidden=!learned;
+  $('extra').onclick=()=>startRound(name,R.getCards,'extra');
   $('moreNew').onclick=()=>startRound(name,R.getCards,'more');
   $('cram').onclick=()=>startRound(name,R.getCards,'cram');
   show('empty');
@@ -2561,6 +2630,7 @@ function showEmpty(name,cards){
 function nextCard(){
   if(!R.queue.length) return finish();
   const c=R.queue[0], x=st(c.key);
+  R.shownAt=Date.now();
   const toEs = c.redo ? c.toEs : chooseDir(c,x); // Wiederholung in derselben Richtung wie der Fehlversuch
   R.toEs=toEs;
   const [de,es]=c.it;
@@ -2616,25 +2686,34 @@ function grade(g){
   if(SRS.snapDay!==today()){ if(Object.keys(SRS.c).length) snapshot('Tagesbeginn'); SRS.snapDay=today(); }   // Stand vor dem ersten Lernen des Tages
   const c=R.queue.shift(), t=today(), x={...st(c.key)}, d=day();
   const firstTry=!c.redo;
+  if(firstTry && R.shownAt){                            // Tempo messen: gleitender Mittelwert, Ausreißer ignorieren
+    const sec=(Date.now()-R.shownAt)/1000;
+    if(sec>=1.5 && sec<=90) SRS.pace=+(.85*(SRS.pace||PACE_DEF)+.15*Math.min(40,Math.max(3,sec))).toFixed(2);
+  }
+  const elapsed=t-lastRev(x);
   if(firstTry){ d.n++; if(g>0) d.ok++; if(x.b===0) d.nw++; if(g>0) R.first++;
     SRS.hist[t]=(SRS.hist[t]||0)+1;
     Object.keys(SRS.hist).forEach(k=>{ if(+k<t-120) delete SRS.hist[k]; });   // 4 Monate genügen
   }
   if(g===0){
     if(firstTry){ x.l=(x.l||0)+1; R.missed.push(c); }
-    x.b=1; x.due=t;
+    if(firstTry) x.b=Math.max(1,x.b-2);                 // milder: zwei Stufen zurück statt auf Stufe 1
+    x.due=t;
     if(c.redo<REDO_MAX) R.queue.splice(Math.min(REDO_GAP,R.queue.length),0,{...c,redo:c.redo+1,toEs:R.toEs});
   } else if(!firstTry){
-    x.b=1; x.due=t+1;                                  // neu gelernt → morgen prüfen
+    x.due=t+1;                                         // in der Runde nachgelernt → morgen prüfen
   } else if(R.mode==='cram'){
     /* freies Üben: Erfolg verschiebt nichts — sonst würden Intervalle künstlich wachsen */
   } else if(g===1){
     x.b=Math.max(x.b,1); x.due=t+Math.max(1,Math.ceil(INT[x.b]/2));
   } else {
-    x.b=Math.min(x.b+1,MAX); x.due=t+INT[x.b];
+    // lange überfällig und trotzdem gewusst → zwei Stufen hoch
+    const jump = x.b>=1 && elapsed>=INT[Math.min(x.b+1,MAX)]*1.5 ? 2 : 1;
+    x.b=Math.min(x.b+jump,MAX); x.due=t+INT[x.b];
   }
+  if(R.mode!=='cram'||g===0) x.r=t;
   const prev=SRS.c[c.key];
-  if(!prev || prev.b!==x.b || prev.due!==x.due || prev.l!==x.l){   // nur echte Änderungen zählen beim Abgleich
+  if(!prev || prev.b!==x.b || prev.due!==x.due || prev.l!==x.l || prev.r!==x.r){   // nur echte Änderungen zählen beim Abgleich
     x.u=Date.now(); SRS.c[c.key]=x; saveQ();
   } else saveQ();                                                // Tagesstatistik trotzdem sichern
   nextCard();
@@ -2864,7 +2943,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-09-28 · 5';
+const APP_VERSION='2026-10-05 · 6';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -2903,7 +2982,7 @@ addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
 if(SYNC&&SYNC.gist) setTimeout(syncNow,800);
 
 /* --- Lernstand sichern / wiederherstellen --- */
-const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir'];
+const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes'];
 function bkStatus(){
   const last=loadJ('q.backup',null), started=Object.keys(SRS.c).length;
   const days=last===null?null:today()-last;
@@ -2953,7 +3032,7 @@ $('bkFile').onchange=async e=>{
     SRS=srs; if(!SRS.hist) SRS.hist={};
     SRS.gen=gen;                                             // neue Generation: gilt auf allen Geräten
     saveQ(); scheduleSync(true);
-    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',20); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto');
+    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto');
     renderPick(); bkStatus(); bkMsg('Lernstand vom '+when+' geladen ('+n+' Karten).');
   }catch(err){ bkMsg('Datei konnte nicht gelesen werden: '+err.message,true); }
 };
@@ -2962,7 +3041,8 @@ $('nextround').onclick=()=>startRound(R.name,R.getCards,R.mode==='cram'?'cram':'
 $('topick').onclick=()=>{renderPick();show('pick')};
 $('back').onclick=()=>{if(TTS)speechSynthesis.cancel();renderPick();show('pick')};
 $('back2').onclick=()=>{renderPick();show('pick')};
-function quizEnter(){ if(!R || !$('pick').hidden || !$('sum').hidden || !$('empty').hidden){ renderPick(); show('pick'); } }
+function quizEnter(){ spreadBacklog();
+   if(!R || !$('pick').hidden || !$('sum').hidden || !$('empty').hidden){ renderPick(); show('pick'); } }
 
 /* ===================== Offline ===================== */
 if('serviceWorker' in navigator){
