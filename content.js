@@ -1,0 +1,1461 @@
+/* ===================== Inhalte ===================== */
+const GRAM=[
+{g:'Grundlagen',t:'Aussprache',h:`
+<table>
+<tr><td class="mono">h</td><td class="de">stumm — <i>hola</i> = „ola"</td></tr>
+<tr><td class="mono">j, g+e/i</td><td class="de">ch wie in Ba<b>ch</b> — <i>jamón</i></td></tr>
+<tr><td class="mono">ll, y</td><td class="de">j wie in <b>j</b>a — <i>llave</i></td></tr>
+<tr><td class="mono">ñ</td><td class="de">nj — <i>mañana</i></td></tr>
+<tr><td class="mono">v</td><td class="de">b — <i>vino</i> = „bino"</td></tr>
+<tr><td class="mono">z, c+e/i</td><td class="de">scharfes s — <i>gracias</i></td></tr>
+<tr><td class="mono">qu</td><td class="de">k — <i>¿qué?</i> = „ke"</td></tr>
+<tr><td class="mono">gu+e/i</td><td class="de">g, u stumm — <i>guía</i> = „gia"</td></tr>
+<tr><td class="mono">r / rr</td><td class="de">Zungenspitze — <i>pero</i> ≠ <i>perro</i></td></tr>
+</table>
+<p>Vokale immer kurz und klar, nie gedehnt, nie geschluckt. Betonung: Wörter auf Vokal, <span class="mono">-n</span> oder <span class="mono">-s</span> auf der vorletzten Silbe, sonst auf der letzten. Der Akzent markiert jede Abweichung.</p>`},
+
+{g:'Grundlagen',t:'Die Personalpronomen',h:`
+<table>
+<tr><th></th><th>Singular</th><th>Plural</th></tr>
+<tr><td class="de">1.</td><td class="mono">yo <span class="gloss">ich</span></td><td class="mono">nosotros/-as <span class="gloss">wir</span></td></tr>
+<tr><td class="de">2.</td><td class="mono">tú <span class="gloss">du</span></td><td class="mono">vosotros/-as <span class="gloss">ihr</span></td></tr>
+<tr><td class="de">3.</td><td class="mono">él / ella <span class="gloss">er / sie</span></td><td class="mono">ellos / ellas <span class="gloss">sie</span></td></tr>
+<tr><td class="de">Höflich</td><td class="mono">usted <span class="gloss">Sie</span></td><td class="mono">ustedes <span class="gloss">Sie, ihr</span></td></tr>
+</table>
+<p><i>usted</i> und <i>ustedes</i> stehen grammatisch in der <b>3. Person</b> — sie nehmen dieselbe Verbform wie <i>él</i> und <i>ellos</i>. Reine Frauengruppen bekommen <i>nosotras / vosotras / ellas</i>, gemischte immer die maskuline Form. In Lateinamerika fehlt <i>vosotros</i> vollständig.</p>
+<div class="note"><span class="tag">Falle</span>In den Beispielsätzen hier steht das Pronomen zum Lernen meist dabei. Im echten Spanisch <b>lässt man es weg</b> — die Endung sagt es schon. <span class="es">Hablo español</span>, nicht <i>yo hablo español</i>, außer du willst betonen oder abgrenzen.</div>`},
+
+{g:'Verben',t:'Präsens — die drei Klassen',h:`
+<p>Endung abschneiden, Personalendung anhängen. Das ist das ganze System.</p>
+<table>
+<tr><th></th><th>hablar</th><th>comer</th><th>vivir</th></tr>
+<tr><td class="de">yo</td><td class="mono">hablo</td><td class="mono">como</td><td class="mono">vivo</td></tr>
+<tr><td class="de">tú</td><td class="mono">hablas</td><td class="mono">comes</td><td class="mono">vives</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">habla</td><td class="mono">come</td><td class="mono">vive</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">hablamos</td><td class="mono">comemos</td><td class="mono">vivimos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">habláis</td><td class="mono">coméis</td><td class="mono">vivís</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">hablan</td><td class="mono">comen</td><td class="mono">viven</td></tr>
+</table>
+<p><span class="mono">-er</span> und <span class="mono">-ir</span> unterscheiden sich nur bei <i>nosotros</i> und <i>vosotros</i>.</p>
+<div class="note t"><span class="tag">Tico</span>„Ihr" ist immer <span class="es">ustedes</span>, also die letzte Zeile. <i>vosotros</i> steht hier nur der Vollständigkeit halber.</div>`},
+
+{g:'Verben',t:'Alle Endungen auf einen Blick',h:`
+<p>Die Tabelle, die du beim Nachschlagen brauchst. Konkrete Verben stehen im Teil <b>Verben</b>.</p>
+<p><b>-ar</b> — hablar</p>
+<table class="wide">
+<tr><th></th><th>Präs.</th><th>Indef.</th><th>Imperf.</th><th>Subj.</th></tr>
+<tr><td class="de">yo</td><td class="mono">-o</td><td class="mono">-é</td><td class="mono">-aba</td><td class="mono">-e</td></tr>
+<tr><td class="de">tú</td><td class="mono">-as</td><td class="mono">-aste</td><td class="mono">-abas</td><td class="mono">-es</td></tr>
+<tr><td class="de">él</td><td class="mono">-a</td><td class="mono">-ó</td><td class="mono">-aba</td><td class="mono">-e</td></tr>
+<tr><td class="de">nos.</td><td class="mono">-amos</td><td class="mono">-amos</td><td class="mono">-ábamos</td><td class="mono">-emos</td></tr>
+<tr><td class="de">vos.</td><td class="mono">-áis</td><td class="mono">-asteis</td><td class="mono">-abais</td><td class="mono">-éis</td></tr>
+<tr><td class="de">ellos</td><td class="mono">-an</td><td class="mono">-aron</td><td class="mono">-aban</td><td class="mono">-en</td></tr>
+</table>
+<p><b>-er / -ir</b> — comer, vivir</p>
+<table class="wide">
+<tr><th></th><th>Präs.</th><th>Indef.</th><th>Imperf.</th><th>Subj.</th></tr>
+<tr><td class="de">yo</td><td class="mono">-o</td><td class="mono">-í</td><td class="mono">-ía</td><td class="mono">-a</td></tr>
+<tr><td class="de">tú</td><td class="mono">-es</td><td class="mono">-iste</td><td class="mono">-ías</td><td class="mono">-as</td></tr>
+<tr><td class="de">él</td><td class="mono">-e</td><td class="mono">-ió</td><td class="mono">-ía</td><td class="mono">-a</td></tr>
+<tr><td class="de">nos.</td><td class="mono">-emos / -imos</td><td class="mono">-imos</td><td class="mono">-íamos</td><td class="mono">-amos</td></tr>
+<tr><td class="de">vos.</td><td class="mono">-éis / -ís</td><td class="mono">-isteis</td><td class="mono">-íais</td><td class="mono">-áis</td></tr>
+<tr><td class="de">ellos</td><td class="mono">-en</td><td class="mono">-ieron</td><td class="mono">-ían</td><td class="mono">-an</td></tr>
+</table>
+<p><b>Futur und Konditional</b> hängen an den <b>ganzen Infinitiv</b> an, für alle drei Klassen gleich:</p>
+<table>
+<tr><td class="de">Futur</td><td class="mono">-é, -ás, -á, -emos, -éis, -án</td></tr>
+<tr><td class="de">Konditional</td><td class="mono">-ía, -ías, -ía, -íamos, -íais, -ían</td></tr>
+</table>
+<div class="note"><span class="tag">Falle</span>Bei <span class="mono">-ar</span> und <span class="mono">-er</span> ist die <i>nosotros</i>-Form im Indefinido gleich der Präsensform: <i>hablamos</i> heißt „wir sprechen" <b>und</b> „wir sprachen". Nur der Zusammenhang entscheidet.</div>`},
+
+{g:'Verben',t:'Stiefel-Verben',h:`
+<p>Der Stammvokal ändert sich überall dort, wo die Betonung auf ihn fällt — also überall außer bei <i>nosotros</i> und <i>vosotros</i>. Färbt man das ein, ergibt sich ein Stiefel.</p>
+<table>
+<tr><th></th><th>e→ie</th><th>o→ue</th><th>e→i</th></tr>
+<tr><td class="de">yo</td><td class="mono">quiero</td><td class="mono">puedo</td><td class="mono">pido</td></tr>
+<tr><td class="de">tú</td><td class="mono">quieres</td><td class="mono">puedes</td><td class="mono">pides</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">quiere</td><td class="mono">puede</td><td class="mono">pide</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">queremos</td><td class="mono">podemos</td><td class="mono">pedimos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">queréis</td><td class="mono">podéis</td><td class="mono">pedís</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">quieren</td><td class="mono">pueden</td><td class="mono">piden</td></tr>
+</table>
+<p class="words"><span>e→ie:</span> <b>querer, pensar, empezar, entender, preferir, cerrar, sentir</b><br>
+<span>o→ue:</span> <b>poder, dormir, volver, costar, encontrar, doler, llover</b><br>
+<span>e→i:</span> <b>pedir, servir, repetir, seguir, decir</b></p>
+<p>Der Wechsel gilt nur im <b>Präsens</b> und im Subjuntivo. Im Indefinido und Imperfecto bleibt der Stamm normal — Ausnahme: <span class="mono">-ir</span>-Verben ändern im Indefinido die 3. Person (<i>pidió, durmieron</i>).</p>`},
+
+{g:'Verben',t:'Nur die yo-Form ist unregelmäßig',h:`
+<table>
+<tr><th>Infinitiv</th><th>yo</th><th>Rest</th></tr>
+<tr><td class="de">hacer machen</td><td class="mono">hago</td><td class="mono de">haces…</td></tr>
+<tr><td class="de">poner stellen</td><td class="mono">pongo</td><td class="mono de">pones…</td></tr>
+<tr><td class="de">salir hinausgehen</td><td class="mono">salgo</td><td class="mono de">sales…</td></tr>
+<tr><td class="de">traer bringen</td><td class="mono">traigo</td><td class="mono de">traes…</td></tr>
+<tr><td class="de">conocer kennen</td><td class="mono">conozco</td><td class="mono de">conoces…</td></tr>
+<tr><td class="de">saber wissen</td><td class="mono">sé</td><td class="mono de">sabes…</td></tr>
+<tr><td class="de">dar geben</td><td class="mono">doy</td><td class="mono de">das…</td></tr>
+<tr><td class="de">ver sehen</td><td class="mono">veo</td><td class="mono de">ves…</td></tr>
+</table>
+<p><b>Beides zugleich</b> — yo-Form plus Stiefel:<br>
+<span class="mono">tener</span> → yo tengo, tú tienes, él tiene, nosotros tenemos, ellos tienen<br>
+<span class="mono">venir</span> → yo vengo, tú vienes, él viene, nosotros venimos, ellos vienen<br>
+<span class="mono">decir</span> → yo digo, tú dices, él dice, nosotros decimos, ellos dicen</p>
+<p>Diese yo-Form ist wichtiger, als sie aussieht: aus ihr werden <b>Subjuntivo und höflicher Imperativ</b> gebildet. <i>tengo → tenga, venga, diga.</i></p>`},
+
+{g:'Verben',t:'Die vier Unregelmäßigen',h:`
+<table>
+<tr><th></th><th>ser</th><th>estar</th><th>ir</th></tr>
+<tr><td class="de">yo</td><td class="mono">soy</td><td class="mono">estoy</td><td class="mono">voy</td></tr>
+<tr><td class="de">tú</td><td class="mono">eres</td><td class="mono">estás</td><td class="mono">vas</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">es</td><td class="mono">está</td><td class="mono">va</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">somos</td><td class="mono">estamos</td><td class="mono">vamos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">sois</td><td class="mono">estáis</td><td class="mono">vais</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">son</td><td class="mono">están</td><td class="mono">van</td></tr>
+</table>
+<p><span class="es">hay</span> <span class="gloss">= es gibt.</span> Unveränderlich, Singular wie Plural, und <b>ohne Subjekt</b>: <span class="es">Hay un problema. Hay muchos turistas. ¿Hay wifi?</span></p>`},
+
+{g:'Verben',t:'ser vs. estar',h:`
+<p><b>ser = was etwas ist. estar = wie oder wo es gerade ist.</b></p>
+<table>
+<tr><th>ser</th><th>estar</th></tr>
+<tr><td class="de">Identität, Herkunft</td><td class="de">Ort — immer</td></tr>
+<tr><td class="de">Beruf, Wesenszug</td><td class="de">momentaner Zustand</td></tr>
+<tr><td class="de">Material, Besitz</td><td class="de">Ergebnis der Veränderung</td></tr>
+<tr><td class="de">Uhrzeit, Datum</td><td class="de">Verlaufsform</td></tr>
+</table>
+<p><span class="es">Yo soy alemán. Ella es mi esposa. Nosotros somos turistas.</span><br>
+<span class="es">Yo estoy en Costa Rica. Nosotros estamos cansados. El café está frío.</span><br>
+<span class="gloss">Uhrzeit und Wetter haben kein Subjekt:</span> <span class="es">Son las tres. Hace calor.</span></p>
+<div class="note"><span class="tag">Falle</span>Der Ort steht immer mit <i>estar</i>, auch wenn er ewig gilt: <span class="es">San José está en Costa Rica.</span> Das Verb kippt außerdem die Bedeutung — <span class="es">él es aburrido</span> er ist langweilig / <span class="es">él está aburrido</span> er langweilt sich · <span class="es">la sopa es rica</span> ein gutes Gericht / <span class="es">la sopa está rica</span> schmeckt gerade toll.</div>`},
+
+{g:'Verben',t:'tener statt „sein“',h:`
+<p>Wo das Deutsche „sein" nimmt, nimmt Spanisch <i>tener</i>:</p>
+<ul class="phr">
+<li><span class="es">Yo tengo 34 años.</span> <span class="gloss">Ich bin 34.</span></li>
+<li><span class="es">Yo tengo hambre / sed.</span> <span class="gloss">Hunger / Durst</span></li>
+<li><span class="es">Nosotros tenemos frío / calor.</span> <span class="gloss">Uns ist kalt / warm</span></li>
+<li><span class="es">Ella tiene sueño.</span> <span class="gloss">Sie ist müde.</span></li>
+<li><span class="es">Yo tengo miedo / prisa.</span> <span class="gloss">Angst / Eile</span></li>
+<li><span class="es">Usted tiene razón.</span> <span class="gloss">Sie haben recht.</span></li>
+</ul>`},
+
+{g:'Verben',t:'Fünf Bausteine',h:`
+<p>Damit deckst du drei Zeitformen ab, ohne sie zu lernen.</p>
+<ul class="phr">
+<li><span class="es">ir a</span> + Inf. <span class="gloss">Zukunft — Nosotros vamos a viajar.</span></li>
+<li><span class="es">estar</span> + <span class="mono">-ando/-iendo</span> <span class="gloss">gerade — Yo estoy buscando el hotel.</span></li>
+<li><span class="es">tener que</span> + Inf. <span class="gloss">müssen — Nosotros tenemos que salir.</span></li>
+<li><span class="es">poder</span> + Inf. <span class="gloss">können — ¿Usted puede repetir?</span></li>
+<li><span class="es">acabar de</span> + Inf. <span class="gloss">gerade eben — Yo acabo de llegar.</span></li>
+</ul>
+<p><b>Gerundium:</b> <span class="mono">-ar → -ando</span>, <span class="mono">-er/-ir → -iendo</span>. Unregelmäßig: <span class="mono">ir → yendo · decir → diciendo · dormir → durmiendo · pedir → pidiendo · oír → oyendo</span></p>`},
+{g:'Verben',t:'Vergangenheit — Indefinido & Imperfecto',h:`
+<p><b>Indefinido</b> — abgeschlossene Einzelhandlung, bringt die Geschichte voran.<br>
+<b>Imperfecto</b> — Zustand, Gewohnheit, Kulisse, „damals war es so".</p>
+<table>
+<tr><th>Indefinido</th><th>hablar</th><th>comer</th></tr>
+<tr><td class="de">yo</td><td class="mono">hablé</td><td class="mono">comí</td></tr>
+<tr><td class="de">tú</td><td class="mono">hablaste</td><td class="mono">comiste</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">habló</td><td class="mono">comió</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">hablamos</td><td class="mono">comimos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">hablasteis</td><td class="mono">comisteis</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">hablaron</td><td class="mono">comieron</td></tr>
+</table>
+<table>
+<tr><th>Imperfecto</th><th>hablar</th><th>comer</th></tr>
+<tr><td class="de">yo</td><td class="mono">hablaba</td><td class="mono">comía</td></tr>
+<tr><td class="de">tú</td><td class="mono">hablabas</td><td class="mono">comías</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">hablaba</td><td class="mono">comía</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">hablábamos</td><td class="mono">comíamos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">hablabais</td><td class="mono">comíais</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">hablaban</td><td class="mono">comían</td></tr>
+</table>
+<p><b>Starke Indefinido-Stämme</b> — Endungen ohne Akzent: <span class="mono">-e, -iste, -o, -imos, -isteis, -ieron</span></p>
+<p class="words"><b>tener</b> <span>tuve</span> · <b>estar</b> <span>estuve</span> · <b>poder</b> <span>pude</span> · <b>poner</b> <span>puse</span> · <b>saber</b> <span>supe</span> · <b>hacer</b> <span>hice, él hizo</span> · <b>querer</b> <span>quise</span> · <b>venir</b> <span>vine</span> · <b>decir</b> <span>dije, ellos dijeron</span> · <b>traer</b> <span>traje, ellos trajeron</span> · <b>ir/ser</b> <span>fui</span> · <b>dar</b> <span>di</span> · <b>ver</b> <span>vi</span></p>
+<p><b>Imperfecto</b> ist fast völlig regelmäßig — nur drei Ausnahmen: <span class="mono">ser → era · ir → iba · ver → veía</span></p>
+<p><span class="es">Ayer nosotros fuimos a la playa. Hacía calor y el hotel era bonito.</span> <span class="gloss">Gestern gingen wir an den Strand. Es war heiß und das Hotel war schön.</span></p>`},
+
+{g:'Verben',t:'Futur & Konditional',h:`
+<p>Beide hängen die Endung an den <b>ganzen Infinitiv</b> — für alle drei Verbklassen identisch. Einfachste Zeiten des Spanischen.</p>
+<table>
+<tr><th></th><th>Futur</th><th>Konditional</th></tr>
+<tr><td class="de">yo</td><td class="mono">hablaré</td><td class="mono">hablaría</td></tr>
+<tr><td class="de">tú</td><td class="mono">hablarás</td><td class="mono">hablarías</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">hablará</td><td class="mono">hablaría</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">hablaremos</td><td class="mono">hablaríamos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">hablaréis</td><td class="mono">hablaríais</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">hablarán</td><td class="mono">hablarían</td></tr>
+</table>
+<p><b>Zehn unregelmäßige Stämme</b> — die Endungen bleiben gleich:</p>
+<p class="words"><b>tener</b> <span>tendr-</span> · <b>poder</b> <span>podr-</span> · <b>poner</b> <span>pondr-</span> · <b>salir</b> <span>saldr-</span> · <b>venir</b> <span>vendr-</span> · <b>decir</b> <span>dir-</span> · <b>hacer</b> <span>har-</span> · <b>querer</b> <span>querr-</span> · <b>saber</b> <span>sabr-</span> · <b>haber</b> <span>habr-</span></p>
+<p>Im Alltag ersetzt <span class="es">ir a</span> + Infinitiv das Futur fast immer: <span class="es">Vamos a salir a las ocho.</span> Das <b>Konditional</b> brauchst du dagegen aktiv — es ist die höflichste Form einer Bitte: <span class="es">¿Podría ayudarme? Me gustaría un café.</span></p>`},
+
+{g:'Verben',t:'Perfekt',h:`
+<p><span class="mono">haber</span> im Präsens + Partizip. Das Partizip verändert sich nie.</p>
+<table>
+<tr><td class="de">yo</td><td class="mono">he</td><td class="de">nosotros</td><td class="mono">hemos</td></tr>
+<tr><td class="de">tú</td><td class="mono">has</td><td class="de">vosotros</td><td class="mono">habéis</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">ha</td><td class="de">ellos, ustedes</td><td class="mono">han</td></tr>
+</table>
+<p><b>Partizip:</b> <span class="mono">-ar → -ado</span> (hablado) · <span class="mono">-er/-ir → -ido</span> (comido, vivido)</p>
+<p class="words"><b>Unregelmäßig:</b> hacer <span>hecho</span> · ver <span>visto</span> · poner <span>puesto</span> · decir <span>dicho</span> · volver <span>vuelto</span> · abrir <span>abierto</span> · escribir <span>escrito</span> · morir <span>muerto</span></p>
+<p><span class="es">¿Ha estado alguna vez en Alemania?</span> <span class="gloss">Waren Sie schon einmal in Deutschland?</span></p>
+<div class="note t"><span class="tag">Tico</span>In Costa Rica wird das Perfekt deutlich seltener benutzt als in Spanien. Wo ein Deutscher „ich habe gegessen" sagt, sagt der Tico meist <span class="es">comí</span> im Indefinido. Verstehen reicht, aktiv brauchst du es kaum.</div>`},
+
+{g:'Verben',t:'Imperativ & höfliche Bitten',h:`
+<p><b>usted-Imperativ:</b> yo-Form nehmen, Endvokal umdrehen. <span class="mono">hablar → hable · comer → coma · venir → venga</span>. Für <i>ustedes</i> ein <span class="mono">-n</span> anhängen. Das Pronomen bleibt weg.</p>
+<p><span class="es">Perdone. Disculpe. Dígame. Espere un momento. Siga derecho.</span></p>
+<p><b>Verneint:</b> einfach <span class="mono">no</span> davor — <span class="es">No se preocupe.</span> <span class="gloss">Machen Sie sich keine Sorgen.</span></p>
+<p><b>tú-Imperativ</b> ist die 3. Person Präsens: <span class="es">habla, come, escucha</span>. Acht Kurzformen fallen heraus: <span class="mono">ten, ven, pon, sal, haz, di, ve, sé</span></p>
+<p>Praktischer sind die Formeln ganz ohne Imperativ:</p>
+<ul class="phr">
+<li><span class="es">¿Me puede traer…?</span> <span class="gloss">Können Sie mir … bringen?</span></li>
+<li><span class="es">¿Podría…?</span> <span class="gloss">Könnten Sie…? — am höflichsten</span></li>
+<li><span class="es">Quisiera… / Me gustaría…</span> <span class="gloss">Ich hätte gern…</span></li>
+<li><span class="es">¿Sería posible…?</span> <span class="gloss">Wäre es möglich…?</span></li>
+</ul>`},
+
+{g:'Verben',t:'Subjuntivo — das Nötigste',h:`
+<p>Kein Tempus, sondern eine Haltung: erscheint nach Wunsch, Zweifel, Gefühl, Aufforderung und bei Zukunftsbezug nach <i>cuando</i>. Gebildet aus der yo-Form mit umgedrehtem Endvokal — dieselbe Form wie der usted-Imperativ.</p>
+<table>
+<tr><th></th><th>hablar</th><th>comer</th></tr>
+<tr><td class="de">yo</td><td class="mono">hable</td><td class="mono">coma</td></tr>
+<tr><td class="de">tú</td><td class="mono">hables</td><td class="mono">comas</td></tr>
+<tr><td class="de">él, usted</td><td class="mono">hable</td><td class="mono">coma</td></tr>
+<tr><td class="de">nosotros</td><td class="mono">hablemos</td><td class="mono">comamos</td></tr>
+<tr><td class="de">vosotros</td><td class="mono">habléis</td><td class="mono">comáis</td></tr>
+<tr><td class="de">ellos, ustedes</td><td class="mono">hablen</td><td class="mono">coman</td></tr>
+</table>
+<p class="words"><b>Unregelmäßig:</b> ser <span>sea</span> · ir <span>vaya</span> · saber <span>sepa</span> · dar <span>dé</span> · estar <span>esté</span> · haber <span>haya</span></p>
+<p>Für eine Reise reichen vier auswendige Formeln:</p>
+<ul class="phr">
+<li><span class="es">Ojalá que sí.</span> <span class="gloss">Hoffentlich.</span></li>
+<li><span class="es">Espero que le guste.</span> <span class="gloss">Ich hoffe, es gefällt Ihnen.</span></li>
+<li><span class="es">Cuando lleguemos…</span> <span class="gloss">Wenn wir ankommen…</span></li>
+<li><span class="es">Que tenga un buen día.</span> <span class="gloss">Einen schönen Tag noch.</span></li>
+</ul>`},
+
+
+{g:'Substantive & Adjektive',t:'Substantiv, Artikel, Plural',h:`
+<table>
+<tr><th>Endung</th><th>Genus</th><th>Ausnahmen</th></tr>
+<tr><td class="mono">-o</td><td class="de">m.</td><td class="de">la mano, la foto, la moto</td></tr>
+<tr><td class="mono">-a</td><td class="de">f.</td><td class="de">el problema, el día, el mapa, el clima, el agua</td></tr>
+<tr><td class="mono">-ción -dad</td><td class="de">f.</td><td class="de">—</td></tr>
+<tr><td class="mono">-or -aje</td><td class="de">m.</td><td class="de">la flor</td></tr>
+</table>
+<table>
+<tr><th></th><th>bestimmt</th><th>unbestimmt</th></tr>
+<tr><td class="de">m. Sg./Pl.</td><td class="mono">el / los</td><td class="mono">un / unos</td></tr>
+<tr><td class="de">f. Sg./Pl.</td><td class="mono">la / las</td><td class="mono">una / unas</td></tr>
+</table>
+<p><b>Plural:</b> Vokal → <span class="mono">-s</span> · Konsonant → <span class="mono">-es</span> (<i>hotel → hoteles</i>) · <span class="mono">-z</span> → <span class="mono">-ces</span> (<i>vez → veces</i>).</p>
+<div class="note"><span class="tag">Falle</span>Pflichtverschmelzungen: <span class="mono">a + el = al</span>, <span class="mono">de + el = del</span>. <span class="es">Nosotros vamos al hotel. La llave del cuarto.</span></div>`},
+
+{g:'Substantive & Adjektive',t:'Adjektive & Steigerung',h:`
+<p>Sie stehen <b>hinter</b> dem Substantiv und richten sich nach Genus und Zahl: <span class="es">un café caliente · una playa bonita · unos días tranquilos</span>. Adjektive auf <span class="mono">-e</span> oder Konsonant haben keine eigene weibliche Form — außer Nationalitäten: <i>alemán / alemana</i>.</p>
+<ul class="phr">
+<li><span class="es">más … que</span> <span class="gloss">mehr als</span></li>
+<li><span class="es">menos … que</span> <span class="gloss">weniger als</span></li>
+<li><span class="es">tan … como</span> <span class="gloss">so … wie</span></li>
+<li><span class="es">el / la más …</span> <span class="gloss">der/die/das …ste</span></li>
+<li><span class="mono">bueno → mejor · malo → peor</span></li>
+<li><span class="mono">grande → mayor · pequeño → menor</span></li>
+</ul>
+<p><b>Adverb</b> aus Adjektiv: weibliche Form + <span class="mono">-mente</span>. <i>rápido → rápidamente, fácil → fácilmente.</i> Im Alltag sagt man oft einfach das Adjektiv: <span class="es">Hable más despacio.</span></p>`},
+
+{g:'Substantive & Adjektive',t:'Possessiv & Demonstrativ',h:`
+<p><span class="mono">mi · tu · su · nuestro</span> — Plural durch <span class="mono">-s</span>: <span class="es">Yo tengo mis maletas.</span> Nur <i>nuestro</i> hat eine weibliche Form: <span class="es">Nosotros tenemos nuestra habitación.</span></p>
+<p><span class="mono">este</span> dieser hier · <span class="mono">ese</span> der da · <span class="mono">aquel</span> jener dort. Angleichung wie beim Adjektiv: <span class="es">Nosotros queremos esta playa.</span> Für Unbestimmtes unveränderlich: <span class="es">¿Qué es esto?</span></p>
+<div class="note"><span class="tag">Falle</span><i>su</i> heißt <i>sein, ihr, Ihr</i> und <i>deren</i> zugleich. Im Zweifel anhängen: <span class="es">la maleta de él / de usted.</span></div>`},
+
+{g:'Satzbau',t:'Objektpronomen',h:`
+<table>
+<tr><th></th><th>direkt</th><th>indirekt</th></tr>
+<tr><td class="de">mich / mir</td><td class="mono">me</td><td class="mono">me</td></tr>
+<tr><td class="de">dich / dir</td><td class="mono">te</td><td class="mono">te</td></tr>
+<tr><td class="de">ihn, sie, es / ihm</td><td class="mono">lo, la</td><td class="mono">le</td></tr>
+<tr><td class="de">uns</td><td class="mono">nos</td><td class="mono">nos</td></tr>
+<tr><td class="de">sie / ihnen, Ihnen</td><td class="mono">los, las</td><td class="mono">les</td></tr>
+</table>
+<div class="note"><span class="tag">Falle</span>Das Objektpronomen steht <b>vor</b> dem konjugierten Verb, nicht dahinter: <span class="es">Yo no lo entiendo. ¿Usted me puede ayudar?</span> An Infinitiv und Gerundium darf es angehängt werden: <span class="es">¿Usted puede ayudarme?</span> — beides richtig.</div>
+<p>Treffen zwei aufeinander, steht der <b>Dativ zuerst</b>: <span class="es">¿Me lo puede traer?</span> <span class="gloss">Können Sie es mir bringen?</span></p>`},
+
+{g:'Satzbau',t:'gustar — rückwärts gebaut',h:`
+<p>Nicht „ich mag X", sondern „mir gefällt X". Das Gemochte ist das Subjekt und bestimmt die Verbform.</p>
+<ul class="phr">
+<li><span class="es">A mí me gusta el café.</span> <span class="gloss">Singular</span></li>
+<li><span class="es">A mí me gustan las playas.</span> <span class="gloss">Plural → Verb im Plural</span></li>
+<li><span class="es">A nosotros nos gusta viajar.</span> <span class="gloss">Infinitiv → immer Sg.</span></li>
+<li><span class="es">A usted le gusta el pescado.</span> <span class="gloss">Sie mögen Fisch.</span></li>
+<li><span class="es">A ella le gustan los monos.</span> <span class="gloss">Sie mag Affen.</span></li>
+</ul>
+<p class="gloss">Betontes Pronomen mit <b>a</b>: a mí, a ti, a él/ella/usted, a nosotros, a vosotros, a ellos/ustedes. Es steht zusätzlich zu <i>me, te, le, nos, os, les</i> — nie an dessen Stelle.</p>
+<p class="words"><span>Genauso:</span> <b>encantar</b> <span>lieben</span> · <b>interesar</b> <span>interessieren</span> · <b>parecer</b> <span>scheinen</span> · <b>doler</b> <span>wehtun</span> · <b>faltar</b> <span>fehlen</span> · <b>quedar</b> <span>passen, übrig sein</span></p>`},
+
+{g:'Satzbau',t:'Fragen & Verneinung',h:`
+<table>
+<tr><td class="mono">¿qué?</td><td class="de">was</td><td class="mono">¿quién?</td><td class="de">wer</td></tr>
+<tr><td class="mono">¿dónde?</td><td class="de">wo</td><td class="mono">¿adónde?</td><td class="de">wohin</td></tr>
+<tr><td class="mono">¿de dónde?</td><td class="de">woher</td><td class="mono">¿cuándo?</td><td class="de">wann</td></tr>
+<tr><td class="mono">¿cómo?</td><td class="de">wie</td><td class="mono">¿por qué?</td><td class="de">warum</td></tr>
+<tr><td class="mono">¿cuál?</td><td class="de">welcher</td><td class="mono">¿cuánto?</td><td class="de">wie viel</td></tr>
+</table>
+<p>Verneinung: <span class="mono">no</span> vor das Verb. Entscheidungsfragen brauchen keine Umstellung, nur Intonation: <span class="es">¿Usted habla inglés?</span></p>
+<div class="note"><span class="tag">Falle</span>Doppelte Verneinung ist Pflicht: <span class="es">No hay nada. Yo no veo a nadie. Nosotros nunca comemos carne.</span></div>`},
+
+{g:'Satzbau',t:'por / para · persönliches a',h:`
+<table>
+<tr><th>para = Ziel</th><th>por = Grund, Durchgang</th></tr>
+<tr><td class="de">Zweck: <i>Esto es para mi esposa.</i></td><td class="de">Ursache: <i>Gracias por todo.</i></td></tr>
+<tr><td class="de">Richtung: <i>Nosotros salimos para Jacó.</i></td><td class="de">durch: <i>Nosotros caminamos por la playa.</i></td></tr>
+<tr><td class="de">Frist: <i>para mañana</i></td><td class="de">Preis: <i>diez dólares por persona</i></td></tr>
+<tr><td class="de">Empfänger</td><td class="de">Zeitspanne: <i>por dos días</i></td></tr>
+</table>
+<div class="note"><span class="tag">Falle</span>Ist das direkte Objekt eine Person, steht <span class="mono">a</span> davor: <span class="es">Yo veo la playa</span>, aber <span class="es">Yo veo a mi esposa.</span> Gibt es im Deutschen nicht — wird ständig vergessen.</div>`}
+];
+
+const VOC=[
+{g:"A1 · Grundwortschatz",t:"Begrüßung & Höflichkeit",h:`
+<p class="words"><b>hola</b> <span>hallo</span> · <b>buenos días</b> <span>guten Morgen</span> · <b>buenas tardes</b> <span>guten Tag, ab mittags</span> · <b>buenas noches</b> <span>guten Abend, gute Nacht</span> · <b>adiós</b> <span>tschüss</span> · <b>hasta luego</b> <span>bis später</span> · <b>hasta mañana</b> <span>bis morgen</span> · <b>nos vemos</b> <span>man sieht sich</span> · <b>bienvenido</b> <span>willkommen</span></p>
+<p class="words"><b>por favor</b> <span>bitte</span> · <b>gracias</b> <span>danke</span> · <b>muchas gracias</b> <span>vielen Dank</span> · <b>de nada</b> <span>gern geschehen</span> · <b>perdón</b> <span>Entschuldigung</span> · <b>disculpe</b> <span>entschuldigen Sie</span> · <b>mucho gusto</b> <span>freut mich</span> · <b>igualmente</b> <span>gleichfalls</span></p>
+<ul class="phr">
+<li><span class="es">¿Cómo está?</span> <span class="gloss">Wie geht es Ihnen?</span></li>
+<li><span class="es">Bien, gracias. ¿Y usted?</span> <span class="gloss">Gut, danke. Und Ihnen?</span></li>
+<li><span class="es">Me llamo Philipp.</span> <span class="gloss">Ich heiße Philipp.</span></li>
+<li><span class="es">¿Cómo se llama usted?</span> <span class="gloss">Wie heißen Sie?</span></li>
+<li><span class="es">Somos de Alemania.</span> <span class="gloss">Wir sind aus Deutschland.</span></li>
+<li><span class="es">¿Habla inglés o alemán?</span> <span class="gloss">Sprechen Sie Englisch oder Deutsch?</span></li>
+<li><span class="es">Hablo un poco de español.</span> <span class="gloss">Ich spreche ein bisschen Spanisch.</span></li>
+<li><span class="es">Más despacio, por favor.</span> <span class="gloss">Langsamer, bitte.</span></li>
+<li><span class="es">No entiendo.</span> <span class="gloss">Ich verstehe nicht.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Auf <i>gracias</i> antwortet man in Costa Rica mit <b>con mucho gusto</b>, nicht mit <i>de nada</i>. Und <b>pura vida</b> ersetzt praktisch jede Begrüßung und Verabschiedung.</div>`},
+{g:"A1 · Grundwortschatz",t:"Bindewörter",h:`<p class="words"><b>y</b> <span>und</span> · <b>o</b> <span>oder</span> · <b>pero</b> <span>aber</span> · <b>porque</b> <span>weil</span> · <b>que</b> <span>dass</span> · <b>si</b> <span>wenn, falls</span> · <b>también</b> <span>auch</span> · <b>tampoco</b> <span>auch nicht</span> · <b>entonces</b> <span>dann, also</span> · <b>pues</b> <span>nun, also</span> · <b>aunque</b> <span>obwohl</span> · <b>además</b> <span>außerdem</span> · <b>por eso</b> <span>deshalb</span> · <b>sin embargo</b> <span>jedoch</span> · <b>mientras</b> <span>während</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Menge & Grad",h:`<p class="words"><b>muy</b> <span>sehr</span> · <b>mucho</b> <span>viel</span> · <b>poco</b> <span>wenig</span> · <b>demasiado</b> <span>zu viel</span> · <b>bastante</b> <span>ziemlich</span> · <b>más</b> <span>mehr</span> · <b>menos</b> <span>weniger</span> · <b>todo</b> <span>alles</span> · <b>nada</b> <span>nichts</span> · <b>algo</b> <span>etwas</span> · <b>alguien</b> <span>jemand</span> · <b>nadie</b> <span>niemand</span> · <b>otro</b> <span>ein anderer</span> · <b>mismo</b> <span>derselbe</span> · <b>cada</b> <span>jeder</span> · <b>solo</b> <span>nur</span> · <b>casi</b> <span>fast</span> · <b>medio</b> <span>halb</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Ort",h:`<p class="words"><b>aquí</b> <span>hier</span> · <b>allí, ahí</b> <span>dort</span> · <b>cerca</b> <span>nah</span> · <b>lejos</b> <span>weit</span> · <b>arriba</b> <span>oben</span> · <b>abajo</b> <span>unten</span> · <b>dentro</b> <span>drinnen</span> · <b>fuera</b> <span>draußen</span> · <b>al lado de</b> <span>neben</span> · <b>enfrente de</b> <span>gegenüber</span> · <b>detrás de</b> <span>hinter</span> · <b>delante de</b> <span>vor</span> · <b>entre</b> <span>zwischen</span> · <b>a la derecha</b> <span>rechts</span> · <b>a la izquierda</b> <span>links</span> · <b>derecho</b> <span>geradeaus</span> · <b>al norte / sur / este / oeste</b> <span>nördlich / südlich / östlich / westlich</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Zeit",h:`<p class="words"><b>ahora</b> <span>jetzt</span> · <b>hoy</b> <span>heute</span> · <b>mañana</b> <span>morgen und Vormittag</span> · <b>ayer</b> <span>gestern</span> · <b>luego, después</b> <span>später, danach</span> · <b>antes</b> <span>vorher</span> · <b>siempre</b> <span>immer</span> · <b>nunca</b> <span>nie</span> · <b>a veces</b> <span>manchmal</span> · <b>ya</b> <span>schon</span> · <b>todavía</b> <span>noch</span> · <b>temprano</b> <span>früh</span> · <b>tarde</b> <span>spät</span> · <b>pronto</b> <span>bald</span> · <b>hasta</b> <span>bis</span> · <b>desde</b> <span>seit</span> · <b>el día</b> <span>Tag</span> · <b>la semana</b> <span>Woche</span> · <b>el mes</b> <span>Monat</span> · <b>el año</b> <span>Jahr</span> · <b>la hora</b> <span>Stunde, Uhrzeit</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Reagieren",h:`<p class="words"><b>claro</b> <span>klar</span> · <b>listo</b> <span>okay, fertig</span> · <b>de acuerdo</b> <span>einverstanden</span> · <b>por supuesto</b> <span>selbstverständlich</span> · <b>tal vez</b> <span>vielleicht</span> · <b>¿verdad?</b> <span>oder?, stimmt's?</span> · <b>lo siento</b> <span>tut mir leid</span> · <b>no importa</b> <span>macht nichts</span> · <b>con permiso</b> <span>Entschuldigung, beim Vorbeigehen</span> · <b>¡qué bien!</b> <span>wie schön!</span> · <b>¡qué lástima!</b> <span>wie schade!</span> · <b>¡salud!</b> <span>Prost! / Gesundheit!</span></p>`},
+{g:"A1 · Grundwortschatz",t:"Häufige Adjektive",h:`
+<table>
+<tr><td class="mono">bueno / malo</td><td class="de">gut / schlecht</td></tr>
+<tr><td class="mono">grande / pequeño</td><td class="de">groß / klein</td></tr>
+<tr><td class="mono">nuevo / viejo</td><td class="de">neu / alt</td></tr>
+<tr><td class="mono">joven</td><td class="de">jung</td></tr>
+<tr><td class="mono">caro / barato</td><td class="de">teuer / billig</td></tr>
+<tr><td class="mono">fácil / difícil</td><td class="de">leicht / schwierig</td></tr>
+<tr><td class="mono">rápido / lento</td><td class="de">schnell / langsam</td></tr>
+<tr><td class="mono">alto / bajo</td><td class="de">hoch, groß / niedrig, klein</td></tr>
+<tr><td class="mono">largo / corto</td><td class="de">lang / kurz</td></tr>
+<tr><td class="mono">limpio / sucio</td><td class="de">sauber / schmutzig</td></tr>
+<tr><td class="mono">lleno / vacío</td><td class="de">voll / leer</td></tr>
+<tr><td class="mono">abierto / cerrado</td><td class="de">offen / geschlossen</td></tr>
+<tr><td class="mono">libre / ocupado</td><td class="de">frei / besetzt</td></tr>
+<tr><td class="mono">bonito / feo</td><td class="de">schön / hässlich</td></tr>
+<tr><td class="mono">tranquilo</td><td class="de">ruhig</td></tr>
+<tr><td class="mono">seguro / peligroso</td><td class="de">sicher / gefährlich</td></tr>
+<tr><td class="mono">cansado</td><td class="de">müde</td></tr>
+<tr><td class="mono">feliz / triste</td><td class="de">glücklich / traurig</td></tr>
+<tr><td class="mono">enfermo</td><td class="de">krank</td></tr>
+<tr><td class="mono">mojado / seco</td><td class="de">nass / trocken</td></tr>
+<tr><td class="mono">próximo / último</td><td class="de">nächster / letzter</td></tr>
+<tr><td class="mono">primero</td><td class="de">erster</td></tr>
+</table>
+<div class="note"><span class="tag">Falle</span><i>largo</i> heißt <b>lang</b>, nicht „groß" — der falsche Freund zum englischen <i>large</i>. Und <i>embarazada</i> heißt <b>schwanger</b>, nicht „verlegen".</div>`},
+{g:"A1 · Grundwortschatz",t:"Farben",h:`
+<p class="words"><b>rojo</b> <span>rot</span> · <b>azul</b> <span>blau</span> · <b>verde</b> <span>grün</span> · <b>amarillo</b> <span>gelb</span> · <b>naranja</b> <span>orange</span> · <b>negro</b> <span>schwarz</span> · <b>blanco</b> <span>weiß</span> · <b>gris</b> <span>grau</span> · <b>café, marrón</b> <span>braun</span> · <b>rosado</b> <span>rosa</span> · <b>morado</b> <span>lila</span> · <b>claro / oscuro</b> <span>hell / dunkel</span></p>
+<p>Farben sind Adjektive und richten sich nach dem Substantiv: <span class="es">un carro rojo, una camisa roja, unos zapatos negros.</span> Die auf <span class="mono">-e</span> oder Konsonant bleiben unverändert: <i>verde, azul, gris.</i></p>`},
+{g:"A1 · Grundwortschatz",t:"Die wichtigsten Verben",h:`
+<p class="gloss">Alle Formen jedes Verbs stehen im Tab <b>Verben</b>.</p>
+<table>
+<tr><td class="mono">ser / estar</td><td class="de">sein</td><td class="mono">poder</td><td class="de">können</td></tr>
+<tr><td class="mono">tener</td><td class="de">haben</td><td class="mono">querer</td><td class="de">wollen</td></tr>
+<tr><td class="mono">hacer</td><td class="de">machen</td><td class="mono">ir</td><td class="de">gehen</td></tr>
+<tr><td class="mono">venir</td><td class="de">kommen</td><td class="mono">llegar</td><td class="de">ankommen</td></tr>
+<tr><td class="mono">salir</td><td class="de">abfahren</td><td class="mono">volver</td><td class="de">zurück</td></tr>
+<tr><td class="mono">dar</td><td class="de">geben</td><td class="mono">tomar</td><td class="de">nehmen</td></tr>
+<tr><td class="mono">llevar</td><td class="de">mitnehmen</td><td class="mono">traer</td><td class="de">bringen</td></tr>
+<tr><td class="mono">decir</td><td class="de">sagen</td><td class="mono">hablar</td><td class="de">sprechen</td></tr>
+<tr><td class="mono">preguntar</td><td class="de">fragen</td><td class="mono">pedir</td><td class="de">bestellen</td></tr>
+<tr><td class="mono">saber</td><td class="de">wissen</td><td class="mono">conocer</td><td class="de">kennen</td></tr>
+<tr><td class="mono">ver</td><td class="de">sehen</td><td class="mono">mirar</td><td class="de">anschauen</td></tr>
+<tr><td class="mono">oír</td><td class="de">hören</td><td class="mono">entender</td><td class="de">verstehen</td></tr>
+<tr><td class="mono">comer</td><td class="de">essen</td><td class="mono">beber</td><td class="de">trinken</td></tr>
+<tr><td class="mono">dormir</td><td class="de">schlafen</td><td class="mono">comprar</td><td class="de">kaufen</td></tr>
+<tr><td class="mono">pagar</td><td class="de">bezahlen</td><td class="mono">costar</td><td class="de">kosten</td></tr>
+<tr><td class="mono">buscar</td><td class="de">suchen</td><td class="mono">encontrar</td><td class="de">finden</td></tr>
+<tr><td class="mono">necesitar</td><td class="de">brauchen</td><td class="mono">gustar</td><td class="de">gefallen</td></tr>
+<tr><td class="mono">esperar</td><td class="de">warten</td><td class="mono">ayudar</td><td class="de">helfen</td></tr>
+<tr><td class="mono">abrir</td><td class="de">öffnen</td><td class="mono">cerrar</td><td class="de">schließen</td></tr>
+<tr><td class="mono">empezar</td><td class="de">anfangen</td><td class="mono">terminar</td><td class="de">beenden</td></tr>
+<tr><td class="mono">quedarse</td><td class="de">bleiben</td><td class="mono">funcionar</td><td class="de">funktionieren</td></tr>
+</table>
+<div class="note"><span class="tag">Falle</span><i>saber</i> = Fakten wissen. <i>conocer</i> = Personen und Orte kennen. <span class="es">Sé dónde está, pero no conozco el lugar.</span> <span class="gloss">Ich weiß, wo es ist, aber ich kenne den Ort nicht.</span></div>`},
+{g:"A1 · Zahlen, Datum, Uhrzeit",t:"Zahlen",h:`
+<p class="words"><b>1–15 einzeln:</b> uno <span>1</span> · dos <span>2</span> · tres <span>3</span> · cuatro <span>4</span> · cinco <span>5</span> · seis <span>6</span> · siete <span>7</span> · ocho <span>8</span> · nueve <span>9</span> · diez <span>10</span> · once <span>11</span> · doce <span>12</span> · trece <span>13</span> · catorce <span>14</span> · quince <span>15</span></p>
+<p class="words"><b>ab 16 gebaut:</b> dieciséis <span>16</span> · diecisiete <span>17</span> · veinte <span>20</span> · veintiuno <span>21</span> · treinta y uno <span>31</span> · cuarenta <span>40</span> · cincuenta <span>50</span> · sesenta <span>60</span> · setenta <span>70</span> · ochenta <span>80</span> · noventa <span>90</span> · cien <span>100</span> · doscientos <span>200</span> · <b>quinientos</b> <span>500, unregelmäßig</span> · mil <span>1000</span></p>
+<div class="note t"><span class="tag">Tico</span>Gezahlt wird in <b>colones</b>, meist in Tausendern: <i>cinco mil colones</i> ≈ 9 €. US-Dollar werden fast überall angenommen, das Wechselgeld kommt in Colones zurück.</div>`},
+{g:"A1 · Zahlen, Datum, Uhrzeit",t:"Wochentage, Monate, Datum",h:`
+<p class="words"><b>lunes</b> <span>Montag</span> · <b>martes</b> <span>Dienstag</span> · <b>miércoles</b> <span>Mittwoch</span> · <b>jueves</b> <span>Donnerstag</span> · <b>viernes</b> <span>Freitag</span> · <b>sábado</b> <span>Samstag</span> · <b>domingo</b> <span>Sonntag</span></p>
+<p class="words"><b>el fin de semana</b> <span>Wochenende</span> · <b>entre semana</b> <span>unter der Woche</span> · <b>anteayer</b> <span>vorgestern</span> · <b>pasado mañana</b> <span>übermorgen</span> · <b>el día festivo</b> <span>Feiertag</span></p>
+<table>
+<tr><td class="mono">el lunes</td><td class="de">am Montag</td></tr>
+<tr><td class="mono">los lunes</td><td class="de">montags, jeden Montag</td></tr>
+<tr><td class="mono">el próximo viernes</td><td class="de">nächsten Freitag</td></tr>
+<tr><td class="mono">el sábado pasado</td><td class="de">letzten Samstag</td></tr>
+</table>
+<p><b>Monate:</b></p>
+<p class="words"><b>enero</b> <span>Januar</span> · <b>febrero</b> <span>Februar</span> · <b>marzo</b> <span>März</span> · <b>abril</b> <span>April</span> · <b>mayo</b> <span>Mai</span> · <b>junio</b> <span>Juni</span> · <b>julio</b> <span>Juli</span> · <b>agosto</b> <span>August</span> · <b>septiembre</b> <span>September</span> · <b>octubre</b> <span>Oktober</span> · <b>noviembre</b> <span>November</span> · <b>diciembre</b> <span>Dezember</span></p>
+<ul class="phr">
+<li><span class="es">¿Qué día es hoy?</span> <span class="gloss">Welcher Tag ist heute?</span></li>
+<li><span class="es">Hoy es martes.</span> <span class="gloss">Heute ist Dienstag.</span></li>
+<li><span class="es">Es el 14 de junio.</span> <span class="gloss">Es ist der 14. Juni.</span></li>
+<li><span class="es">Llegamos el 3 de marzo.</span> <span class="gloss">Wir kommen am 3. März an.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Wochentage und Monate schreibt man <b>klein</b>. Beim Datum stehen normale Zahlen, keine Ordnungszahlen — nur der Erste macht eine Ausnahme: <span class="es">el primero de mayo</span>. Der Artikel <i>el</i> ersetzt das deutsche „am": <i>el lunes</i>, nicht <i>en lunes</i>.</div>`},
+{g:"A1 · Zahlen, Datum, Uhrzeit",t:"Uhrzeit",h:`
+<table>
+<tr><td class="mono">¿Qué hora es?</td><td class="de">Wie spät ist es?</td></tr>
+<tr><td class="mono">Es la una.</td><td class="de">Es ist eins.</td></tr>
+<tr><td class="mono">Son las dos.</td><td class="de">Es ist zwei.</td></tr>
+<tr><td class="mono">Son las tres y cuarto.</td><td class="de">Viertel nach drei</td></tr>
+<tr><td class="mono">Son las tres y media.</td><td class="de">halb vier</td></tr>
+<tr><td class="mono">Son las cuatro menos cuarto.</td><td class="de">Viertel vor vier</td></tr>
+<tr><td class="mono">Son las cinco en punto.</td><td class="de">Punkt fünf</td></tr>
+<tr><td class="mono">el mediodía / la medianoche</td><td class="de">Mittag / Mitternacht</td></tr>
+</table>
+<p class="words"><b>de la mañana</b> <span>morgens</span> · <b>de la tarde</b> <span>nachmittags</span> · <b>de la noche</b> <span>abends</span> · <b>la madrugada</b> <span>frühe Morgenstunden</span></p>
+<ul class="phr">
+<li><span class="es">¿A qué hora sale el bus?</span> <span class="gloss">Wann fährt der Bus ab?</span></li>
+<li><span class="es">A las ocho de la mañana.</span> <span class="gloss">Um acht Uhr morgens.</span></li>
+<li><span class="es">Desde las nueve hasta las cinco.</span> <span class="gloss">Von neun bis fünf.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Nur „eins" bekommt den Singular: <i>es la una</i>, alles andere <i>son las…</i> Für die Uhrzeit steht immer <b>ser</b>, nie <i>estar</i>. Costa Rica rechnet in 12 Stunden mit <span class="mono">a.m.</span> und <span class="mono">p.m.</span> — „18 Uhr" versteht niemand.</div>`},
+{g:"A1 · Zahlen, Datum, Uhrzeit",t:"Jahreszeiten & Wetter",h:`
+<p class="words"><b>la primavera</b> <span>Frühling</span> · <b>el verano</b> <span>Sommer</span> · <b>el otoño</b> <span>Herbst</span> · <b>el invierno</b> <span>Winter</span></p>
+<p><b>Wetter</b> — fast alles mit <span class="mono">hacer</span> gebaut:</p>
+<table>
+<tr><td class="mono">hace sol</td><td class="de">es ist sonnig</td></tr>
+<tr><td class="mono">hace calor / frío</td><td class="de">es ist warm / kalt</td></tr>
+<tr><td class="mono">hace viento</td><td class="de">es ist windig</td></tr>
+<tr><td class="mono">hace buen tiempo</td><td class="de">das Wetter ist gut</td></tr>
+<tr><td class="mono">está nublado</td><td class="de">es ist bewölkt</td></tr>
+<tr><td class="mono">está lloviendo</td><td class="de">es regnet gerade</td></tr>
+<tr><td class="mono">llueve</td><td class="de">es regnet</td></tr>
+</table>
+<p class="words"><b>la lluvia</b> <span>Regen</span> · <b>el aguacero</b> <span>Platzregen</span> · <b>la tormenta</b> <span>Gewitter</span> · <b>la nube</b> <span>Wolke</span> · <b>húmedo</b> <span>feucht, schwül</span> · <b>la sombra</b> <span>Schatten</span> · <b>el paraguas</b> <span>Regenschirm</span> · <b>la temperatura</b> <span>Temperatur</span></p>
+<div class="note t"><span class="tag">Tico</span>Costa Rica kennt keine vier Jahreszeiten, sondern zwei: <b>verano</b> <span class="gloss">Trockenzeit, Dezember bis April</span> und <b>invierno</b> <span class="gloss">Regenzeit, Mai bis November</span>. Wenn ein Tico von „Winter" spricht, meint er Regen, nicht Kälte. In der Regenzeit fällt der Guss meist nachmittags — vormittags planen.</div>`},
+{g:"A1–A2 · Situationen",t:"Restaurant",h:`
+<p class="words"><b>el desayuno</b> <span>Frühstück</span> · <b>el almuerzo</b> <span>Mittagessen</span> · <b>la cena</b> <span>Abendessen</span> · <b>la carta</b> <span>Speisekarte</span> · <b>el plato</b> <span>Gericht, Teller</span> · <b>la bebida</b> <span>Getränk</span> · <b>la propina</b> <span>Trinkgeld</span> · <b>la cuenta</b> <span>Rechnung</span></p>
+<p class="words"><b>el agua</b> <span>Wasser</span> · <b>el café</b> <span>Kaffee</span> · <b>el jugo</b> <span>Saft</span> · <b>la cerveza</b> <span>Bier</span> · <b>el vino</b> <span>Wein</span> · <b>la leche</b> <span>Milch</span> · <b>sin gas / con gas</b> <span>still / mit Kohlensäure</span></p>
+<p class="words"><b>el pollo</b> <span>Huhn</span> · <b>la carne</b> <span>Fleisch</span> · <b>el pescado</b> <span>Fisch</span> · <b>los camarones</b> <span>Garnelen</span> · <b>el arroz</b> <span>Reis</span> · <b>los frijoles</b> <span>Bohnen</span> · <b>la ensalada</b> <span>Salat</span> · <b>las verduras</b> <span>Gemüse</span> · <b>la fruta</b> <span>Obst</span> · <b>el pan</b> <span>Brot</span> · <b>el queso</b> <span>Käse</span> · <b>los huevos</b> <span>Eier</span> · <b>el postre</b> <span>Nachtisch</span></p>
+<p class="words"><b>picante</b> <span>scharf</span> · <b>dulce</b> <span>süß</span> · <b>salado</b> <span>salzig</span> · <b>frío</b> <span>kalt</span> · <b>caliente</b> <span>heiß</span> · <b>rico</b> <span>lecker</span></p>
+<ul class="phr">
+<li><span class="es">Una mesa para dos, por favor.</span> <span class="gloss">Einen Tisch für zwei, bitte.</span></li>
+<li><span class="es">¿Qué me recomienda?</span> <span class="gloss">Was empfehlen Sie mir?</span></li>
+<li><span class="es">Para mí, el pollo. Para ella, el pescado.</span> <span class="gloss">Für mich das Huhn, für sie den Fisch.</span></li>
+<li><span class="es">¿Tiene algo vegetariano?</span> <span class="gloss">Haben Sie etwas Vegetarisches?</span></li>
+<li><span class="es">Soy alérgico a…</span> <span class="gloss">Ich bin allergisch gegen…</span></li>
+<li><span class="es">La cuenta, por favor.</span> <span class="gloss">Die Rechnung, bitte.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span><b>casado</b> <span class="gloss">Standard-Mittagsteller mit Reis, Bohnen, Salat, Fleisch, Kochbanane</span> · <b>gallo pinto</b> <span class="gloss">Frühstück aus Reis und Bohnen</span> · <b>soda</b> <span class="gloss">kleines günstiges Lokal, dort esst ihr am besten</span> · <b>refresco natural</b> <span class="gloss">frisch gemixter Saft, con agua oder con leche</span> · <b>olla de carne</b> <span class="gloss">Rindfleischeintopf mit Wurzelgemüse</span></div>`},
+{g:"A1–A2 · Situationen",t:"Unterkunft",h:`
+<p class="words"><b>la habitación, el cuarto</b> <span>Zimmer</span> · <b>la llave</b> <span>Schlüssel</span> · <b>la cama</b> <span>Bett</span> · <b>la toalla</b> <span>Handtuch</span> · <b>la ducha</b> <span>Dusche</span> · <b>el baño</b> <span>Bad, Toilette</span> · <b>el aire acondicionado</b> <span>Klimaanlage</span> · <b>el ventilador</b> <span>Ventilator</span> · <b>la reserva</b> <span>Buchung</span> · <b>la recepción</b> <span>Rezeption</span> · <b>la piscina</b> <span>Schwimmbad</span> · <b>la caja fuerte</b> <span>Safe</span> · <b>la contraseña</b> <span>Passwort</span> · <b>la sábana</b> <span>Bettlaken</span> · <b>el mosquitero</b> <span>Moskitonetz</span></p>
+<ul class="phr">
+<li><span class="es">Tenemos una reserva a nombre de…</span> <span class="gloss">Wir haben eine Buchung auf den Namen…</span></li>
+<li><span class="es">¿A qué hora es el check-out?</span> <span class="gloss">Um wie viel Uhr ist der Check-out?</span></li>
+<li><span class="es">No funciona el aire acondicionado.</span> <span class="gloss">Die Klimaanlage funktioniert nicht.</span></li>
+<li><span class="es">¿Está incluido el desayuno?</span> <span class="gloss">Ist das Frühstück inbegriffen?</span></li>
+</ul>`},
+{g:"A1–A2 · Situationen",t:"Unterwegs",h:`
+<p class="words"><b>el aeropuerto</b> <span>Flughafen</span> · <b>el vuelo</b> <span>Flug</span> · <b>la maleta</b> <span>Koffer</span> · <b>el equipaje</b> <span>Gepäck</span> · <b>el bus</b> <span>Bus</span> · <b>la parada</b> <span>Haltestelle</span> · <b>el tiquete</b> <span>Ticket</span> · <b>el carro</b> <span>Auto</span> · <b>alquilar</b> <span>mieten</span> · <b>la gasolina</b> <span>Benzin</span> · <b>la carretera</b> <span>Landstraße</span> · <b>el camino</b> <span>Weg</span> · <b>el puente</b> <span>Brücke</span> · <b>el barro</b> <span>Schlamm</span> · <b>la tarjeta</b> <span>Karte</span> · <b>el peaje</b> <span>Maut</span> · <b>la bomba</b> <span>Tankstelle, in Costa Rica</span></p>
+<ul class="phr">
+<li><span class="es">¿Dónde está la parada del bus?</span> <span class="gloss">Wo ist die Bushaltestelle?</span></li>
+<li><span class="es">¿Este bus va a Monteverde?</span> <span class="gloss">Fährt dieser Bus nach Monteverde?</span></li>
+<li><span class="es">¿Cuánto tiempo toma?</span> <span class="gloss">Wie lange dauert es?</span></li>
+<li><span class="es">¿Se puede pagar con tarjeta?</span> <span class="gloss">Kann man mit Karte zahlen?</span></li>
+<li><span class="es">Estamos perdidos.</span> <span class="gloss">Wir haben uns verlaufen.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Adressen laufen ohne Straßennamen über Landmarken: <span class="es">200 metros al sur de la iglesia.</span> <span class="gloss">200 Meter südlich der Kirche.</span> Eine <b>cuadra</b> ist ein Häuserblock und zählt als 100 Meter.</div>`},
+{g:"A1–A2 · Situationen",t:"Einkaufen & Geld",h:`
+<p class="words"><b>la tienda</b> <span>Laden</span> · <b>el supermercado</b> <span>Supermarkt</span> · <b>el mercado</b> <span>Markt</span> · <b>la caja</b> <span>Kasse</span> · <b>el efectivo</b> <span>Bargeld</span> · <b>el cambio</b> <span>Wechselgeld</span> · <b>el recibo</b> <span>Kassenbon</span> · <b>la bolsa</b> <span>Tüte</span> · <b>el descuento</b> <span>Rabatt</span> · <b>la oferta</b> <span>Angebot</span> · <b>la talla</b> <span>Kleidergröße</span> · <b>el número</b> <span>Schuhgröße</span> · <b>el banco</b> <span>Bank</span> · <b>el cajero automático</b> <span>Geldautomat</span> · <b>la tarjeta de crédito</b> <span>Kreditkarte</span> · <b>el impuesto</b> <span>Steuer</span></p>
+<p class="words"><b>la camisa</b> <span>Hemd</span> · <b>la camiseta</b> <span>T-Shirt</span> · <b>el pantalón</b> <span>Hose</span> · <b>el vestido</b> <span>Kleid</span> · <b>los zapatos</b> <span>Schuhe</span> · <b>las sandalias</b> <span>Sandalen</span> · <b>el sombrero</b> <span>Hut</span> · <b>el traje de baño</b> <span>Badeanzug, Badehose</span> · <b>la chaqueta</b> <span>Jacke</span></p>
+<ul class="phr">
+<li><span class="es">¿Cuánto cuesta esto?</span> <span class="gloss">Was kostet das?</span></li>
+<li><span class="es">Solo estoy mirando.</span> <span class="gloss">Ich schaue mich nur um.</span></li>
+<li><span class="es">¿Tiene otro color?</span> <span class="gloss">Haben Sie eine andere Farbe?</span></li>
+<li><span class="es">¿Me lo puedo probar?</span> <span class="gloss">Kann ich es anprobieren?</span></li>
+<li><span class="es">¿Acepta dólares?</span> <span class="gloss">Nehmen Sie Dollar?</span></li>
+<li><span class="es">¿Tiene cambio?</span> <span class="gloss">Haben Sie Wechselgeld?</span></li>
+<li><span class="es">Es muy caro. ¿Hay algo más barato?</span> <span class="gloss">Das ist sehr teuer. Gibt es etwas Günstigeres?</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>In Costa Rica wird kaum gehandelt — Preise sind meist fest, anders als in Mexiko oder Marokko. Auf Kunsthandwerksmärkten ist ein höflicher Versuch trotzdem in Ordnung. Kleine <b>sodas</b> und <b>pulperías</b> nehmen oft nur Bargeld.</div>`},
+{g:"A1–A2 · Situationen",t:"Natur & Ausflüge",h:`
+<p class="words"><b>la playa</b> <span>Strand</span> · <b>el mar</b> <span>Meer</span> · <b>la ola</b> <span>Welle</span> · <b>la arena</b> <span>Sand</span> · <b>el bosque</b> <span>Wald</span> · <b>la selva</b> <span>Dschungel</span> · <b>el volcán</b> <span>Vulkan</span> · <b>la catarata</b> <span>Wasserfall</span> · <b>el río</b> <span>Fluss</span> · <b>el sendero</b> <span>Wanderweg</span> · <b>la caminata</b> <span>Wanderung</span> · <b>el parque nacional</b> <span>Nationalpark</span> · <b>la entrada</b> <span>Eintritt</span> · <b>el guía</b> <span>Führer</span> · <b>el horario</b> <span>Öffnungszeiten</span> · <b>el protector solar</b> <span>Sonnencreme</span> · <b>el repelente</b> <span>Mückenschutz</span> · <b>la marea</b> <span>Gezeiten</span></p>
+<p class="words"><b>el mono</b> <span>Affe</span> · <b>el perezoso</b> <span>Faultier</span> · <b>el tucán</b> <span>Tukan</span> · <b>la rana</b> <span>Frosch</span> · <b>la tortuga</b> <span>Schildkröte</span> · <b>el cocodrilo</b> <span>Krokodil</span> · <b>la mariposa</b> <span>Schmetterling</span> · <b>el pájaro</b> <span>Vogel</span> · <b>el mosquito</b> <span>Mücke</span> · <b>la serpiente</b> <span>Schlange</span> · <b>el colibrí</b> <span>Kolibri</span></p>
+<ul class="phr">
+<li><span class="es">¿A qué hora abre el parque?</span> <span class="gloss">Um wie viel Uhr öffnet der Park?</span></li>
+<li><span class="es">¿Cuánto cuesta la entrada por persona?</span> <span class="gloss">Was kostet der Eintritt pro Person?</span></li>
+<li><span class="es">¿Hace falta reservar?</span> <span class="gloss">Muss man reservieren?</span></li>
+<li><span class="es">¿Es seguro nadar aquí?</span> <span class="gloss">Ist es sicher, hier zu schwimmen?</span></li>
+</ul>`},
+{g:"A1–A2 · Situationen",t:"Gesundheit & Notfall",h:`
+<p class="words"><b>la cabeza</b> <span>Kopf</span> · <b>el ojo</b> <span>Auge</span> · <b>la nariz</b> <span>Nase</span> · <b>la boca</b> <span>Mund</span> · <b>el diente</b> <span>Zahn</span> · <b>la oreja</b> <span>Ohr</span> · <b>el cuello</b> <span>Hals, Nacken</span> · <b>la garganta</b> <span>Rachen</span> · <b>el hombro</b> <span>Schulter</span> · <b>el brazo</b> <span>Arm</span> · <b>la mano</b> <span>Hand</span> · <b>el dedo</b> <span>Finger</span> · <b>la espalda</b> <span>Rücken</span> · <b>el estómago</b> <span>Magen, Bauch</span> · <b>la pierna</b> <span>Bein</span> · <b>la rodilla</b> <span>Knie</span> · <b>el pie</b> <span>Fuß</span> · <b>la piel</b> <span>Haut</span> · <b>el corazón</b> <span>Herz</span></p>
+<p><b>Beschwerden</b></p>
+<p class="words"><b>el dolor</b> <span>Schmerz</span> · <b>la fiebre</b> <span>Fieber</span> · <b>la tos</b> <span>Husten</span> · <b>el resfriado</b> <span>Erkältung</span> · <b>la diarrea</b> <span>Durchfall</span> · <b>la náusea</b> <span>Übelkeit</span> · <b>la picadura</b> <span>Insektenstich</span> · <b>la herida</b> <span>Wunde</span> · <b>la quemadura de sol</b> <span>Sonnenbrand</span> · <b>la alergia</b> <span>Allergie</span> · <b>la pastilla</b> <span>Tablette</span> · <b>la receta</b> <span>Rezept</span> · <b>el seguro</b> <span>Versicherung</span></p>
+<p><b>Hilfe holen</b> — Notruf Costa Rica: <b>911</b></p>
+<p class="words"><b>la farmacia</b> <span>Apotheke</span> · <b>el médico</b> <span>Arzt</span> · <b>el hospital</b> <span>Krankenhaus</span> · <b>la ambulancia</b> <span>Krankenwagen</span> · <b>la policía</b> <span>Polizei</span> · <b>la emergencia</b> <span>Notfall</span></p>
+<ul class="phr">
+<li><span class="es">Necesito un médico.</span> <span class="gloss">Ich brauche einen Arzt.</span></li>
+<li><span class="es">¿Me puede ayudar?</span> <span class="gloss">Können Sie mir helfen?</span></li>
+<li><span class="es">¡Cuidado!</span> <span class="gloss">Vorsicht!</span></li>
+<li><span class="es">Me siento mal.</span> <span class="gloss">Mir geht es schlecht.</span></li>
+<li><span class="es">Me duele la cabeza.</span> <span class="gloss">Mir tut der Kopf weh.</span></li>
+<li><span class="es">Me duelen los pies.</span> <span class="gloss">Mir tun die Füße weh.</span></li>
+<li><span class="es">Tengo fiebre desde ayer.</span> <span class="gloss">Ich habe seit gestern Fieber.</span></li>
+<li><span class="es">¿Tiene algo para las picaduras?</span> <span class="gloss">Haben Sie etwas gegen Insektenstiche?</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Körperteile bekommen den <b>bestimmten Artikel</b>, nicht das Possessivpronomen: <i>me duele <b>la</b> cabeza</i>, nicht <i>mi cabeza</i>. Und <i>doler</i> läuft wie <i>gustar</i> — der schmerzende Körperteil ist das Subjekt.</div>`},
+{g:"A1–A2 · Situationen",t:"Familie & Menschen",h:`
+<p class="words"><b>la familia</b> <span>Familie</span> · <b>el padre</b> <span>Vater</span> · <b>la madre</b> <span>Mutter</span> · <b>los padres</b> <span>Eltern</span> · <b>el hijo / la hija</b> <span>Sohn / Tochter</span> · <b>el hermano / la hermana</b> <span>Bruder / Schwester</span> · <b>el abuelo / la abuela</b> <span>Großvater / Großmutter</span> · <b>el tío / la tía</b> <span>Onkel / Tante</span> · <b>el primo / la prima</b> <span>Cousin / Cousine</span> · <b>el sobrino</b> <span>Neffe</span> · <b>los suegros</b> <span>Schwiegereltern</span></p>
+<p class="words"><b>el amigo / la amiga</b> <span>Freund / Freundin</span> · <b>el novio / la novia</b> <span>Partner / Partnerin, auch Bräutigam / Braut</span> · <b>el niño / la niña</b> <span>Junge / Mädchen</span> · <b>el hombre</b> <span>Mann</span> · <b>la mujer</b> <span>Frau</span> · <b>el señor / la señora</b> <span>Herr / Dame</span> · <b>la gente</b> <span>Leute</span> · <b>el vecino</b> <span>Nachbar</span></p>
+<ul class="phr">
+<li><span class="es">¿Tiene hijos?</span> <span class="gloss">Haben Sie Kinder?</span></li>
+<li><span class="es">Esta es mi esposa.</span> <span class="gloss">Das ist meine Frau.</span></li>
+<li><span class="es">Viajamos con mi familia.</span> <span class="gloss">Wir reisen mit meiner Familie.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><i>la gente</i> ist grammatisch <b>Singular</b>: <span class="es">La gente es muy amable.</span> <span class="gloss">Die Leute sind sehr freundlich.</span></div>`},
+{g:"A1–A2 · Situationen",t:"Hochzeitsreise",h:`
+<p class="words"><b>mi esposo</b> <span>mein Mann</span> · <b>mi esposa</b> <span>meine Frau</span> · <b>la luna de miel</b> <span>Flitterwochen</span> · <b>la boda</b> <span>Hochzeit</span> · <b>recién casados</b> <span>frisch verheiratet</span> · <b>el anillo</b> <span>Ring</span> · <b>la pareja</b> <span>Paar, Partner</span></p>
+<ul class="phr">
+<li><span class="es">Estamos de luna de miel.</span> <span class="gloss">Wir sind auf Hochzeitsreise.</span></li>
+<li><span class="es">Nos casamos hace dos semanas.</span> <span class="gloss">Wir haben vor zwei Wochen geheiratet.</span></li>
+<li><span class="es">¿Nos puede tomar una foto?</span> <span class="gloss">Können Sie ein Foto von uns machen?</span></li>
+<li><span class="es">¡Felicidades!</span> <span class="gloss">Herzlichen Glückwunsch!</span></li>
+</ul>`},
+{g:"A2 · Ausdrucksweise",t:"Redewendungen",h:`
+<p>Feste Wendungen, die im Gespräch ständig fallen. Wörtlich übersetzen führt hier meist in die Irre.</p>
+<table>
+<tr><td class="mono">¿Qué tal?</td><td class="de">Wie läuft's?</td></tr>
+<tr><td class="mono">¿Qué pasa?</td><td class="de">Was ist los?</td></tr>
+<tr><td class="mono">No pasa nada.</td><td class="de">Kein Problem, nicht schlimm</td></tr>
+<tr><td class="mono">Más o menos.</td><td class="de">So lala</td></tr>
+<tr><td class="mono">Poco a poco.</td><td class="de">Nach und nach</td></tr>
+<tr><td class="mono">Da igual.</td><td class="de">Ist egal</td></tr>
+<tr><td class="mono">Ni idea.</td><td class="de">Keine Ahnung</td></tr>
+<tr><td class="mono">Ya veo.</td><td class="de">Ach so, verstehe</td></tr>
+<tr><td class="mono">¿En serio?</td><td class="de">Im Ernst?</td></tr>
+<tr><td class="mono">¡No me diga!</td><td class="de">Was Sie nicht sagen!</td></tr>
+<tr><td class="mono">¡Qué va!</td><td class="de">Ach was!</td></tr>
+<tr><td class="mono">Por si acaso</td><td class="de">Für alle Fälle</td></tr>
+<tr><td class="mono">De todos modos</td><td class="de">Wie auch immer</td></tr>
+<tr><td class="mono">Vale la pena.</td><td class="de">Es lohnt sich</td></tr>
+<tr><td class="mono">¡Ojo!</td><td class="de">Achtung! Pass auf!</td></tr>
+<tr><td class="mono">¡Qué pena!</td><td class="de">Wie peinlich / wie schade</td></tr>
+</table>
+<p><b>Mit Verb gebaut</b> — die brauchst du aktiv:</p>
+<table>
+<tr><td class="mono">tener ganas de</td><td class="de">Lust haben auf</td></tr>
+<tr><td class="mono">hacer falta</td><td class="de">nötig sein, fehlen</td></tr>
+<tr><td class="mono">dar una vuelta</td><td class="de">eine Runde drehen</td></tr>
+<tr><td class="mono">echar de menos</td><td class="de">vermissen</td></tr>
+<tr><td class="mono">estar de acuerdo</td><td class="de">einverstanden sein</td></tr>
+<tr><td class="mono">tomar el sol</td><td class="de">sich sonnen</td></tr>
+<tr><td class="mono">darse cuenta de</td><td class="de">etwas merken</td></tr>
+<tr><td class="mono">tener que ver con</td><td class="de">zu tun haben mit</td></tr>
+</table>
+<p><b>Bildhaft</b> — zum Verstehen, nicht unbedingt zum Nachsprechen:</p>
+<table>
+<tr><td class="mono">costar un ojo de la cara</td><td class="de">ein Vermögen kosten</td></tr>
+<tr><td class="mono">meter la pata</td><td class="de">ins Fettnäpfchen treten</td></tr>
+<tr><td class="mono">tomar el pelo</td><td class="de">auf den Arm nehmen</td></tr>
+<tr><td class="mono">estar hecho polvo</td><td class="de">völlig erledigt sein</td></tr>
+<tr><td class="mono">no tener pelos en la lengua</td><td class="de">kein Blatt vor den Mund nehmen</td></tr>
+<tr><td class="mono">ser pan comido</td><td class="de">ein Kinderspiel sein</td></tr>
+</table>`},
+{g:"A2 · Ausdrucksweise",t:"Tico-Spanisch",h:`
+<table>
+<tr><td class="mono">pura vida</td><td class="de">hallo, danke, bitte, alles gut — geht immer</td></tr>
+<tr><td class="mono">con mucho gusto</td><td class="de">gern geschehen — nicht <i>de nada</i></td></tr>
+<tr><td class="mono">¡diay!</td><td class="de">tja, na ja — Füllwort am Satzanfang</td></tr>
+<tr><td class="mono">¿cómo va?</td><td class="de">wie läuft's?</td></tr>
+<tr><td class="mono">tuanis</td><td class="de">cool, super</td></tr>
+<tr><td class="mono">¡qué chiva!</td><td class="de">wie geil!</td></tr>
+<tr><td class="mono">buena nota</td><td class="de">netter Kerl, sympathisch</td></tr>
+<tr><td class="mono">¡qué salado!</td><td class="de">so ein Pech!</td></tr>
+<tr><td class="mono">pura paja</td><td class="de">Blödsinn, Gelaber</td></tr>
+<tr><td class="mono">¡upe!</td><td class="de">Ruf an der Haustür statt Klopfen</td></tr>
+<tr><td class="mono">tico / tica</td><td class="de">Costa-Ricaner / -in</td></tr>
+</table>
+<p><b>Dinge und Orte</b></p>
+<table>
+<tr><td class="mono">la vara</td><td class="de">die Sache, das Ding</td></tr>
+<tr><td class="mono">chunche</td><td class="de">Dingsbums</td></tr>
+<tr><td class="mono">soda</td><td class="de">kleines Speiselokal</td></tr>
+<tr><td class="mono">pulpería</td><td class="de">Tante-Emma-Laden</td></tr>
+<tr><td class="mono">Chepe</td><td class="de">Spitzname für San José</td></tr>
+<tr><td class="mono">brete</td><td class="de">Arbeit, Job</td></tr>
+<tr><td class="mono">harina, plata</td><td class="de">Geld</td></tr>
+<tr><td class="mono">rojo / tucán</td><td class="de">1000er- / 5000er-Schein</td></tr>
+<tr><td class="mono">birra</td><td class="de">Bier</td></tr>
+<tr><td class="mono">estar de goma</td><td class="de">verkatert sein</td></tr>
+</table>
+<div class="note t"><span class="tag">Tico</span>Ticos duzen mit <b>vos</b>, nicht mit <i>tú</i> — endbetont: <i>vos hablás, comés, vivís</i>, und <i>vos sos</i>. Aktiv brauchst du das nicht, <b>usted</b> ist immer höflich und richtig. Wundere dich nur nicht über <span class="es">¿De dónde sos?</span> <span class="gloss">Woher kommst du?</span></div>
+<div class="note"><span class="tag">Falle</span><b>mae</b> heißt „Alter, Kumpel" und fällt unter Jüngeren in jedem zweiten Satz. Als Gast klingt es aufgesetzt — verstehen ja, selbst benutzen erst, wenn ihr jemanden gut kennt. Dasselbe gilt für den Rest des Slangs: <i>pura vida</i> und <i>con mucho gusto</i> kannst du bedenkenlos sagen, alles andere hörst du erstmal nur.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Gefühle & Stimmung",h:`
+<p class="words"><b>contento</b> <span>zufrieden, froh</span> · <b>emocionado</b> <span>begeistert, aufgeregt</span> · <b>nervioso</b> <span>nervös</span> · <b>preocupado</b> <span>besorgt</span> · <b>enojado</b> <span>wütend</span> · <b>sorprendido</b> <span>überrascht</span> · <b>orgulloso</b> <span>stolz</span> · <b>agradecido</b> <span>dankbar</span> · <b>enamorado</b> <span>verliebt</span> · <b>relajado</b> <span>entspannt</span> · <b>estresado</b> <span>gestresst</span> · <b>asustado</b> <span>erschrocken</span> · <b>decepcionado</b> <span>enttäuscht</span> · <b>avergonzado</b> <span>beschämt</span> · <b>celoso</b> <span>eifersüchtig</span> · <b>aburrido</b> <span>gelangweilt</span></p>
+<p><b>Gefühle als Substantiv</b></p>
+<p class="words"><b>la alegría</b> <span>Freude</span> · <b>el miedo</b> <span>Angst</span> · <b>la sorpresa</b> <span>Überraschung</span> · <b>la tristeza</b> <span>Traurigkeit</span> · <b>el amor</b> <span>Liebe</span></p>
+<ul class="phr">
+<li><span class="es">Estamos muy emocionados.</span> <span class="gloss">Wir sind ganz aufgeregt.</span></li>
+<li><span class="es">Estamos enamorados.</span> <span class="gloss">Wir sind verliebt.</span></li>
+<li><span class="es">Me siento muy relajado aquí.</span> <span class="gloss">Ich fühle mich hier sehr entspannt.</span></li>
+<li><span class="es">No se preocupe.</span> <span class="gloss">Machen Sie sich keine Sorgen.</span></li>
+<li><span class="es">¡Qué dicha!</span> <span class="gloss">Wie schön! Was für ein Glück!</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Gefühle sind Zustände und stehen mit <b>estar</b>: <span class="es">estoy contento, está enojada</span>. Mit <i>ser</i> kippt die Bedeutung: <i>es aburrido</i> = er ist langweilig.</div>
+<div class="note t"><span class="tag">Tico</span><b>¡Qué dicha!</b> ist typisch costa-ricanisch für „wie schön" — und <b>estar bravo</b> heißt in Costa Rica <i>wütend</i>, nicht „brav".</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Menschen beschreiben",h:`
+<p><b>Charakter</b></p>
+<p class="words"><b>amable</b> <span>freundlich</span> · <b>simpático</b> <span>sympathisch</span> · <b>antipático</b> <span>unsympathisch</span> · <b>divertido</b> <span>lustig</span> · <b>serio</b> <span>ernst</span> · <b>tímido</b> <span>schüchtern</span> · <b>abierto</b> <span>offen</span> · <b>generoso</b> <span>großzügig</span> · <b>paciente</b> <span>geduldig</span> · <b>impaciente</b> <span>ungeduldig</span> · <b>trabajador</b> <span>fleißig</span> · <b>perezoso</b> <span>faul</span> · <b>inteligente</b> <span>klug</span></p>
+<p><b>Aussehen</b></p>
+<p class="words"><b>delgado</b> <span>schlank</span> · <b>fuerte</b> <span>kräftig, stark</span> · <b>el pelo</b> <span>Haar</span> · <b>rubio</b> <span>blond</span> · <b>moreno</b> <span>dunkelhaarig, braun gebrannt</span> · <b>canoso</b> <span>grauhaarig</span> · <b>calvo</b> <span>glatzköpfig</span> · <b>la barba</b> <span>Bart</span> · <b>los anteojos</b> <span>Brille</span> · <b>guapo</b> <span>gut aussehend</span> · <b>parecerse a</b> <span>ähnlich sehen</span></p>
+<ul class="phr">
+<li><span class="es">Mi esposa es muy simpática.</span> <span class="gloss">Meine Frau ist sehr sympathisch.</span></li>
+<li><span class="es">Es alto y tiene barba.</span> <span class="gloss">Er ist groß und hat einen Bart.</span></li>
+<li><span class="es">Los ticos son muy amables.</span> <span class="gloss">Die Costa-Ricaner sind sehr freundlich.</span></li>
+<li><span class="es">Se parece a su madre.</span> <span class="gloss">Er sieht seiner Mutter ähnlich.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><i>perezoso</i> heißt <b>faul</b> — und <i>el perezoso</i>, das Faultier, ist wörtlich „der Faule". Brille ist in Lateinamerika <b>los anteojos</b>, <i>las gafas</i> klingt nach Spanien.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Beruf & Arbeitsalltag",h:`
+<p class="words"><b>el trabajo</b> <span>Arbeit</span> · <b>trabajar</b> <span>arbeiten</span> · <b>la empresa</b> <span>Firma</span> · <b>la oficina</b> <span>Büro</span> · <b>el jefe / la jefa</b> <span>Chef / Chefin</span> · <b>el compañero de trabajo</b> <span>Kollege</span> · <b>el cliente</b> <span>Kunde</span> · <b>la reunión</b> <span>Besprechung</span> · <b>el turno</b> <span>Schicht</span> · <b>las vacaciones</b> <span>Urlaub</span> · <b>jubilado</b> <span>in Rente</span> · <b>la universidad</b> <span>Universität</span> · <b>estudiar</b> <span>studieren, lernen</span></p>
+<p><b>Berufe</b></p>
+<p class="words"><b>el anestesiólogo</b> <span>Anästhesist</span> · <b>el enfermero / la enfermera</b> <span>Pfleger / Pflegerin</span> · <b>el abogado</b> <span>Anwalt</span> · <b>el maestro</b> <span>Lehrer, Grundschule</span> · <b>el profesor</b> <span>Lehrer, Dozent</span> · <b>el ingeniero</b> <span>Ingenieur</span> · <b>el arquitecto</b> <span>Architekt</span> · <b>el cocinero</b> <span>Koch</span> · <b>el salonero</b> <span>Kellner</span> · <b>el vendedor</b> <span>Verkäufer</span> · <b>el chofer</b> <span>Fahrer</span> · <b>el agricultor</b> <span>Landwirt</span> · <b>el programador</b> <span>Programmierer</span></p>
+<ul class="phr">
+<li><span class="es">¿A qué se dedica?</span> <span class="gloss">Was machen Sie beruflich?</span></li>
+<li><span class="es">Soy anestesiólogo.</span> <span class="gloss">Ich bin Anästhesist.</span></li>
+<li><span class="es">Trabajo en un hospital.</span> <span class="gloss">Ich arbeite in einem Krankenhaus.</span></li>
+<li><span class="es">Estamos de vacaciones.</span> <span class="gloss">Wir sind im Urlaub.</span></li>
+<li><span class="es">Mañana tengo turno de noche.</span> <span class="gloss">Morgen habe ich Nachtschicht.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Beim Beruf steht <b>kein Artikel</b>: <span class="es">Soy anestesiólogo</span>, nicht <i>soy un anestesiólogo</i> — außer mit Adjektiv: <i>es un médico excelente</i>.</div>
+<div class="note t"><span class="tag">Tico</span>Der Kellner heißt in Costa Rica <b>salonero</b>. <i>Mesero</i> verstehen alle, <i>camarero</i> klingt nach Spanien.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Freizeit & Sport",h:`
+<p class="words"><b>el tiempo libre</b> <span>Freizeit</span> · <b>el pasatiempo</b> <span>Hobby</span> · <b>leer</b> <span>lesen</span> · <b>cocinar</b> <span>kochen</span> · <b>bailar</b> <span>tanzen</span> · <b>cantar</b> <span>singen</span> · <b>pintar</b> <span>malen</span> · <b>pescar</b> <span>angeln</span> · <b>surfear</b> <span>surfen</span> · <b>bucear</b> <span>tauchen</span> · <b>andar en bicicleta</b> <span>Rad fahren</span> · <b>el ciclismo</b> <span>Radsport</span> · <b>correr</b> <span>laufen, rennen</span> · <b>entrenar</b> <span>trainieren</span> · <b>hacer ejercicio</b> <span>Sport treiben</span> · <b>el gimnasio</b> <span>Fitnessstudio</span></p>
+<p class="words"><b>el fútbol</b> <span>Fußball</span> · <b>el partido</b> <span>Spiel, Match</span> · <b>el equipo</b> <span>Mannschaft</span> · <b>ganar</b> <span>gewinnen</span> · <b>perder</b> <span>verlieren</span> · <b>empatar</b> <span>unentschieden spielen</span> · <b>la música</b> <span>Musik</span> · <b>el concierto</b> <span>Konzert</span> · <b>la película</b> <span>Film</span> · <b>el cine</b> <span>Kino</span> · <b>la fiesta</b> <span>Feier, Party</span> · <b>el baile</b> <span>Tanz</span></p>
+<ul class="phr">
+<li><span class="es">¿Qué le gusta hacer en su tiempo libre?</span> <span class="gloss">Was machen Sie gern in Ihrer Freizeit?</span></li>
+<li><span class="es">Me gusta andar en bicicleta.</span> <span class="gloss">Ich fahre gern Rad.</span></li>
+<li><span class="es">¿Vamos a bailar?</span> <span class="gloss">Gehen wir tanzen?</span></li>
+<li><span class="es">¿Quién ganó el partido?</span> <span class="gloss">Wer hat das Spiel gewonnen?</span></li>
+<li><span class="es">Entreno tres veces por semana.</span> <span class="gloss">Ich trainiere dreimal pro Woche.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Fußball ist Religion: <b>la Sele</b> ist die Nationalmannschaft, eine <b>mejenga</b> ein spontanes Kickspiel. Wer nach Saprissa oder Liga fragt, hat sofort ein Gesprächsthema.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Wohnen & Haushalt",h:`
+<p class="words"><b>la casa</b> <span>Haus</span> · <b>el apartamento</b> <span>Wohnung</span> · <b>la cocina</b> <span>Küche, Herd</span> · <b>la sala</b> <span>Wohnzimmer</span> · <b>el comedor</b> <span>Esszimmer</span> · <b>el jardín</b> <span>Garten</span> · <b>la terraza</b> <span>Terrasse</span> · <b>el balcón</b> <span>Balkon</span> · <b>la puerta</b> <span>Tür</span> · <b>la ventana</b> <span>Fenster</span> · <b>el piso</b> <span>Boden, Stockwerk</span> · <b>la escalera</b> <span>Treppe</span> · <b>la pared</b> <span>Wand</span> · <b>el techo</b> <span>Dach, Decke</span></p>
+<p><b>Einrichtung & Haushalt</b></p>
+<p class="words"><b>la mesa</b> <span>Tisch</span> · <b>la silla</b> <span>Stuhl</span> · <b>el sofá</b> <span>Sofa</span> · <b>el ropero</b> <span>Kleiderschrank</span> · <b>la refri</b> <span>Kühlschrank</span> · <b>la lavadora</b> <span>Waschmaschine</span> · <b>la basura</b> <span>Müll</span> · <b>limpiar</b> <span>putzen</span> · <b>lavar</b> <span>waschen</span> · <b>prender</b> <span>einschalten</span> · <b>apagar</b> <span>ausschalten</span> · <b>la luz</b> <span>Licht, Strom</span></p>
+<ul class="phr">
+<li><span class="es">¿Puede prender el aire, por favor?</span> <span class="gloss">Können Sie die Klimaanlage einschalten?</span></li>
+<li><span class="es">Se fue la luz.</span> <span class="gloss">Der Strom ist ausgefallen.</span></li>
+<li><span class="es">¿Dónde se bota la basura?</span> <span class="gloss">Wo wirft man den Müll hin?</span></li>
+<li><span class="es">La habitación está en el segundo piso.</span> <span class="gloss">Das Zimmer ist im zweiten Stock.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Einschalten heißt in Lateinamerika <b>prender</b> (<i>encender</i> ist förmlicher), Müll wegwerfen <b>botar</b>. Stromausfälle bei Gewittern sind normal: <span class="es">se fue la luz</span>.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Handy & Technik",h:`
+<p class="words"><b>el celular</b> <span>Handy</span> · <b>el cargador</b> <span>Ladegerät</span> · <b>la batería</b> <span>Akku</span> · <b>cargar</b> <span>laden</span> · <b>el enchufe</b> <span>Steckdose</span> · <b>el adaptador</b> <span>Adapter</span> · <b>la señal</b> <span>Empfang</span> · <b>el chip</b> <span>SIM-Karte</span> · <b>los datos</b> <span>mobile Daten</span> · <b>la recarga</b> <span>Guthaben aufladen</span> · <b>la llamada</b> <span>Anruf</span> · <b>llamar</b> <span>anrufen</span> · <b>el mensaje</b> <span>Nachricht</span> · <b>mandar</b> <span>schicken</span> · <b>el correo</b> <span>E-Mail</span> · <b>la computadora</b> <span>Computer</span> · <b>la aplicación</b> <span>App</span> · <b>descargar</b> <span>herunterladen</span></p>
+<ul class="phr">
+<li><span class="es">Se me acabó la batería.</span> <span class="gloss">Mein Akku ist leer.</span></li>
+<li><span class="es">¿Dónde puedo cargar el celular?</span> <span class="gloss">Wo kann ich das Handy laden?</span></li>
+<li><span class="es">No tengo señal.</span> <span class="gloss">Ich habe keinen Empfang.</span></li>
+<li><span class="es">¿Dónde compro un chip?</span> <span class="gloss">Wo kaufe ich eine SIM-Karte?</span></li>
+<li><span class="es">Le mando un mensaje por WhatsApp.</span> <span class="gloss">Ich schicke Ihnen eine WhatsApp.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Costa Rica nutzt Steckdosen nach US-Norm (Typ A/B, 110 Volt) — für deutsche Stecker braucht ihr einen <b>adaptador</b>. Absprachen mit Unterkünften und Guides laufen fast immer über WhatsApp.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"In der Stadt",h:`
+<p class="words"><b>la ciudad</b> <span>Stadt</span> · <b>el pueblo</b> <span>Dorf, Kleinstadt</span> · <b>el barrio</b> <span>Viertel</span> · <b>el centro</b> <span>Zentrum</span> · <b>la calle</b> <span>Straße</span> · <b>la avenida</b> <span>Allee, Hauptstraße</span> · <b>la esquina</b> <span>Ecke</span> · <b>la plaza</b> <span>Platz</span> · <b>el parque</b> <span>Park</span> · <b>la iglesia</b> <span>Kirche</span> · <b>el museo</b> <span>Museum</span> · <b>el edificio</b> <span>Gebäude</span> · <b>la terminal de buses</b> <span>Busbahnhof</span> · <b>el semáforo</b> <span>Ampel</span> · <b>la salida</b> <span>Ausgang</span></p>
+<p class="words"><b>cruzar</b> <span>überqueren</span> · <b>doblar</b> <span>abbiegen</span> · <b>subir</b> <span>hinaufgehen, einsteigen</span> · <b>bajar</b> <span>hinuntergehen, aussteigen</span> · <b>seguir recto</b> <span>geradeaus weitergehen</span></p>
+<ul class="phr">
+<li><span class="es">¿Cómo llego al centro?</span> <span class="gloss">Wie komme ich ins Zentrum?</span></li>
+<li><span class="es">Doble a la derecha en la esquina.</span> <span class="gloss">Biegen Sie an der Ecke rechts ab.</span></li>
+<li><span class="es">Siga recto dos cuadras.</span> <span class="gloss">Gehen Sie zwei Blocks geradeaus.</span></li>
+<li><span class="es">Está a tres cuadras de aquí.</span> <span class="gloss">Es ist drei Blocks von hier.</span></li>
+<li><span class="es">¿Dónde me bajo?</span> <span class="gloss">Wo muss ich aussteigen?</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><i>la parada</i> ist die Haltestelle, <b>la terminal</b> der Busbahnhof — für Fernbusse nach Monteverde oder zur Küste braucht ihr die <i>terminal</i>.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Zeitangaben & Häufigkeit",h:`
+<p class="words"><b>anoche</b> <span>gestern Abend</span> · <b>esta mañana</b> <span>heute Morgen</span> · <b>esta noche</b> <span>heute Abend</span> · <b>todos los días</b> <span>jeden Tag</span> · <b>cada dos días</b> <span>jeden zweiten Tag</span> · <b>a menudo</b> <span>oft</span> · <b>de vez en cuando</b> <span>ab und zu</span> · <b>casi nunca</b> <span>fast nie</span> · <b>enseguida</b> <span>sofort</span> · <b>ahorita</b> <span>gleich, jetzt</span> · <b>al rato</b> <span>nachher</span> · <b>dentro de</b> <span>in, binnen</span> · <b>durante</b> <span>während</span> · <b>a tiempo</b> <span>pünktlich</span> · <b>atrasado</b> <span>verspätet</span> · <b>la próxima vez</b> <span>nächstes Mal</span> · <b>la última vez</b> <span>letztes Mal</span></p>
+<ul class="phr">
+<li><span class="es">Llegamos hace tres días.</span> <span class="gloss">Wir sind vor drei Tagen angekommen.</span></li>
+<li><span class="es">Salimos dentro de una hora.</span> <span class="gloss">Wir fahren in einer Stunde los.</span></li>
+<li><span class="es">El bus viene atrasado.</span> <span class="gloss">Der Bus hat Verspätung.</span></li>
+<li><span class="es">La próxima vez vamos al Caribe.</span> <span class="gloss">Nächstes Mal fahren wir in die Karibik.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>„vor drei Tagen" ist <b>hace</b> + Zeitraum: <i>hace tres días</i>. „in einer Stunde" ist <b>dentro de</b> — <i>en una hora</i> heißt eher „innerhalb einer Stunde".</div>
+<div class="note t"><span class="tag">Tico</span><b>ahorita</b> kann „jetzt sofort" oder „irgendwann gleich" bedeuten — und die <i>hora tica</i> ist entspannt. Bei Touren und Bussen gilt trotzdem die Uhr.</div>`},
+{g:"Aufbau A2 · Menschen & Alltag",t:"Küche & Speisen",h:`
+<p><b>Zubereitung</b></p>
+<p class="words"><b>a la plancha</b> <span>gegrillt, von der Platte</span> · <b>frito</b> <span>frittiert</span> · <b>asado</b> <span>gebraten, gegrillt</span> · <b>al horno</b> <span>aus dem Ofen</span> · <b>crudo</b> <span>roh</span> · <b>bien cocido</b> <span>durchgegart</span> · <b>la sal</b> <span>Salz</span> · <b>la pimienta</b> <span>Pfeffer</span> · <b>el azúcar</b> <span>Zucker</span> · <b>el aceite</b> <span>Öl</span> · <b>el ajo</b> <span>Knoblauch</span> · <b>la cebolla</b> <span>Zwiebel</span> · <b>el tomate</b> <span>Tomate</span> · <b>el hielo</b> <span>Eis, Eiswürfel</span></p>
+<p><b>Obst & Typisches</b></p>
+<p class="words"><b>el aguacate</b> <span>Avocado</span> · <b>el plátano</b> <span>Kochbanane</span> · <b>el banano</b> <span>Banane</span> · <b>la piña</b> <span>Ananas</span> · <b>el mango</b> <span>Mango</span> · <b>la papaya</b> <span>Papaya</span> · <b>la sandía</b> <span>Wassermelone</span> · <b>el coco</b> <span>Kokosnuss</span> · <b>la guanábana</b> <span>Stachelannone</span> · <b>el cas</b> <span>Cas-Guave</span> · <b>el maíz</b> <span>Mais</span> · <b>la tortilla</b> <span>Maisfladen</span> · <b>los patacones</b> <span>frittierte Kochbananen</span> · <b>los maduros</b> <span>süße gebratene Kochbananen</span> · <b>el chifrijo</b> <span>Reis-Bohnen-Schweinefleisch-Schale</span></p>
+<p><b>Auf dem Tisch</b></p>
+<p class="words"><b>el vaso</b> <span>Glas</span> · <b>la taza</b> <span>Tasse</span> · <b>el tenedor</b> <span>Gabel</span> · <b>el cuchillo</b> <span>Messer</span> · <b>la cuchara</b> <span>Löffel</span> · <b>la servilleta</b> <span>Serviette</span> · <b>la botella</b> <span>Flasche</span></p>
+<ul class="phr">
+<li><span class="es">¿Me regala un café, por favor?</span> <span class="gloss">Einen Kaffee, bitte.</span></li>
+<li><span class="es">¿Me trae un vaso de agua sin hielo?</span> <span class="gloss">Bringen Sie mir ein Glas Wasser ohne Eis?</span></li>
+<li><span class="es">Sin cebolla, por favor.</span> <span class="gloss">Ohne Zwiebeln, bitte.</span></li>
+<li><span class="es">¿Qué lleva este plato?</span> <span class="gloss">Was ist in diesem Gericht?</span></li>
+<li><span class="es">Está demasiado salado.</span> <span class="gloss">Es ist zu salzig.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span><b>¿Me regala…?</b> heißt wörtlich „schenken Sie mir…", ist aber die höflichste Art zu bestellen — bezahlt wird trotzdem. <b>plátano</b> ist die Kochbanane, die Obstbanane heißt <b>banano</b>. Auf jedem Tisch steht <b>Salsa Lizano</b>.</div>`},
+{g:"Aufbau B1 · Reise & Gespräch",t:"Mit dem Mietwagen",h:`
+<p class="words"><b>manejar</b> <span>Auto fahren</span> · <b>la licencia de conducir</b> <span>Führerschein</span> · <b>el volante</b> <span>Lenkrad</span> · <b>la llanta</b> <span>Reifen</span> · <b>el freno</b> <span>Bremse</span> · <b>el motor</b> <span>Motor</span> · <b>el diésel</b> <span>Diesel</span> · <b>la gasolinera</b> <span>Tankstelle</span> · <b>el parqueo</b> <span>Parkplatz</span> · <b>parquear</b> <span>parken</span> · <b>la presa</b> <span>Stau</span> · <b>el hueco</b> <span>Schlagloch</span> · <b>la curva</b> <span>Kurve</span> · <b>la multa</b> <span>Strafzettel</span> · <b>el taller</b> <span>Werkstatt</span> · <b>el mecánico</b> <span>Mechaniker</span> · <b>la grúa</b> <span>Abschleppwagen</span> · <b>el choque</b> <span>Unfall, Zusammenstoß</span> · <b>la doble tracción</b> <span>Allradantrieb</span> · <b>adelantar</b> <span>überholen</span></p>
+<p><b>Schilder</b></p>
+<p class="words"><b>Alto</b> <span>Stopp</span> · <b>Ceda el paso</b> <span>Vorfahrt gewähren</span> · <b>Una vía</b> <span>Einbahnstraße, einspuriger Abschnitt</span> · <b>Despacio</b> <span>Langsam</span> · <b>Prohibido adelantar</b> <span>Überholverbot</span></p>
+<ul class="phr">
+<li><span class="es">Lleno de súper, por favor.</span> <span class="gloss">Volltanken mit Super, bitte.</span></li>
+<li><span class="es">Tenemos una llanta pinchada.</span> <span class="gloss">Wir haben einen Platten.</span></li>
+<li><span class="es">¿Dónde puedo parquear?</span> <span class="gloss">Wo kann ich parken?</span></li>
+<li><span class="es">¿El camino está en buen estado?</span> <span class="gloss">Ist die Straße in gutem Zustand?</span></li>
+<li><span class="es">¿Se necesita doble tracción?</span> <span class="gloss">Braucht man Allrad?</span></li>
+<li><span class="es">Hay mucha presa.</span> <span class="gloss">Es ist viel Stau.</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>In Costa Rica heißt der Stau <b>presa</b> und der Parkplatz <b>parqueo</b>. Tankstellen sind bedient — man sagt nur Sorte und Menge. Viele Brücken sind <i>de una vía</i>: Wer das <i>Ceda</i>-Schild hat, wartet. Nachts wegen Schlaglöchern und fehlender Beleuchtung möglichst nicht fahren.</div>`},
+{g:"Aufbau B1 · Reise & Gespräch",t:"Tiere & Natur Costa Ricas",h:`
+<p><b>Tiere</b></p>
+<p class="words"><b>la ballena</b> <span>Wal</span> · <b>el delfín</b> <span>Delfin</span> · <b>el tiburón</b> <span>Hai</span> · <b>la tortuga baula</b> <span>Lederschildkröte</span> · <b>la iguana</b> <span>Leguan</span> · <b>el pizote</b> <span>Nasenbär</span> · <b>la lapa roja</b> <span>Hellroter Ara</span> · <b>el mono congo</b> <span>Brüllaffe</span> · <b>el mono carablanca</b> <span>Kapuzineraffe</span> · <b>la danta</b> <span>Tapir</span> · <b>el quetzal</b> <span>Quetzal</span> · <b>el murciélago</b> <span>Fledermaus</span> · <b>la araña</b> <span>Spinne</span> · <b>la hormiga</b> <span>Ameise</span></p>
+<p><b>Landschaft & Aktivitäten</b></p>
+<p class="words"><b>el bosque nuboso</b> <span>Nebelwald</span> · <b>la neblina</b> <span>Nebel</span> · <b>el manglar</b> <span>Mangrovenwald</span> · <b>el arrecife</b> <span>Riff</span> · <b>la isla</b> <span>Insel</span> · <b>la bahía</b> <span>Bucht</span> · <b>el cráter</b> <span>Krater</span> · <b>las aguas termales</b> <span>heiße Quellen</span> · <b>el mirador</b> <span>Aussichtspunkt</span> · <b>el puente colgante</b> <span>Hängebrücke</span> · <b>el canopy</b> <span>Seilrutsche</span> · <b>la corriente</b> <span>Strömung</span> · <b>el esnórquel</b> <span>Schnorcheln</span> · <b>el kayak</b> <span>Kajak</span> · <b>el tour</b> <span>geführter Ausflug</span></p>
+<ul class="phr">
+<li><span class="es">¿Dónde se pueden ver ballenas?</span> <span class="gloss">Wo kann man Wale sehen?</span></li>
+<li><span class="es">¿Hay corriente fuerte aquí?</span> <span class="gloss">Gibt es hier starke Strömung?</span></li>
+<li><span class="es">Vimos un mono congo.</span> <span class="gloss">Wir haben einen Brüllaffen gesehen.</span></li>
+<li><span class="es">¿A qué hora sale el tour?</span> <span class="gloss">Wann startet die Tour?</span></li>
+<li><span class="es">¿Está incluido el transporte?</span> <span class="gloss">Ist der Transport inbegriffen?</span></li>
+</ul>
+<div class="note t"><span class="tag">Tico</span>Den Brüllaffen hört ihr, bevor ihr ihn seht: <b>el congo</b>. An vielen Pazifikstränden gibt es gefährliche Rückströmungen — <b>corriente de resaca</b> — und selten Rettungsschwimmer. Einheimische fragen, bevor ihr ins Wasser geht.</div>`},
+{g:"Aufbau B1 · Reise & Gespräch",t:"Probleme lösen",h:`
+<p class="words"><b>el problema</b> <span>Problem</span> · <b>la queja</b> <span>Beschwerde</span> · <b>quejarse</b> <span>sich beschweren</span> · <b>reclamar</b> <span>reklamieren</span> · <b>el reembolso</b> <span>Rückerstattung</span> · <b>cancelar</b> <span>stornieren, absagen</span> · <b>cambiar</b> <span>wechseln, umtauschen</span> · <b>roto</b> <span>kaputt</span> · <b>no sirve</b> <span>funktioniert nicht</span> · <b>el ruido</b> <span>Lärm</span> · <b>olvidar</b> <span>vergessen</span> · <b>robar</b> <span>stehlen</span> · <b>la billetera</b> <span>Geldbeutel</span> · <b>el pasaporte</b> <span>Reisepass</span> · <b>la denuncia</b> <span>Anzeige</span> · <b>la embajada</b> <span>Botschaft</span> · <b>el error</b> <span>Fehler</span></p>
+<ul class="phr">
+<li><span class="es">La ducha no sirve.</span> <span class="gloss">Die Dusche funktioniert nicht.</span></li>
+<li><span class="es">Hay mucho ruido en la habitación.</span> <span class="gloss">Im Zimmer ist es sehr laut.</span></li>
+<li><span class="es">Quisiera cambiar de habitación.</span> <span class="gloss">Ich würde gern das Zimmer wechseln.</span></li>
+<li><span class="es">Creo que hay un error en la cuenta.</span> <span class="gloss">Ich glaube, in der Rechnung ist ein Fehler.</span></li>
+<li><span class="es">Perdí mi pasaporte.</span> <span class="gloss">Ich habe meinen Pass verloren.</span></li>
+<li><span class="es">Me robaron la billetera.</span> <span class="gloss">Mir wurde der Geldbeutel gestohlen.</span></li>
+<li><span class="es">¿Me puede devolver el dinero?</span> <span class="gloss">Können Sie mir das Geld zurückgeben?</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>„Mir wurde gestohlen" baut man mit <b>unpersönlichem Plural</b>: <span class="es">me robaron…</span> — wörtlich „sie haben mir … gestohlen".</div>
+<div class="note t"><span class="tag">Tico</span><b>no sirve</b> ist die Standardformel für „funktioniert nicht". Beschwerden kommen in Costa Rica freundlich und indirekt am besten an — erst <i>disculpe</i>, dann das Problem.</div>`},
+{g:"Aufbau B1 · Reise & Gespräch",t:"Meinung & Gespräch",h:`
+<p class="words"><b>creo que</b> <span>ich glaube, dass</span> · <b>pienso que</b> <span>ich denke, dass</span> · <b>me parece que</b> <span>mir scheint, dass</span> · <b>en mi opinión</b> <span>meiner Meinung nach</span> · <b>depende</b> <span>kommt darauf an</span> · <b>por un lado</b> <span>einerseits</span> · <b>por otro lado</b> <span>andererseits</span> · <b>en cambio</b> <span>hingegen</span> · <b>por lo tanto</b> <span>deshalb</span> · <b>o sea</b> <span>also, das heißt</span> · <b>es decir</b> <span>das heißt</span> · <b>a pesar de</b> <span>trotz</span> · <b>de hecho</b> <span>tatsächlich</span> · <b>la verdad es que</b> <span>ehrlich gesagt</span> · <b>seguramente</b> <span>sicherlich</span> · <b>me da igual</b> <span>ist mir egal</span> · <b>prefiero</b> <span>ich bevorzuge</span></p>
+<ul class="phr">
+<li><span class="es">Creo que sí. / Creo que no.</span> <span class="gloss">Ich glaube schon. / Ich glaube nicht.</span></li>
+<li><span class="es">Me parece muy bien.</span> <span class="gloss">Das finde ich sehr gut.</span></li>
+<li><span class="es">Depende del clima.</span> <span class="gloss">Das hängt vom Wetter ab.</span></li>
+<li><span class="es">¿Usted qué opina?</span> <span class="gloss">Was meinen Sie?</span></li>
+<li><span class="es">Por un lado es caro, por otro lado vale la pena.</span> <span class="gloss">Einerseits ist es teuer, andererseits lohnt es sich.</span></li>
+<li><span class="es">La verdad es que me encanta este país.</span> <span class="gloss">Ehrlich gesagt liebe ich dieses Land.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span>Verneinte Meinung verlangt den Subjuntivo: <span class="es">creo que es caro</span>, aber <span class="es">no creo que sea caro</span>. Im Zweifel die bejahte Form wählen.</div>`}
+];
+
+const VERBS=[
+{g:"Unregelmäßig",t:"ser",sub:"sein — Wesen, Identität",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>soy</b></td><td class="mono"><b>fui</b></td><td class="mono"><b>era</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>eres</b></td><td class="mono"><b>fuiste</b></td><td class="mono"><b>eras</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>es</b></td><td class="mono"><b>fue</b></td><td class="mono"><b>era</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>somos</b></td><td class="mono"><b>fuimos</b></td><td class="mono"><b>éramos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>sois</b></td><td class="mono"><b>fuisteis</b></td><td class="mono"><b>erais</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>son</b></td><td class="mono"><b>fueron</b></td><td class="mono"><b>eran</b></td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">seré</td><td class="mono">sería</td><td class="mono"><b>sea</b></td></tr><tr><td class="de">tú</td><td class="mono">serás</td><td class="mono">serías</td><td class="mono"><b>seas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">será</td><td class="mono">sería</td><td class="mono"><b>sea</b></td></tr><tr><td class="de">nos.</td><td class="mono">seremos</td><td class="mono">seríamos</td><td class="mono"><b>seamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">seréis</td><td class="mono">seríais</td><td class="mono"><b>seáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">serán</td><td class="mono">serían</td><td class="mono"><b>sean</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡sea! <span class="gloss">usted</span> · ¡sean! <span class="gloss">ustedes</span> · ¡sé! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">siendo</td></tr><tr><td class="de">Partizip</td><td class="mono">sido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"estar",sub:"sein — Ort, Zustand",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>estoy</b></td><td class="mono"><b>estuve</b></td><td class="mono">estaba</td></tr><tr><td class="de">tú</td><td class="mono"><b>estás</b></td><td class="mono"><b>estuviste</b></td><td class="mono">estabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>está</b></td><td class="mono"><b>estuvo</b></td><td class="mono">estaba</td></tr><tr><td class="de">nos.</td><td class="mono">estamos</td><td class="mono"><b>estuvimos</b></td><td class="mono">estábamos</td></tr><tr><td class="de">vos.</td><td class="mono">estáis</td><td class="mono"><b>estuvisteis</b></td><td class="mono">estabais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>están</b></td><td class="mono"><b>estuvieron</b></td><td class="mono">estaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">estaré</td><td class="mono">estaría</td><td class="mono"><b>esté</b></td></tr><tr><td class="de">tú</td><td class="mono">estarás</td><td class="mono">estarías</td><td class="mono"><b>estés</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">estará</td><td class="mono">estaría</td><td class="mono"><b>esté</b></td></tr><tr><td class="de">nos.</td><td class="mono">estaremos</td><td class="mono">estaríamos</td><td class="mono">estemos</td></tr><tr><td class="de">vos.</td><td class="mono">estaréis</td><td class="mono">estaríais</td><td class="mono">estéis</td></tr><tr><td class="de">ellos</td><td class="mono">estarán</td><td class="mono">estarían</td><td class="mono"><b>estén</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡esté! <span class="gloss">usted</span> · ¡estén! <span class="gloss">ustedes</span> · ¡está! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">estando</td></tr><tr><td class="de">Partizip</td><td class="mono">estado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"haber",sub:"haben (Hilfsverb), es gibt",h:`<p class="gloss">Als „es gibt" nur <i>hay</i>. Sonst Hilfsverb: <i>he comido</i>.</p><table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>he</b></td><td class="mono"><b>hube</b></td><td class="mono">había</td></tr><tr><td class="de">tú</td><td class="mono"><b>has</b></td><td class="mono"><b>hubiste</b></td><td class="mono">habías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>ha / hay</b></td><td class="mono"><b>hubo</b></td><td class="mono">había</td></tr><tr><td class="de">nos.</td><td class="mono"><b>hemos</b></td><td class="mono"><b>hubimos</b></td><td class="mono">habíamos</td></tr><tr><td class="de">vos.</td><td class="mono">habéis</td><td class="mono"><b>hubisteis</b></td><td class="mono">habíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>han</b></td><td class="mono"><b>hubieron</b></td><td class="mono">habían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>habré</b></td><td class="mono"><b>habría</b></td><td class="mono"><b>haya</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>habrás</b></td><td class="mono"><b>habrías</b></td><td class="mono"><b>hayas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>habrá</b></td><td class="mono"><b>habría</b></td><td class="mono"><b>haya</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>habremos</b></td><td class="mono"><b>habríamos</b></td><td class="mono"><b>hayamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>habréis</b></td><td class="mono"><b>habríais</b></td><td class="mono"><b>hayáis</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>habrán</b></td><td class="mono"><b>habrían</b></td><td class="mono"><b>hayan</b></td></tr></table><table><tr><td class="de">Gerundium</td><td class="mono">habiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">habido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"tener",sub:"haben",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>tengo</b></td><td class="mono"><b>tuve</b></td><td class="mono">tenía</td></tr><tr><td class="de">tú</td><td class="mono"><b>tienes</b></td><td class="mono"><b>tuviste</b></td><td class="mono">tenías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>tiene</b></td><td class="mono"><b>tuvo</b></td><td class="mono">tenía</td></tr><tr><td class="de">nos.</td><td class="mono">tenemos</td><td class="mono"><b>tuvimos</b></td><td class="mono">teníamos</td></tr><tr><td class="de">vos.</td><td class="mono">tenéis</td><td class="mono"><b>tuvisteis</b></td><td class="mono">teníais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>tienen</b></td><td class="mono"><b>tuvieron</b></td><td class="mono">tenían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>tendré</b></td><td class="mono"><b>tendría</b></td><td class="mono"><b>tenga</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>tendrás</b></td><td class="mono"><b>tendrías</b></td><td class="mono"><b>tengas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>tendrá</b></td><td class="mono"><b>tendría</b></td><td class="mono"><b>tenga</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>tendremos</b></td><td class="mono"><b>tendríamos</b></td><td class="mono"><b>tengamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>tendréis</b></td><td class="mono"><b>tendríais</b></td><td class="mono"><b>tengáis</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>tendrán</b></td><td class="mono"><b>tendrían</b></td><td class="mono"><b>tengan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡tenga! <span class="gloss">usted</span> · ¡tengan! <span class="gloss">ustedes</span> · ¡ten! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">teniendo</td></tr><tr><td class="de">Partizip</td><td class="mono">tenido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"ir",sub:"gehen, fahren",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>voy</b></td><td class="mono"><b>fui</b></td><td class="mono"><b>iba</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>vas</b></td><td class="mono"><b>fuiste</b></td><td class="mono"><b>ibas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>va</b></td><td class="mono"><b>fue</b></td><td class="mono"><b>iba</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>vamos</b></td><td class="mono"><b>fuimos</b></td><td class="mono"><b>íbamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>vais</b></td><td class="mono"><b>fuisteis</b></td><td class="mono"><b>ibais</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>van</b></td><td class="mono"><b>fueron</b></td><td class="mono"><b>iban</b></td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">iré</td><td class="mono">iría</td><td class="mono"><b>vaya</b></td></tr><tr><td class="de">tú</td><td class="mono">irás</td><td class="mono">irías</td><td class="mono"><b>vayas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">irá</td><td class="mono">iría</td><td class="mono"><b>vaya</b></td></tr><tr><td class="de">nos.</td><td class="mono">iremos</td><td class="mono">iríamos</td><td class="mono"><b>vayamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">iréis</td><td class="mono">iríais</td><td class="mono"><b>vayáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">irán</td><td class="mono">irían</td><td class="mono"><b>vayan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡vaya! <span class="gloss">usted</span> · ¡vayan! <span class="gloss">ustedes</span> · ¡ve! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">yendo</td></tr><tr><td class="de">Partizip</td><td class="mono">ido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"hacer",sub:"machen, tun",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>hago</b></td><td class="mono"><b>hice</b></td><td class="mono">hacía</td></tr><tr><td class="de">tú</td><td class="mono">haces</td><td class="mono"><b>hiciste</b></td><td class="mono">hacías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">hace</td><td class="mono"><b>hizo</b></td><td class="mono">hacía</td></tr><tr><td class="de">nos.</td><td class="mono">hacemos</td><td class="mono"><b>hicimos</b></td><td class="mono">hacíamos</td></tr><tr><td class="de">vos.</td><td class="mono">hacéis</td><td class="mono"><b>hicisteis</b></td><td class="mono">hacíais</td></tr><tr><td class="de">ellos</td><td class="mono">hacen</td><td class="mono"><b>hicieron</b></td><td class="mono">hacían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>haré</b></td><td class="mono"><b>haría</b></td><td class="mono"><b>haga</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>harás</b></td><td class="mono"><b>harías</b></td><td class="mono"><b>hagas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>hará</b></td><td class="mono"><b>haría</b></td><td class="mono"><b>haga</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>haremos</b></td><td class="mono"><b>haríamos</b></td><td class="mono"><b>hagamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>haréis</b></td><td class="mono"><b>haríais</b></td><td class="mono"><b>hagáis</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>harán</b></td><td class="mono"><b>harían</b></td><td class="mono"><b>hagan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡haga! <span class="gloss">usted</span> · ¡hagan! <span class="gloss">ustedes</span> · ¡haz! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">haciendo</td></tr><tr><td class="de">Partizip</td><td class="mono">hecho</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"poder",sub:"können",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>puedo</b></td><td class="mono"><b>pude</b></td><td class="mono">podía</td></tr><tr><td class="de">tú</td><td class="mono"><b>puedes</b></td><td class="mono"><b>pudiste</b></td><td class="mono">podías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>puede</b></td><td class="mono"><b>pudo</b></td><td class="mono">podía</td></tr><tr><td class="de">nos.</td><td class="mono">podemos</td><td class="mono"><b>pudimos</b></td><td class="mono">podíamos</td></tr><tr><td class="de">vos.</td><td class="mono">podéis</td><td class="mono"><b>pudisteis</b></td><td class="mono">podíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>pueden</b></td><td class="mono"><b>pudieron</b></td><td class="mono">podían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>podré</b></td><td class="mono"><b>podría</b></td><td class="mono"><b>pueda</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>podrás</b></td><td class="mono"><b>podrías</b></td><td class="mono"><b>puedas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>podrá</b></td><td class="mono"><b>podría</b></td><td class="mono"><b>pueda</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>podremos</b></td><td class="mono"><b>podríamos</b></td><td class="mono">podamos</td></tr><tr><td class="de">vos.</td><td class="mono"><b>podréis</b></td><td class="mono"><b>podríais</b></td><td class="mono">podáis</td></tr><tr><td class="de">ellos</td><td class="mono"><b>podrán</b></td><td class="mono"><b>podrían</b></td><td class="mono"><b>puedan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡pueda! <span class="gloss">usted</span> · ¡puedan! <span class="gloss">ustedes</span> · ¡puede! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">pudiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">podido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"querer",sub:"wollen, mögen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>quiero</b></td><td class="mono"><b>quise</b></td><td class="mono">quería</td></tr><tr><td class="de">tú</td><td class="mono"><b>quieres</b></td><td class="mono"><b>quisiste</b></td><td class="mono">querías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>quiere</b></td><td class="mono"><b>quiso</b></td><td class="mono">quería</td></tr><tr><td class="de">nos.</td><td class="mono">queremos</td><td class="mono"><b>quisimos</b></td><td class="mono">queríamos</td></tr><tr><td class="de">vos.</td><td class="mono">queréis</td><td class="mono"><b>quisisteis</b></td><td class="mono">queríais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>quieren</b></td><td class="mono"><b>quisieron</b></td><td class="mono">querían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>querré</b></td><td class="mono"><b>querría</b></td><td class="mono"><b>quiera</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>querrás</b></td><td class="mono"><b>querrías</b></td><td class="mono"><b>quieras</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>querrá</b></td><td class="mono"><b>querría</b></td><td class="mono"><b>quiera</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>querremos</b></td><td class="mono"><b>querríamos</b></td><td class="mono">queramos</td></tr><tr><td class="de">vos.</td><td class="mono"><b>querréis</b></td><td class="mono"><b>querríais</b></td><td class="mono">queráis</td></tr><tr><td class="de">ellos</td><td class="mono"><b>querrán</b></td><td class="mono"><b>querrían</b></td><td class="mono"><b>quieran</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡quiera! <span class="gloss">usted</span> · ¡quieran! <span class="gloss">ustedes</span> · ¡quiere! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">queriendo</td></tr><tr><td class="de">Partizip</td><td class="mono">querido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"saber",sub:"wissen, können",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>sé</b></td><td class="mono"><b>supe</b></td><td class="mono">sabía</td></tr><tr><td class="de">tú</td><td class="mono">sabes</td><td class="mono"><b>supiste</b></td><td class="mono">sabías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">sabe</td><td class="mono"><b>supo</b></td><td class="mono">sabía</td></tr><tr><td class="de">nos.</td><td class="mono">sabemos</td><td class="mono"><b>supimos</b></td><td class="mono">sabíamos</td></tr><tr><td class="de">vos.</td><td class="mono">sabéis</td><td class="mono"><b>supisteis</b></td><td class="mono">sabíais</td></tr><tr><td class="de">ellos</td><td class="mono">saben</td><td class="mono"><b>supieron</b></td><td class="mono">sabían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>sabré</b></td><td class="mono"><b>sabría</b></td><td class="mono"><b>sepa</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>sabrás</b></td><td class="mono"><b>sabrías</b></td><td class="mono"><b>sepas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>sabrá</b></td><td class="mono"><b>sabría</b></td><td class="mono"><b>sepa</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>sabremos</b></td><td class="mono"><b>sabríamos</b></td><td class="mono"><b>sepamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>sabréis</b></td><td class="mono"><b>sabríais</b></td><td class="mono"><b>sepáis</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>sabrán</b></td><td class="mono"><b>sabrían</b></td><td class="mono"><b>sepan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡sepa! <span class="gloss">usted</span> · ¡sepan! <span class="gloss">ustedes</span> · ¡sabe! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">sabiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">sabido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"decir",sub:"sagen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>digo</b></td><td class="mono"><b>dije</b></td><td class="mono">decía</td></tr><tr><td class="de">tú</td><td class="mono"><b>dices</b></td><td class="mono"><b>dijiste</b></td><td class="mono">decías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>dice</b></td><td class="mono"><b>dijo</b></td><td class="mono">decía</td></tr><tr><td class="de">nos.</td><td class="mono">decimos</td><td class="mono"><b>dijimos</b></td><td class="mono">decíamos</td></tr><tr><td class="de">vos.</td><td class="mono">decís</td><td class="mono"><b>dijisteis</b></td><td class="mono">decíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>dicen</b></td><td class="mono"><b>dijeron</b></td><td class="mono">decían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>diré</b></td><td class="mono"><b>diría</b></td><td class="mono"><b>diga</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>dirás</b></td><td class="mono"><b>dirías</b></td><td class="mono"><b>digas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>dirá</b></td><td class="mono"><b>diría</b></td><td class="mono"><b>diga</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>diremos</b></td><td class="mono"><b>diríamos</b></td><td class="mono"><b>digamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>diréis</b></td><td class="mono"><b>diríais</b></td><td class="mono"><b>digáis</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>dirán</b></td><td class="mono"><b>dirían</b></td><td class="mono"><b>digan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡diga! <span class="gloss">usted</span> · ¡digan! <span class="gloss">ustedes</span> · ¡di! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">diciendo</td></tr><tr><td class="de">Partizip</td><td class="mono">dicho</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"venir",sub:"kommen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>vengo</b></td><td class="mono"><b>vine</b></td><td class="mono">venía</td></tr><tr><td class="de">tú</td><td class="mono"><b>vienes</b></td><td class="mono"><b>viniste</b></td><td class="mono">venías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>viene</b></td><td class="mono"><b>vino</b></td><td class="mono">venía</td></tr><tr><td class="de">nos.</td><td class="mono">venimos</td><td class="mono"><b>vinimos</b></td><td class="mono">veníamos</td></tr><tr><td class="de">vos.</td><td class="mono">venís</td><td class="mono"><b>vinisteis</b></td><td class="mono">veníais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>vienen</b></td><td class="mono"><b>vinieron</b></td><td class="mono">venían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>vendré</b></td><td class="mono"><b>vendría</b></td><td class="mono"><b>venga</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>vendrás</b></td><td class="mono"><b>vendrías</b></td><td class="mono"><b>vengas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>vendrá</b></td><td class="mono"><b>vendría</b></td><td class="mono"><b>venga</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>vendremos</b></td><td class="mono"><b>vendríamos</b></td><td class="mono"><b>vengamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>vendréis</b></td><td class="mono"><b>vendríais</b></td><td class="mono"><b>vengáis</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>vendrán</b></td><td class="mono"><b>vendrían</b></td><td class="mono"><b>vengan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡venga! <span class="gloss">usted</span> · ¡vengan! <span class="gloss">ustedes</span> · ¡ven! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">viniendo</td></tr><tr><td class="de">Partizip</td><td class="mono">venido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"dar",sub:"geben",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>doy</b></td><td class="mono"><b>di</b></td><td class="mono">daba</td></tr><tr><td class="de">tú</td><td class="mono">das</td><td class="mono"><b>diste</b></td><td class="mono">dabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">da</td><td class="mono"><b>dio</b></td><td class="mono">daba</td></tr><tr><td class="de">nos.</td><td class="mono">damos</td><td class="mono"><b>dimos</b></td><td class="mono">dábamos</td></tr><tr><td class="de">vos.</td><td class="mono"><b>dais</b></td><td class="mono"><b>disteis</b></td><td class="mono">dabais</td></tr><tr><td class="de">ellos</td><td class="mono">dan</td><td class="mono"><b>dieron</b></td><td class="mono">daban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">daré</td><td class="mono">daría</td><td class="mono"><b>dé</b></td></tr><tr><td class="de">tú</td><td class="mono">darás</td><td class="mono">darías</td><td class="mono">des</td></tr><tr><td class="de">él/Ud.</td><td class="mono">dará</td><td class="mono">daría</td><td class="mono"><b>dé</b></td></tr><tr><td class="de">nos.</td><td class="mono">daremos</td><td class="mono">daríamos</td><td class="mono">demos</td></tr><tr><td class="de">vos.</td><td class="mono">daréis</td><td class="mono">daríais</td><td class="mono"><b>deis</b></td></tr><tr><td class="de">ellos</td><td class="mono">darán</td><td class="mono">darían</td><td class="mono">den</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡dé! <span class="gloss">usted</span> · ¡den! <span class="gloss">ustedes</span> · ¡da! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">dando</td></tr><tr><td class="de">Partizip</td><td class="mono">dado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"ver",sub:"sehen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>veo</b></td><td class="mono"><b>vi</b></td><td class="mono"><b>veía</b></td></tr><tr><td class="de">tú</td><td class="mono">ves</td><td class="mono">viste</td><td class="mono"><b>veías</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">ve</td><td class="mono"><b>vio</b></td><td class="mono"><b>veía</b></td></tr><tr><td class="de">nos.</td><td class="mono">vemos</td><td class="mono">vimos</td><td class="mono"><b>veíamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>veis</b></td><td class="mono">visteis</td><td class="mono"><b>veíais</b></td></tr><tr><td class="de">ellos</td><td class="mono">ven</td><td class="mono">vieron</td><td class="mono"><b>veían</b></td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">veré</td><td class="mono">vería</td><td class="mono"><b>vea</b></td></tr><tr><td class="de">tú</td><td class="mono">verás</td><td class="mono">verías</td><td class="mono"><b>veas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">verá</td><td class="mono">vería</td><td class="mono"><b>vea</b></td></tr><tr><td class="de">nos.</td><td class="mono">veremos</td><td class="mono">veríamos</td><td class="mono"><b>veamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">veréis</td><td class="mono">veríais</td><td class="mono"><b>veáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">verán</td><td class="mono">verían</td><td class="mono"><b>vean</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡vea! <span class="gloss">usted</span> · ¡vean! <span class="gloss">ustedes</span> · ¡ve! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">viendo</td></tr><tr><td class="de">Partizip</td><td class="mono">visto</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"poner",sub:"stellen, legen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>pongo</b></td><td class="mono"><b>puse</b></td><td class="mono">ponía</td></tr><tr><td class="de">tú</td><td class="mono">pones</td><td class="mono"><b>pusiste</b></td><td class="mono">ponías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">pone</td><td class="mono"><b>puso</b></td><td class="mono">ponía</td></tr><tr><td class="de">nos.</td><td class="mono">ponemos</td><td class="mono"><b>pusimos</b></td><td class="mono">poníamos</td></tr><tr><td class="de">vos.</td><td class="mono">ponéis</td><td class="mono"><b>pusisteis</b></td><td class="mono">poníais</td></tr><tr><td class="de">ellos</td><td class="mono">ponen</td><td class="mono"><b>pusieron</b></td><td class="mono">ponían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>pondré</b></td><td class="mono"><b>pondría</b></td><td class="mono"><b>ponga</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>pondrás</b></td><td class="mono"><b>pondrías</b></td><td class="mono"><b>pongas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>pondrá</b></td><td class="mono"><b>pondría</b></td><td class="mono"><b>ponga</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>pondremos</b></td><td class="mono"><b>pondríamos</b></td><td class="mono"><b>pongamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>pondréis</b></td><td class="mono"><b>pondríais</b></td><td class="mono"><b>pongáis</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>pondrán</b></td><td class="mono"><b>pondrían</b></td><td class="mono"><b>pongan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡ponga! <span class="gloss">usted</span> · ¡pongan! <span class="gloss">ustedes</span> · ¡pon! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">poniendo</td></tr><tr><td class="de">Partizip</td><td class="mono">puesto</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"salir",sub:"hinausgehen, abfahren",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>salgo</b></td><td class="mono">salí</td><td class="mono">salía</td></tr><tr><td class="de">tú</td><td class="mono">sales</td><td class="mono">saliste</td><td class="mono">salías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">sale</td><td class="mono">salió</td><td class="mono">salía</td></tr><tr><td class="de">nos.</td><td class="mono">salimos</td><td class="mono">salimos</td><td class="mono">salíamos</td></tr><tr><td class="de">vos.</td><td class="mono">salís</td><td class="mono">salisteis</td><td class="mono">salíais</td></tr><tr><td class="de">ellos</td><td class="mono">salen</td><td class="mono">salieron</td><td class="mono">salían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono"><b>saldré</b></td><td class="mono"><b>saldría</b></td><td class="mono"><b>salga</b></td></tr><tr><td class="de">tú</td><td class="mono"><b>saldrás</b></td><td class="mono"><b>saldrías</b></td><td class="mono"><b>salgas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>saldrá</b></td><td class="mono"><b>saldría</b></td><td class="mono"><b>salga</b></td></tr><tr><td class="de">nos.</td><td class="mono"><b>saldremos</b></td><td class="mono"><b>saldríamos</b></td><td class="mono"><b>salgamos</b></td></tr><tr><td class="de">vos.</td><td class="mono"><b>saldréis</b></td><td class="mono"><b>saldríais</b></td><td class="mono"><b>salgáis</b></td></tr><tr><td class="de">ellos</td><td class="mono"><b>saldrán</b></td><td class="mono"><b>saldrían</b></td><td class="mono"><b>salgan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡salga! <span class="gloss">usted</span> · ¡salgan! <span class="gloss">ustedes</span> · ¡sal! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">saliendo</td></tr><tr><td class="de">Partizip</td><td class="mono">salido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"traer",sub:"bringen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>traigo</b></td><td class="mono"><b>traje</b></td><td class="mono">traía</td></tr><tr><td class="de">tú</td><td class="mono">traes</td><td class="mono"><b>trajiste</b></td><td class="mono">traías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">trae</td><td class="mono"><b>trajo</b></td><td class="mono">traía</td></tr><tr><td class="de">nos.</td><td class="mono">traemos</td><td class="mono"><b>trajimos</b></td><td class="mono">traíamos</td></tr><tr><td class="de">vos.</td><td class="mono">traéis</td><td class="mono"><b>trajisteis</b></td><td class="mono">traíais</td></tr><tr><td class="de">ellos</td><td class="mono">traen</td><td class="mono"><b>trajeron</b></td><td class="mono">traían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">traeré</td><td class="mono">traería</td><td class="mono"><b>traiga</b></td></tr><tr><td class="de">tú</td><td class="mono">traerás</td><td class="mono">traerías</td><td class="mono"><b>traigas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">traerá</td><td class="mono">traería</td><td class="mono"><b>traiga</b></td></tr><tr><td class="de">nos.</td><td class="mono">traeremos</td><td class="mono">traeríamos</td><td class="mono"><b>traigamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">traeréis</td><td class="mono">traeríais</td><td class="mono"><b>traigáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">traerán</td><td class="mono">traerían</td><td class="mono"><b>traigan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡traiga! <span class="gloss">usted</span> · ¡traigan! <span class="gloss">ustedes</span> · ¡trae! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">trayendo</td></tr><tr><td class="de">Partizip</td><td class="mono">traído</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"oír",sub:"hören",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>oigo</b></td><td class="mono">oí</td><td class="mono">oía</td></tr><tr><td class="de">tú</td><td class="mono"><b>oyes</b></td><td class="mono"><b>oíste</b></td><td class="mono">oías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>oye</b></td><td class="mono"><b>oyó</b></td><td class="mono">oía</td></tr><tr><td class="de">nos.</td><td class="mono"><b>oímos</b></td><td class="mono"><b>oímos</b></td><td class="mono">oíamos</td></tr><tr><td class="de">vos.</td><td class="mono">oís</td><td class="mono"><b>oísteis</b></td><td class="mono">oíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>oyen</b></td><td class="mono"><b>oyeron</b></td><td class="mono">oían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">oiré</td><td class="mono">oiría</td><td class="mono"><b>oiga</b></td></tr><tr><td class="de">tú</td><td class="mono">oirás</td><td class="mono">oirías</td><td class="mono"><b>oigas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">oirá</td><td class="mono">oiría</td><td class="mono"><b>oiga</b></td></tr><tr><td class="de">nos.</td><td class="mono">oiremos</td><td class="mono">oiríamos</td><td class="mono"><b>oigamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">oiréis</td><td class="mono">oiríais</td><td class="mono"><b>oigáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">oirán</td><td class="mono">oirían</td><td class="mono"><b>oigan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡oiga! <span class="gloss">usted</span> · ¡oigan! <span class="gloss">ustedes</span> · ¡oye! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">oyendo</td></tr><tr><td class="de">Partizip</td><td class="mono">oído</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"conocer",sub:"kennen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>conozco</b></td><td class="mono">conocí</td><td class="mono">conocía</td></tr><tr><td class="de">tú</td><td class="mono">conoces</td><td class="mono">conociste</td><td class="mono">conocías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">conoce</td><td class="mono">conoció</td><td class="mono">conocía</td></tr><tr><td class="de">nos.</td><td class="mono">conocemos</td><td class="mono">conocimos</td><td class="mono">conocíamos</td></tr><tr><td class="de">vos.</td><td class="mono">conocéis</td><td class="mono">conocisteis</td><td class="mono">conocíais</td></tr><tr><td class="de">ellos</td><td class="mono">conocen</td><td class="mono">conocieron</td><td class="mono">conocían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">conoceré</td><td class="mono">conocería</td><td class="mono"><b>conozca</b></td></tr><tr><td class="de">tú</td><td class="mono">conocerás</td><td class="mono">conocerías</td><td class="mono"><b>conozcas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">conocerá</td><td class="mono">conocería</td><td class="mono"><b>conozca</b></td></tr><tr><td class="de">nos.</td><td class="mono">conoceremos</td><td class="mono">conoceríamos</td><td class="mono"><b>conozcamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">conoceréis</td><td class="mono">conoceríais</td><td class="mono"><b>conozcáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">conocerán</td><td class="mono">conocerían</td><td class="mono"><b>conozcan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡conozca! <span class="gloss">usted</span> · ¡conozcan! <span class="gloss">ustedes</span> · ¡conoce! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">conociendo</td></tr><tr><td class="de">Partizip</td><td class="mono">conocido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Unregelmäßig",t:"seguir",sub:"folgen, weitermachen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>sigo</b></td><td class="mono">seguí</td><td class="mono">seguía</td></tr><tr><td class="de">tú</td><td class="mono"><b>sigues</b></td><td class="mono">seguiste</td><td class="mono">seguías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>sigue</b></td><td class="mono"><b>siguió</b></td><td class="mono">seguía</td></tr><tr><td class="de">nos.</td><td class="mono">seguimos</td><td class="mono">seguimos</td><td class="mono">seguíamos</td></tr><tr><td class="de">vos.</td><td class="mono">seguís</td><td class="mono">seguisteis</td><td class="mono">seguíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>siguen</b></td><td class="mono"><b>siguieron</b></td><td class="mono">seguían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">seguiré</td><td class="mono">seguiría</td><td class="mono"><b>siga</b></td></tr><tr><td class="de">tú</td><td class="mono">seguirás</td><td class="mono">seguirías</td><td class="mono"><b>sigas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">seguirá</td><td class="mono">seguiría</td><td class="mono"><b>siga</b></td></tr><tr><td class="de">nos.</td><td class="mono">seguiremos</td><td class="mono">seguiríamos</td><td class="mono"><b>sigamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">seguiréis</td><td class="mono">seguiríais</td><td class="mono"><b>sigáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">seguirán</td><td class="mono">seguirían</td><td class="mono"><b>sigan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡siga! <span class="gloss">usted</span> · ¡sigan! <span class="gloss">ustedes</span> · ¡sigue! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">siguiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">seguido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"cerrar",sub:"schließen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>cierro</b></td><td class="mono">cerré</td><td class="mono">cerraba</td></tr><tr><td class="de">tú</td><td class="mono"><b>cierras</b></td><td class="mono">cerraste</td><td class="mono">cerrabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>cierra</b></td><td class="mono">cerró</td><td class="mono">cerraba</td></tr><tr><td class="de">nos.</td><td class="mono">cerramos</td><td class="mono">cerramos</td><td class="mono">cerrábamos</td></tr><tr><td class="de">vos.</td><td class="mono">cerráis</td><td class="mono">cerrasteis</td><td class="mono">cerrabais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>cierran</b></td><td class="mono">cerraron</td><td class="mono">cerraban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">cerraré</td><td class="mono">cerraría</td><td class="mono"><b>cierre</b></td></tr><tr><td class="de">tú</td><td class="mono">cerrarás</td><td class="mono">cerrarías</td><td class="mono"><b>cierres</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">cerrará</td><td class="mono">cerraría</td><td class="mono"><b>cierre</b></td></tr><tr><td class="de">nos.</td><td class="mono">cerraremos</td><td class="mono">cerraríamos</td><td class="mono">cerremos</td></tr><tr><td class="de">vos.</td><td class="mono">cerraréis</td><td class="mono">cerraríais</td><td class="mono">cerréis</td></tr><tr><td class="de">ellos</td><td class="mono">cerrarán</td><td class="mono">cerrarían</td><td class="mono"><b>cierren</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡cierre! <span class="gloss">usted</span> · ¡cierren! <span class="gloss">ustedes</span> · ¡cierra! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">cerrando</td></tr><tr><td class="de">Partizip</td><td class="mono">cerrado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"costar",sub:"kosten",h:`<p class="gloss">Nur in der 3. Person gebräuchlich: <i>cuesta / cuestan</i>.</p><table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>cuesto</b></td><td class="mono">costé</td><td class="mono">costaba</td></tr><tr><td class="de">tú</td><td class="mono"><b>cuestas</b></td><td class="mono">costaste</td><td class="mono">costabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>cuesta</b></td><td class="mono">costó</td><td class="mono">costaba</td></tr><tr><td class="de">nos.</td><td class="mono">costamos</td><td class="mono">costamos</td><td class="mono">costábamos</td></tr><tr><td class="de">vos.</td><td class="mono">costáis</td><td class="mono">costasteis</td><td class="mono">costabais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>cuestan</b></td><td class="mono">costaron</td><td class="mono">costaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">costaré</td><td class="mono">costaría</td><td class="mono"><b>cueste</b></td></tr><tr><td class="de">tú</td><td class="mono">costarás</td><td class="mono">costarías</td><td class="mono"><b>cuestes</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">costará</td><td class="mono">costaría</td><td class="mono"><b>cueste</b></td></tr><tr><td class="de">nos.</td><td class="mono">costaremos</td><td class="mono">costaríamos</td><td class="mono">costemos</td></tr><tr><td class="de">vos.</td><td class="mono">costaréis</td><td class="mono">costaríais</td><td class="mono">costéis</td></tr><tr><td class="de">ellos</td><td class="mono">costarán</td><td class="mono">costarían</td><td class="mono"><b>cuesten</b></td></tr></table><table><tr><td class="de">Gerundium</td><td class="mono">costando</td></tr><tr><td class="de">Partizip</td><td class="mono">costado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"doler",sub:"wehtun",h:`<p class="gloss">Wie gustar: <i>me duele la cabeza</i>.</p><table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>duelo</b></td><td class="mono">dolí</td><td class="mono">dolía</td></tr><tr><td class="de">tú</td><td class="mono"><b>dueles</b></td><td class="mono">doliste</td><td class="mono">dolías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>duele</b></td><td class="mono">dolió</td><td class="mono">dolía</td></tr><tr><td class="de">nos.</td><td class="mono">dolemos</td><td class="mono">dolimos</td><td class="mono">dolíamos</td></tr><tr><td class="de">vos.</td><td class="mono">doléis</td><td class="mono">dolisteis</td><td class="mono">dolíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>duelen</b></td><td class="mono">dolieron</td><td class="mono">dolían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">doleré</td><td class="mono">dolería</td><td class="mono"><b>duela</b></td></tr><tr><td class="de">tú</td><td class="mono">dolerás</td><td class="mono">dolerías</td><td class="mono"><b>duelas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">dolerá</td><td class="mono">dolería</td><td class="mono"><b>duela</b></td></tr><tr><td class="de">nos.</td><td class="mono">doleremos</td><td class="mono">doleríamos</td><td class="mono">dolamos</td></tr><tr><td class="de">vos.</td><td class="mono">doleréis</td><td class="mono">doleríais</td><td class="mono">doláis</td></tr><tr><td class="de">ellos</td><td class="mono">dolerán</td><td class="mono">dolerían</td><td class="mono"><b>duelan</b></td></tr></table><table><tr><td class="de">Gerundium</td><td class="mono">doliendo</td></tr><tr><td class="de">Partizip</td><td class="mono">dolido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"dormir",sub:"schlafen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>duermo</b></td><td class="mono">dormí</td><td class="mono">dormía</td></tr><tr><td class="de">tú</td><td class="mono"><b>duermes</b></td><td class="mono">dormiste</td><td class="mono">dormías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>duerme</b></td><td class="mono"><b>durmió</b></td><td class="mono">dormía</td></tr><tr><td class="de">nos.</td><td class="mono">dormimos</td><td class="mono">dormimos</td><td class="mono">dormíamos</td></tr><tr><td class="de">vos.</td><td class="mono">dormís</td><td class="mono">dormisteis</td><td class="mono">dormíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>duermen</b></td><td class="mono"><b>durmieron</b></td><td class="mono">dormían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">dormiré</td><td class="mono">dormiría</td><td class="mono"><b>duerma</b></td></tr><tr><td class="de">tú</td><td class="mono">dormirás</td><td class="mono">dormirías</td><td class="mono"><b>duermas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">dormirá</td><td class="mono">dormiría</td><td class="mono"><b>duerma</b></td></tr><tr><td class="de">nos.</td><td class="mono">dormiremos</td><td class="mono">dormiríamos</td><td class="mono"><b>durmamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">dormiréis</td><td class="mono">dormiríais</td><td class="mono"><b>durmáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">dormirán</td><td class="mono">dormirían</td><td class="mono"><b>duerman</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡duerma! <span class="gloss">usted</span> · ¡duerman! <span class="gloss">ustedes</span> · ¡duerme! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">durmiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">dormido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"empezar",sub:"anfangen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>empiezo</b></td><td class="mono"><b>empecé</b></td><td class="mono">empezaba</td></tr><tr><td class="de">tú</td><td class="mono"><b>empiezas</b></td><td class="mono">empezaste</td><td class="mono">empezabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>empieza</b></td><td class="mono">empezó</td><td class="mono">empezaba</td></tr><tr><td class="de">nos.</td><td class="mono">empezamos</td><td class="mono">empezamos</td><td class="mono">empezábamos</td></tr><tr><td class="de">vos.</td><td class="mono">empezáis</td><td class="mono">empezasteis</td><td class="mono">empezabais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>empiezan</b></td><td class="mono">empezaron</td><td class="mono">empezaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">empezaré</td><td class="mono">empezaría</td><td class="mono"><b>empiece</b></td></tr><tr><td class="de">tú</td><td class="mono">empezarás</td><td class="mono">empezarías</td><td class="mono"><b>empieces</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">empezará</td><td class="mono">empezaría</td><td class="mono"><b>empiece</b></td></tr><tr><td class="de">nos.</td><td class="mono">empezaremos</td><td class="mono">empezaríamos</td><td class="mono"><b>empecemos</b></td></tr><tr><td class="de">vos.</td><td class="mono">empezaréis</td><td class="mono">empezaríais</td><td class="mono"><b>empecéis</b></td></tr><tr><td class="de">ellos</td><td class="mono">empezarán</td><td class="mono">empezarían</td><td class="mono"><b>empiecen</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡empiece! <span class="gloss">usted</span> · ¡empiecen! <span class="gloss">ustedes</span> · ¡empieza! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">empezando</td></tr><tr><td class="de">Partizip</td><td class="mono">empezado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"encontrar",sub:"finden",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>encuentro</b></td><td class="mono">encontré</td><td class="mono">encontraba</td></tr><tr><td class="de">tú</td><td class="mono"><b>encuentras</b></td><td class="mono">encontraste</td><td class="mono">encontrabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>encuentra</b></td><td class="mono">encontró</td><td class="mono">encontraba</td></tr><tr><td class="de">nos.</td><td class="mono">encontramos</td><td class="mono">encontramos</td><td class="mono">encontrábamos</td></tr><tr><td class="de">vos.</td><td class="mono">encontráis</td><td class="mono">encontrasteis</td><td class="mono">encontrabais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>encuentran</b></td><td class="mono">encontraron</td><td class="mono">encontraban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">encontraré</td><td class="mono">encontraría</td><td class="mono"><b>encuentre</b></td></tr><tr><td class="de">tú</td><td class="mono">encontrarás</td><td class="mono">encontrarías</td><td class="mono"><b>encuentres</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">encontrará</td><td class="mono">encontraría</td><td class="mono"><b>encuentre</b></td></tr><tr><td class="de">nos.</td><td class="mono">encontraremos</td><td class="mono">encontraríamos</td><td class="mono">encontremos</td></tr><tr><td class="de">vos.</td><td class="mono">encontraréis</td><td class="mono">encontraríais</td><td class="mono">encontréis</td></tr><tr><td class="de">ellos</td><td class="mono">encontrarán</td><td class="mono">encontrarían</td><td class="mono"><b>encuentren</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡encuentre! <span class="gloss">usted</span> · ¡encuentren! <span class="gloss">ustedes</span> · ¡encuentra! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">encontrando</td></tr><tr><td class="de">Partizip</td><td class="mono">encontrado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"entender",sub:"verstehen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>entiendo</b></td><td class="mono">entendí</td><td class="mono">entendía</td></tr><tr><td class="de">tú</td><td class="mono"><b>entiendes</b></td><td class="mono">entendiste</td><td class="mono">entendías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>entiende</b></td><td class="mono">entendió</td><td class="mono">entendía</td></tr><tr><td class="de">nos.</td><td class="mono">entendemos</td><td class="mono">entendimos</td><td class="mono">entendíamos</td></tr><tr><td class="de">vos.</td><td class="mono">entendéis</td><td class="mono">entendisteis</td><td class="mono">entendíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>entienden</b></td><td class="mono">entendieron</td><td class="mono">entendían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">entenderé</td><td class="mono">entendería</td><td class="mono"><b>entienda</b></td></tr><tr><td class="de">tú</td><td class="mono">entenderás</td><td class="mono">entenderías</td><td class="mono"><b>entiendas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">entenderá</td><td class="mono">entendería</td><td class="mono"><b>entienda</b></td></tr><tr><td class="de">nos.</td><td class="mono">entenderemos</td><td class="mono">entenderíamos</td><td class="mono">entendamos</td></tr><tr><td class="de">vos.</td><td class="mono">entenderéis</td><td class="mono">entenderíais</td><td class="mono">entendáis</td></tr><tr><td class="de">ellos</td><td class="mono">entenderán</td><td class="mono">entenderían</td><td class="mono"><b>entiendan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡entienda! <span class="gloss">usted</span> · ¡entiendan! <span class="gloss">ustedes</span> · ¡entiende! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">entendiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">entendido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"pedir",sub:"bitten, bestellen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>pido</b></td><td class="mono">pedí</td><td class="mono">pedía</td></tr><tr><td class="de">tú</td><td class="mono"><b>pides</b></td><td class="mono">pediste</td><td class="mono">pedías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>pide</b></td><td class="mono"><b>pidió</b></td><td class="mono">pedía</td></tr><tr><td class="de">nos.</td><td class="mono">pedimos</td><td class="mono">pedimos</td><td class="mono">pedíamos</td></tr><tr><td class="de">vos.</td><td class="mono">pedís</td><td class="mono">pedisteis</td><td class="mono">pedíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>piden</b></td><td class="mono"><b>pidieron</b></td><td class="mono">pedían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">pediré</td><td class="mono">pediría</td><td class="mono"><b>pida</b></td></tr><tr><td class="de">tú</td><td class="mono">pedirás</td><td class="mono">pedirías</td><td class="mono"><b>pidas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">pedirá</td><td class="mono">pediría</td><td class="mono"><b>pida</b></td></tr><tr><td class="de">nos.</td><td class="mono">pediremos</td><td class="mono">pediríamos</td><td class="mono"><b>pidamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">pediréis</td><td class="mono">pediríais</td><td class="mono"><b>pidáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">pedirán</td><td class="mono">pedirían</td><td class="mono"><b>pidan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡pida! <span class="gloss">usted</span> · ¡pidan! <span class="gloss">ustedes</span> · ¡pide! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">pidiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">pedido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"preferir",sub:"bevorzugen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>prefiero</b></td><td class="mono">preferí</td><td class="mono">prefería</td></tr><tr><td class="de">tú</td><td class="mono"><b>prefieres</b></td><td class="mono">preferiste</td><td class="mono">preferías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>prefiere</b></td><td class="mono"><b>prefirió</b></td><td class="mono">prefería</td></tr><tr><td class="de">nos.</td><td class="mono">preferimos</td><td class="mono">preferimos</td><td class="mono">preferíamos</td></tr><tr><td class="de">vos.</td><td class="mono">preferís</td><td class="mono">preferisteis</td><td class="mono">preferíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>prefieren</b></td><td class="mono"><b>prefirieron</b></td><td class="mono">preferían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">preferiré</td><td class="mono">preferiría</td><td class="mono"><b>prefiera</b></td></tr><tr><td class="de">tú</td><td class="mono">preferirás</td><td class="mono">preferirías</td><td class="mono"><b>prefieras</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">preferirá</td><td class="mono">preferiría</td><td class="mono"><b>prefiera</b></td></tr><tr><td class="de">nos.</td><td class="mono">preferiremos</td><td class="mono">preferiríamos</td><td class="mono"><b>prefiramos</b></td></tr><tr><td class="de">vos.</td><td class="mono">preferiréis</td><td class="mono">preferiríais</td><td class="mono"><b>prefiráis</b></td></tr><tr><td class="de">ellos</td><td class="mono">preferirán</td><td class="mono">preferirían</td><td class="mono"><b>prefieran</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡prefiera! <span class="gloss">usted</span> · ¡prefieran! <span class="gloss">ustedes</span> · ¡prefiere! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">prefiriendo</td></tr><tr><td class="de">Partizip</td><td class="mono">preferido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"sentir",sub:"fühlen, bedauern",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>siento</b></td><td class="mono">sentí</td><td class="mono">sentía</td></tr><tr><td class="de">tú</td><td class="mono"><b>sientes</b></td><td class="mono">sentiste</td><td class="mono">sentías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>siente</b></td><td class="mono"><b>sintió</b></td><td class="mono">sentía</td></tr><tr><td class="de">nos.</td><td class="mono">sentimos</td><td class="mono">sentimos</td><td class="mono">sentíamos</td></tr><tr><td class="de">vos.</td><td class="mono">sentís</td><td class="mono">sentisteis</td><td class="mono">sentíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>sienten</b></td><td class="mono"><b>sintieron</b></td><td class="mono">sentían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">sentiré</td><td class="mono">sentiría</td><td class="mono"><b>sienta</b></td></tr><tr><td class="de">tú</td><td class="mono">sentirás</td><td class="mono">sentirías</td><td class="mono"><b>sientas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">sentirá</td><td class="mono">sentiría</td><td class="mono"><b>sienta</b></td></tr><tr><td class="de">nos.</td><td class="mono">sentiremos</td><td class="mono">sentiríamos</td><td class="mono"><b>sintamos</b></td></tr><tr><td class="de">vos.</td><td class="mono">sentiréis</td><td class="mono">sentiríais</td><td class="mono"><b>sintáis</b></td></tr><tr><td class="de">ellos</td><td class="mono">sentirán</td><td class="mono">sentirían</td><td class="mono"><b>sientan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡sienta! <span class="gloss">usted</span> · ¡sientan! <span class="gloss">ustedes</span> · ¡siente! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">sintiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">sentido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Stammwechsler",t:"volver",sub:"zurückkehren",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono"><b>vuelvo</b></td><td class="mono">volví</td><td class="mono">volvía</td></tr><tr><td class="de">tú</td><td class="mono"><b>vuelves</b></td><td class="mono">volviste</td><td class="mono">volvías</td></tr><tr><td class="de">él/Ud.</td><td class="mono"><b>vuelve</b></td><td class="mono">volvió</td><td class="mono">volvía</td></tr><tr><td class="de">nos.</td><td class="mono">volvemos</td><td class="mono">volvimos</td><td class="mono">volvíamos</td></tr><tr><td class="de">vos.</td><td class="mono">volvéis</td><td class="mono">volvisteis</td><td class="mono">volvíais</td></tr><tr><td class="de">ellos</td><td class="mono"><b>vuelven</b></td><td class="mono">volvieron</td><td class="mono">volvían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">volveré</td><td class="mono">volvería</td><td class="mono"><b>vuelva</b></td></tr><tr><td class="de">tú</td><td class="mono">volverás</td><td class="mono">volverías</td><td class="mono"><b>vuelvas</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">volverá</td><td class="mono">volvería</td><td class="mono"><b>vuelva</b></td></tr><tr><td class="de">nos.</td><td class="mono">volveremos</td><td class="mono">volveríamos</td><td class="mono">volvamos</td></tr><tr><td class="de">vos.</td><td class="mono">volveréis</td><td class="mono">volveríais</td><td class="mono">volváis</td></tr><tr><td class="de">ellos</td><td class="mono">volverán</td><td class="mono">volverían</td><td class="mono"><b>vuelvan</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡vuelva! <span class="gloss">usted</span> · ¡vuelvan! <span class="gloss">ustedes</span> · ¡vuelve! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">volviendo</td></tr><tr><td class="de">Partizip</td><td class="mono">vuelto</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"abrir",sub:"öffnen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">abro</td><td class="mono">abrí</td><td class="mono">abría</td></tr><tr><td class="de">tú</td><td class="mono">abres</td><td class="mono">abriste</td><td class="mono">abrías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">abre</td><td class="mono">abrió</td><td class="mono">abría</td></tr><tr><td class="de">nos.</td><td class="mono">abrimos</td><td class="mono">abrimos</td><td class="mono">abríamos</td></tr><tr><td class="de">vos.</td><td class="mono">abrís</td><td class="mono">abristeis</td><td class="mono">abríais</td></tr><tr><td class="de">ellos</td><td class="mono">abren</td><td class="mono">abrieron</td><td class="mono">abrían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">abriré</td><td class="mono">abriría</td><td class="mono">abra</td></tr><tr><td class="de">tú</td><td class="mono">abrirás</td><td class="mono">abrirías</td><td class="mono">abras</td></tr><tr><td class="de">él/Ud.</td><td class="mono">abrirá</td><td class="mono">abriría</td><td class="mono">abra</td></tr><tr><td class="de">nos.</td><td class="mono">abriremos</td><td class="mono">abriríamos</td><td class="mono">abramos</td></tr><tr><td class="de">vos.</td><td class="mono">abriréis</td><td class="mono">abriríais</td><td class="mono">abráis</td></tr><tr><td class="de">ellos</td><td class="mono">abrirán</td><td class="mono">abrirían</td><td class="mono">abran</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡abra! <span class="gloss">usted</span> · ¡abran! <span class="gloss">ustedes</span> · ¡abre! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">abriendo</td></tr><tr><td class="de">Partizip</td><td class="mono">abierto</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"ayudar",sub:"helfen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">ayudo</td><td class="mono">ayudé</td><td class="mono">ayudaba</td></tr><tr><td class="de">tú</td><td class="mono">ayudas</td><td class="mono">ayudaste</td><td class="mono">ayudabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">ayuda</td><td class="mono">ayudó</td><td class="mono">ayudaba</td></tr><tr><td class="de">nos.</td><td class="mono">ayudamos</td><td class="mono">ayudamos</td><td class="mono">ayudábamos</td></tr><tr><td class="de">vos.</td><td class="mono">ayudáis</td><td class="mono">ayudasteis</td><td class="mono">ayudabais</td></tr><tr><td class="de">ellos</td><td class="mono">ayudan</td><td class="mono">ayudaron</td><td class="mono">ayudaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">ayudaré</td><td class="mono">ayudaría</td><td class="mono">ayude</td></tr><tr><td class="de">tú</td><td class="mono">ayudarás</td><td class="mono">ayudarías</td><td class="mono">ayudes</td></tr><tr><td class="de">él/Ud.</td><td class="mono">ayudará</td><td class="mono">ayudaría</td><td class="mono">ayude</td></tr><tr><td class="de">nos.</td><td class="mono">ayudaremos</td><td class="mono">ayudaríamos</td><td class="mono">ayudemos</td></tr><tr><td class="de">vos.</td><td class="mono">ayudaréis</td><td class="mono">ayudaríais</td><td class="mono">ayudéis</td></tr><tr><td class="de">ellos</td><td class="mono">ayudarán</td><td class="mono">ayudarían</td><td class="mono">ayuden</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡ayude! <span class="gloss">usted</span> · ¡ayuden! <span class="gloss">ustedes</span> · ¡ayuda! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">ayudando</td></tr><tr><td class="de">Partizip</td><td class="mono">ayudado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"beber",sub:"trinken",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">bebo</td><td class="mono">bebí</td><td class="mono">bebía</td></tr><tr><td class="de">tú</td><td class="mono">bebes</td><td class="mono">bebiste</td><td class="mono">bebías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">bebe</td><td class="mono">bebió</td><td class="mono">bebía</td></tr><tr><td class="de">nos.</td><td class="mono">bebemos</td><td class="mono">bebimos</td><td class="mono">bebíamos</td></tr><tr><td class="de">vos.</td><td class="mono">bebéis</td><td class="mono">bebisteis</td><td class="mono">bebíais</td></tr><tr><td class="de">ellos</td><td class="mono">beben</td><td class="mono">bebieron</td><td class="mono">bebían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">beberé</td><td class="mono">bebería</td><td class="mono">beba</td></tr><tr><td class="de">tú</td><td class="mono">beberás</td><td class="mono">beberías</td><td class="mono">bebas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">beberá</td><td class="mono">bebería</td><td class="mono">beba</td></tr><tr><td class="de">nos.</td><td class="mono">beberemos</td><td class="mono">beberíamos</td><td class="mono">bebamos</td></tr><tr><td class="de">vos.</td><td class="mono">beberéis</td><td class="mono">beberíais</td><td class="mono">bebáis</td></tr><tr><td class="de">ellos</td><td class="mono">beberán</td><td class="mono">beberían</td><td class="mono">beban</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡beba! <span class="gloss">usted</span> · ¡beban! <span class="gloss">ustedes</span> · ¡bebe! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">bebiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">bebido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"buscar",sub:"suchen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">busco</td><td class="mono"><b>busqué</b></td><td class="mono">buscaba</td></tr><tr><td class="de">tú</td><td class="mono">buscas</td><td class="mono">buscaste</td><td class="mono">buscabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">busca</td><td class="mono">buscó</td><td class="mono">buscaba</td></tr><tr><td class="de">nos.</td><td class="mono">buscamos</td><td class="mono">buscamos</td><td class="mono">buscábamos</td></tr><tr><td class="de">vos.</td><td class="mono">buscáis</td><td class="mono">buscasteis</td><td class="mono">buscabais</td></tr><tr><td class="de">ellos</td><td class="mono">buscan</td><td class="mono">buscaron</td><td class="mono">buscaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">buscaré</td><td class="mono">buscaría</td><td class="mono"><b>busque</b></td></tr><tr><td class="de">tú</td><td class="mono">buscarás</td><td class="mono">buscarías</td><td class="mono"><b>busques</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">buscará</td><td class="mono">buscaría</td><td class="mono"><b>busque</b></td></tr><tr><td class="de">nos.</td><td class="mono">buscaremos</td><td class="mono">buscaríamos</td><td class="mono"><b>busquemos</b></td></tr><tr><td class="de">vos.</td><td class="mono">buscaréis</td><td class="mono">buscaríais</td><td class="mono"><b>busquéis</b></td></tr><tr><td class="de">ellos</td><td class="mono">buscarán</td><td class="mono">buscarían</td><td class="mono"><b>busquen</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡busque! <span class="gloss">usted</span> · ¡busquen! <span class="gloss">ustedes</span> · ¡busca! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">buscando</td></tr><tr><td class="de">Partizip</td><td class="mono">buscado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"comer",sub:"essen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">como</td><td class="mono">comí</td><td class="mono">comía</td></tr><tr><td class="de">tú</td><td class="mono">comes</td><td class="mono">comiste</td><td class="mono">comías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">come</td><td class="mono">comió</td><td class="mono">comía</td></tr><tr><td class="de">nos.</td><td class="mono">comemos</td><td class="mono">comimos</td><td class="mono">comíamos</td></tr><tr><td class="de">vos.</td><td class="mono">coméis</td><td class="mono">comisteis</td><td class="mono">comíais</td></tr><tr><td class="de">ellos</td><td class="mono">comen</td><td class="mono">comieron</td><td class="mono">comían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">comeré</td><td class="mono">comería</td><td class="mono">coma</td></tr><tr><td class="de">tú</td><td class="mono">comerás</td><td class="mono">comerías</td><td class="mono">comas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">comerá</td><td class="mono">comería</td><td class="mono">coma</td></tr><tr><td class="de">nos.</td><td class="mono">comeremos</td><td class="mono">comeríamos</td><td class="mono">comamos</td></tr><tr><td class="de">vos.</td><td class="mono">comeréis</td><td class="mono">comeríais</td><td class="mono">comáis</td></tr><tr><td class="de">ellos</td><td class="mono">comerán</td><td class="mono">comerían</td><td class="mono">coman</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡coma! <span class="gloss">usted</span> · ¡coman! <span class="gloss">ustedes</span> · ¡come! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">comiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">comido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"comprar",sub:"kaufen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">compro</td><td class="mono">compré</td><td class="mono">compraba</td></tr><tr><td class="de">tú</td><td class="mono">compras</td><td class="mono">compraste</td><td class="mono">comprabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">compra</td><td class="mono">compró</td><td class="mono">compraba</td></tr><tr><td class="de">nos.</td><td class="mono">compramos</td><td class="mono">compramos</td><td class="mono">comprábamos</td></tr><tr><td class="de">vos.</td><td class="mono">compráis</td><td class="mono">comprasteis</td><td class="mono">comprabais</td></tr><tr><td class="de">ellos</td><td class="mono">compran</td><td class="mono">compraron</td><td class="mono">compraban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">compraré</td><td class="mono">compraría</td><td class="mono">compre</td></tr><tr><td class="de">tú</td><td class="mono">comprarás</td><td class="mono">comprarías</td><td class="mono">compres</td></tr><tr><td class="de">él/Ud.</td><td class="mono">comprará</td><td class="mono">compraría</td><td class="mono">compre</td></tr><tr><td class="de">nos.</td><td class="mono">compraremos</td><td class="mono">compraríamos</td><td class="mono">compremos</td></tr><tr><td class="de">vos.</td><td class="mono">compraréis</td><td class="mono">compraríais</td><td class="mono">compréis</td></tr><tr><td class="de">ellos</td><td class="mono">comprarán</td><td class="mono">comprarían</td><td class="mono">compren</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡compre! <span class="gloss">usted</span> · ¡compren! <span class="gloss">ustedes</span> · ¡compra! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">comprando</td></tr><tr><td class="de">Partizip</td><td class="mono">comprado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"escribir",sub:"schreiben",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">escribo</td><td class="mono">escribí</td><td class="mono">escribía</td></tr><tr><td class="de">tú</td><td class="mono">escribes</td><td class="mono">escribiste</td><td class="mono">escribías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">escribe</td><td class="mono">escribió</td><td class="mono">escribía</td></tr><tr><td class="de">nos.</td><td class="mono">escribimos</td><td class="mono">escribimos</td><td class="mono">escribíamos</td></tr><tr><td class="de">vos.</td><td class="mono">escribís</td><td class="mono">escribisteis</td><td class="mono">escribíais</td></tr><tr><td class="de">ellos</td><td class="mono">escriben</td><td class="mono">escribieron</td><td class="mono">escribían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">escribiré</td><td class="mono">escribiría</td><td class="mono">escriba</td></tr><tr><td class="de">tú</td><td class="mono">escribirás</td><td class="mono">escribirías</td><td class="mono">escribas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">escribirá</td><td class="mono">escribiría</td><td class="mono">escriba</td></tr><tr><td class="de">nos.</td><td class="mono">escribiremos</td><td class="mono">escribiríamos</td><td class="mono">escribamos</td></tr><tr><td class="de">vos.</td><td class="mono">escribiréis</td><td class="mono">escribiríais</td><td class="mono">escribáis</td></tr><tr><td class="de">ellos</td><td class="mono">escribirán</td><td class="mono">escribirían</td><td class="mono">escriban</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡escriba! <span class="gloss">usted</span> · ¡escriban! <span class="gloss">ustedes</span> · ¡escribe! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">escribiendo</td></tr><tr><td class="de">Partizip</td><td class="mono">escrito</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"esperar",sub:"warten, hoffen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">espero</td><td class="mono">esperé</td><td class="mono">esperaba</td></tr><tr><td class="de">tú</td><td class="mono">esperas</td><td class="mono">esperaste</td><td class="mono">esperabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">espera</td><td class="mono">esperó</td><td class="mono">esperaba</td></tr><tr><td class="de">nos.</td><td class="mono">esperamos</td><td class="mono">esperamos</td><td class="mono">esperábamos</td></tr><tr><td class="de">vos.</td><td class="mono">esperáis</td><td class="mono">esperasteis</td><td class="mono">esperabais</td></tr><tr><td class="de">ellos</td><td class="mono">esperan</td><td class="mono">esperaron</td><td class="mono">esperaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">esperaré</td><td class="mono">esperaría</td><td class="mono">espere</td></tr><tr><td class="de">tú</td><td class="mono">esperarás</td><td class="mono">esperarías</td><td class="mono">esperes</td></tr><tr><td class="de">él/Ud.</td><td class="mono">esperará</td><td class="mono">esperaría</td><td class="mono">espere</td></tr><tr><td class="de">nos.</td><td class="mono">esperaremos</td><td class="mono">esperaríamos</td><td class="mono">esperemos</td></tr><tr><td class="de">vos.</td><td class="mono">esperaréis</td><td class="mono">esperaríais</td><td class="mono">esperéis</td></tr><tr><td class="de">ellos</td><td class="mono">esperarán</td><td class="mono">esperarían</td><td class="mono">esperen</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡espere! <span class="gloss">usted</span> · ¡esperen! <span class="gloss">ustedes</span> · ¡espera! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">esperando</td></tr><tr><td class="de">Partizip</td><td class="mono">esperado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"gustar",sub:"gefallen",h:`<p class="gloss">Rückwärts gebaut: <i>me gusta</i> / <i>me gustan</i>. Nur 3. Person.</p><table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">gusto</td><td class="mono">gusté</td><td class="mono">gustaba</td></tr><tr><td class="de">tú</td><td class="mono">gustas</td><td class="mono">gustaste</td><td class="mono">gustabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">gusta</td><td class="mono">gustó</td><td class="mono">gustaba</td></tr><tr><td class="de">nos.</td><td class="mono">gustamos</td><td class="mono">gustamos</td><td class="mono">gustábamos</td></tr><tr><td class="de">vos.</td><td class="mono">gustáis</td><td class="mono">gustasteis</td><td class="mono">gustabais</td></tr><tr><td class="de">ellos</td><td class="mono">gustan</td><td class="mono">gustaron</td><td class="mono">gustaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">gustaré</td><td class="mono">gustaría</td><td class="mono">guste</td></tr><tr><td class="de">tú</td><td class="mono">gustarás</td><td class="mono">gustarías</td><td class="mono">gustes</td></tr><tr><td class="de">él/Ud.</td><td class="mono">gustará</td><td class="mono">gustaría</td><td class="mono">guste</td></tr><tr><td class="de">nos.</td><td class="mono">gustaremos</td><td class="mono">gustaríamos</td><td class="mono">gustemos</td></tr><tr><td class="de">vos.</td><td class="mono">gustaréis</td><td class="mono">gustaríais</td><td class="mono">gustéis</td></tr><tr><td class="de">ellos</td><td class="mono">gustarán</td><td class="mono">gustarían</td><td class="mono">gusten</td></tr></table><table><tr><td class="de">Gerundium</td><td class="mono">gustando</td></tr><tr><td class="de">Partizip</td><td class="mono">gustado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"hablar",sub:"sprechen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">hablo</td><td class="mono">hablé</td><td class="mono">hablaba</td></tr><tr><td class="de">tú</td><td class="mono">hablas</td><td class="mono">hablaste</td><td class="mono">hablabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">habla</td><td class="mono">habló</td><td class="mono">hablaba</td></tr><tr><td class="de">nos.</td><td class="mono">hablamos</td><td class="mono">hablamos</td><td class="mono">hablábamos</td></tr><tr><td class="de">vos.</td><td class="mono">habláis</td><td class="mono">hablasteis</td><td class="mono">hablabais</td></tr><tr><td class="de">ellos</td><td class="mono">hablan</td><td class="mono">hablaron</td><td class="mono">hablaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">hablaré</td><td class="mono">hablaría</td><td class="mono">hable</td></tr><tr><td class="de">tú</td><td class="mono">hablarás</td><td class="mono">hablarías</td><td class="mono">hables</td></tr><tr><td class="de">él/Ud.</td><td class="mono">hablará</td><td class="mono">hablaría</td><td class="mono">hable</td></tr><tr><td class="de">nos.</td><td class="mono">hablaremos</td><td class="mono">hablaríamos</td><td class="mono">hablemos</td></tr><tr><td class="de">vos.</td><td class="mono">hablaréis</td><td class="mono">hablaríais</td><td class="mono">habléis</td></tr><tr><td class="de">ellos</td><td class="mono">hablarán</td><td class="mono">hablarían</td><td class="mono">hablen</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡hable! <span class="gloss">usted</span> · ¡hablen! <span class="gloss">ustedes</span> · ¡habla! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">hablando</td></tr><tr><td class="de">Partizip</td><td class="mono">hablado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"llegar",sub:"ankommen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">llego</td><td class="mono"><b>llegué</b></td><td class="mono">llegaba</td></tr><tr><td class="de">tú</td><td class="mono">llegas</td><td class="mono">llegaste</td><td class="mono">llegabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">llega</td><td class="mono">llegó</td><td class="mono">llegaba</td></tr><tr><td class="de">nos.</td><td class="mono">llegamos</td><td class="mono">llegamos</td><td class="mono">llegábamos</td></tr><tr><td class="de">vos.</td><td class="mono">llegáis</td><td class="mono">llegasteis</td><td class="mono">llegabais</td></tr><tr><td class="de">ellos</td><td class="mono">llegan</td><td class="mono">llegaron</td><td class="mono">llegaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">llegaré</td><td class="mono">llegaría</td><td class="mono"><b>llegue</b></td></tr><tr><td class="de">tú</td><td class="mono">llegarás</td><td class="mono">llegarías</td><td class="mono"><b>llegues</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">llegará</td><td class="mono">llegaría</td><td class="mono"><b>llegue</b></td></tr><tr><td class="de">nos.</td><td class="mono">llegaremos</td><td class="mono">llegaríamos</td><td class="mono"><b>lleguemos</b></td></tr><tr><td class="de">vos.</td><td class="mono">llegaréis</td><td class="mono">llegaríais</td><td class="mono"><b>lleguéis</b></td></tr><tr><td class="de">ellos</td><td class="mono">llegarán</td><td class="mono">llegarían</td><td class="mono"><b>lleguen</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡llegue! <span class="gloss">usted</span> · ¡lleguen! <span class="gloss">ustedes</span> · ¡llega! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">llegando</td></tr><tr><td class="de">Partizip</td><td class="mono">llegado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"llevar",sub:"tragen, mitnehmen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">llevo</td><td class="mono">llevé</td><td class="mono">llevaba</td></tr><tr><td class="de">tú</td><td class="mono">llevas</td><td class="mono">llevaste</td><td class="mono">llevabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">lleva</td><td class="mono">llevó</td><td class="mono">llevaba</td></tr><tr><td class="de">nos.</td><td class="mono">llevamos</td><td class="mono">llevamos</td><td class="mono">llevábamos</td></tr><tr><td class="de">vos.</td><td class="mono">lleváis</td><td class="mono">llevasteis</td><td class="mono">llevabais</td></tr><tr><td class="de">ellos</td><td class="mono">llevan</td><td class="mono">llevaron</td><td class="mono">llevaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">llevaré</td><td class="mono">llevaría</td><td class="mono">lleve</td></tr><tr><td class="de">tú</td><td class="mono">llevarás</td><td class="mono">llevarías</td><td class="mono">lleves</td></tr><tr><td class="de">él/Ud.</td><td class="mono">llevará</td><td class="mono">llevaría</td><td class="mono">lleve</td></tr><tr><td class="de">nos.</td><td class="mono">llevaremos</td><td class="mono">llevaríamos</td><td class="mono">llevemos</td></tr><tr><td class="de">vos.</td><td class="mono">llevaréis</td><td class="mono">llevaríais</td><td class="mono">llevéis</td></tr><tr><td class="de">ellos</td><td class="mono">llevarán</td><td class="mono">llevarían</td><td class="mono">lleven</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡lleve! <span class="gloss">usted</span> · ¡lleven! <span class="gloss">ustedes</span> · ¡lleva! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">llevando</td></tr><tr><td class="de">Partizip</td><td class="mono">llevado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"necesitar",sub:"brauchen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">necesito</td><td class="mono">necesité</td><td class="mono">necesitaba</td></tr><tr><td class="de">tú</td><td class="mono">necesitas</td><td class="mono">necesitaste</td><td class="mono">necesitabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">necesita</td><td class="mono">necesitó</td><td class="mono">necesitaba</td></tr><tr><td class="de">nos.</td><td class="mono">necesitamos</td><td class="mono">necesitamos</td><td class="mono">necesitábamos</td></tr><tr><td class="de">vos.</td><td class="mono">necesitáis</td><td class="mono">necesitasteis</td><td class="mono">necesitabais</td></tr><tr><td class="de">ellos</td><td class="mono">necesitan</td><td class="mono">necesitaron</td><td class="mono">necesitaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">necesitaré</td><td class="mono">necesitaría</td><td class="mono">necesite</td></tr><tr><td class="de">tú</td><td class="mono">necesitarás</td><td class="mono">necesitarías</td><td class="mono">necesites</td></tr><tr><td class="de">él/Ud.</td><td class="mono">necesitará</td><td class="mono">necesitaría</td><td class="mono">necesite</td></tr><tr><td class="de">nos.</td><td class="mono">necesitaremos</td><td class="mono">necesitaríamos</td><td class="mono">necesitemos</td></tr><tr><td class="de">vos.</td><td class="mono">necesitaréis</td><td class="mono">necesitaríais</td><td class="mono">necesitéis</td></tr><tr><td class="de">ellos</td><td class="mono">necesitarán</td><td class="mono">necesitarían</td><td class="mono">necesiten</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡necesite! <span class="gloss">usted</span> · ¡necesiten! <span class="gloss">ustedes</span> · ¡necesita! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">necesitando</td></tr><tr><td class="de">Partizip</td><td class="mono">necesitado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"pagar",sub:"bezahlen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">pago</td><td class="mono"><b>pagué</b></td><td class="mono">pagaba</td></tr><tr><td class="de">tú</td><td class="mono">pagas</td><td class="mono">pagaste</td><td class="mono">pagabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">paga</td><td class="mono">pagó</td><td class="mono">pagaba</td></tr><tr><td class="de">nos.</td><td class="mono">pagamos</td><td class="mono">pagamos</td><td class="mono">pagábamos</td></tr><tr><td class="de">vos.</td><td class="mono">pagáis</td><td class="mono">pagasteis</td><td class="mono">pagabais</td></tr><tr><td class="de">ellos</td><td class="mono">pagan</td><td class="mono">pagaron</td><td class="mono">pagaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">pagaré</td><td class="mono">pagaría</td><td class="mono"><b>pague</b></td></tr><tr><td class="de">tú</td><td class="mono">pagarás</td><td class="mono">pagarías</td><td class="mono"><b>pagues</b></td></tr><tr><td class="de">él/Ud.</td><td class="mono">pagará</td><td class="mono">pagaría</td><td class="mono"><b>pague</b></td></tr><tr><td class="de">nos.</td><td class="mono">pagaremos</td><td class="mono">pagaríamos</td><td class="mono"><b>paguemos</b></td></tr><tr><td class="de">vos.</td><td class="mono">pagaréis</td><td class="mono">pagaríais</td><td class="mono"><b>paguéis</b></td></tr><tr><td class="de">ellos</td><td class="mono">pagarán</td><td class="mono">pagarían</td><td class="mono"><b>paguen</b></td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡pague! <span class="gloss">usted</span> · ¡paguen! <span class="gloss">ustedes</span> · ¡paga! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">pagando</td></tr><tr><td class="de">Partizip</td><td class="mono">pagado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"tomar",sub:"nehmen, trinken",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">tomo</td><td class="mono">tomé</td><td class="mono">tomaba</td></tr><tr><td class="de">tú</td><td class="mono">tomas</td><td class="mono">tomaste</td><td class="mono">tomabas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">toma</td><td class="mono">tomó</td><td class="mono">tomaba</td></tr><tr><td class="de">nos.</td><td class="mono">tomamos</td><td class="mono">tomamos</td><td class="mono">tomábamos</td></tr><tr><td class="de">vos.</td><td class="mono">tomáis</td><td class="mono">tomasteis</td><td class="mono">tomabais</td></tr><tr><td class="de">ellos</td><td class="mono">toman</td><td class="mono">tomaron</td><td class="mono">tomaban</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">tomaré</td><td class="mono">tomaría</td><td class="mono">tome</td></tr><tr><td class="de">tú</td><td class="mono">tomarás</td><td class="mono">tomarías</td><td class="mono">tomes</td></tr><tr><td class="de">él/Ud.</td><td class="mono">tomará</td><td class="mono">tomaría</td><td class="mono">tome</td></tr><tr><td class="de">nos.</td><td class="mono">tomaremos</td><td class="mono">tomaríamos</td><td class="mono">tomemos</td></tr><tr><td class="de">vos.</td><td class="mono">tomaréis</td><td class="mono">tomaríais</td><td class="mono">toméis</td></tr><tr><td class="de">ellos</td><td class="mono">tomarán</td><td class="mono">tomarían</td><td class="mono">tomen</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡tome! <span class="gloss">usted</span> · ¡tomen! <span class="gloss">ustedes</span> · ¡toma! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">tomando</td></tr><tr><td class="de">Partizip</td><td class="mono">tomado</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+{g:"Regelmäßig",t:"vivir",sub:"leben, wohnen",h:`<table class="vt"><tr><th></th><th>Präsens</th><th>Indefinido</th><th>Imperfecto</th></tr><tr><td class="de">yo</td><td class="mono">vivo</td><td class="mono">viví</td><td class="mono">vivía</td></tr><tr><td class="de">tú</td><td class="mono">vives</td><td class="mono">viviste</td><td class="mono">vivías</td></tr><tr><td class="de">él/Ud.</td><td class="mono">vive</td><td class="mono">vivió</td><td class="mono">vivía</td></tr><tr><td class="de">nos.</td><td class="mono">vivimos</td><td class="mono">vivimos</td><td class="mono">vivíamos</td></tr><tr><td class="de">vos.</td><td class="mono">vivís</td><td class="mono">vivisteis</td><td class="mono">vivíais</td></tr><tr><td class="de">ellos</td><td class="mono">viven</td><td class="mono">vivieron</td><td class="mono">vivían</td></tr></table><table class="vt"><tr><th></th><th>Futur</th><th>Konditional</th><th>Subjuntivo</th></tr><tr><td class="de">yo</td><td class="mono">viviré</td><td class="mono">viviría</td><td class="mono">viva</td></tr><tr><td class="de">tú</td><td class="mono">vivirás</td><td class="mono">vivirías</td><td class="mono">vivas</td></tr><tr><td class="de">él/Ud.</td><td class="mono">vivirá</td><td class="mono">viviría</td><td class="mono">viva</td></tr><tr><td class="de">nos.</td><td class="mono">viviremos</td><td class="mono">viviríamos</td><td class="mono">vivamos</td></tr><tr><td class="de">vos.</td><td class="mono">viviréis</td><td class="mono">viviríais</td><td class="mono">viváis</td></tr><tr><td class="de">ellos</td><td class="mono">vivirán</td><td class="mono">vivirían</td><td class="mono">vivan</td></tr></table><table><tr><td class="de">Imperativ</td><td class="mono">¡viva! <span class="gloss">usted</span> · ¡vivan! <span class="gloss">ustedes</span> · ¡vive! <span class="gloss">tú</span></td></tr><tr><td class="de">Gerundium</td><td class="mono">viviendo</td></tr><tr><td class="de">Partizip</td><td class="mono">vivido</td></tr></table><p class="gloss">Fett = weicht vom regelmäßigen Muster ab. él/Ud. = él, ella, usted · ellos = ellos, ellas, ustedes</p>`},
+];
+
+const SENT_DECKS=[
+{
+"id": "begr",
+"name": "Begrüßung & Kennenlernen",
+"items": [
+[
+"Guten Morgen, wie geht es Ihnen?",
+"Buenos días, ¿cómo está?"
+],
+[
+"Ich heiße Philipp, wir sind aus Deutschland.",
+"Me llamo Philipp, somos de Alemania."
+],
+[
+"Sprechen Sie Englisch?",
+"¿Usted habla inglés?"
+],
+[
+"Woher kommen Sie?",
+"¿De dónde es usted?"
+],
+[
+"Das ist meine Frau.",
+"Esta es mi esposa."
+],
+[
+"Haben Sie Kinder?",
+"¿Tiene hijos?"
+],
+[
+"Ich spreche ein bisschen Spanisch.",
+"Hablo un poco de español."
+],
+[
+"Waren Sie schon einmal in Deutschland?",
+"¿Ha estado alguna vez en Alemania?"
+],
+[
+"Einen schönen Tag noch.",
+"Que tenga un buen día."
+],
+[
+"Freut mich.",
+"Mucho gusto."
+],
+[
+"Wie heißen Sie?",
+"¿Cómo se llama usted?"
+],
+[
+"Gut, danke. Und Ihnen?",
+"Bien, gracias. ¿Y usted?"
+],
+[
+"Bis morgen!",
+"¡Hasta mañana!"
+]
+]
+},
+{
+"id": "verst",
+"name": "Verständigung",
+"items": [
+[
+"Ich verstehe nicht, können Sie das wiederholen?",
+"No entiendo, ¿puede repetir?"
+],
+[
+"Können Sie mir helfen?",
+"¿Me puede ayudar?"
+],
+[
+"Könnten Sie langsamer sprechen?",
+"¿Podría hablar más despacio?"
+],
+[
+"Einen Moment bitte.",
+"Espere un momento, por favor."
+],
+[
+"Können Sie das aufschreiben?",
+"¿Me lo puede escribir?"
+],
+[
+"Ich lerne noch Spanisch.",
+"Todavía estoy aprendiendo español."
+],
+[
+"Ich weiß nicht, wo es ist.",
+"No sé dónde está."
+],
+[
+"Ich kenne diesen Ort nicht.",
+"No conozco este lugar."
+],
+[
+"Wie sagt man das auf Spanisch?",
+"¿Cómo se dice eso en español?"
+],
+[
+"Was bedeutet das?",
+"¿Qué significa eso?"
+],
+[
+"Ich verstehe nicht.",
+"No entiendo."
+]
+]
+},
+{
+"id": "rest",
+"name": "Restaurant",
+"items": [
+[
+"Die Rechnung, bitte.",
+"La cuenta, por favor."
+],
+[
+"Ich habe Hunger. Wo gibt es ein gutes Restaurant?",
+"Tengo hambre. ¿Dónde hay un buen restaurante?"
+],
+[
+"Ein Tisch für zwei, bitte.",
+"Una mesa para dos, por favor."
+],
+[
+"Was empfehlen Sie mir?",
+"¿Qué me recomienda?"
+],
+[
+"Haben Sie etwas Vegetarisches?",
+"¿Tiene algo vegetariano?"
+],
+[
+"Ich hätte gern einen Kaffee ohne Zucker.",
+"Quisiera un café sin azúcar."
+],
+[
+"Es hat sehr gut geschmeckt, danke.",
+"Estaba muy rico, gracias."
+],
+[
+"Ich hätte gern einen Kaffee.",
+"Me gustaría un café."
+],
+[
+"Der Kaffee ist kalt.",
+"El café está frío."
+],
+[
+"Das ist das beste Restaurant der Stadt.",
+"Este es el mejor restaurante de la ciudad."
+],
+[
+"Ich mag Fisch, aber meine Frau bevorzugt Huhn.",
+"Me gusta el pescado, pero mi esposa prefiere el pollo."
+],
+[
+"Prost!",
+"¡Salud!"
+],
+[
+"Die Speisekarte, bitte.",
+"La carta, por favor."
+],
+[
+"Noch ein Bier, bitte.",
+"Otra cerveza, por favor."
+],
+[
+"Ist das scharf?",
+"¿Es picante?"
+]
+]
+},
+{
+"id": "unter",
+"name": "Unterkunft",
+"items": [
+[
+"Wir haben eine Buchung auf den Namen Müller.",
+"Tenemos una reserva a nombre de Müller."
+],
+[
+"Die Klimaanlage funktioniert nicht.",
+"No funciona el aire acondicionado."
+],
+[
+"Ist das Frühstück inbegriffen?",
+"¿Está incluido el desayuno?"
+],
+[
+"Wie lautet das WLAN-Passwort?",
+"¿Cuál es la contraseña del wifi?"
+],
+[
+"Um wie viel Uhr ist der Check-out?",
+"¿A qué hora es el check-out?"
+],
+[
+"Mir gefällt dieses Hotel.",
+"Me gusta este hotel."
+],
+[
+"Haben Sie ein Zimmer frei?",
+"¿Tiene una habitación libre?"
+],
+[
+"Für zwei Nächte.",
+"Para dos noches."
+],
+[
+"Können wir das Zimmer sehen?",
+"¿Podemos ver la habitación?"
+],
+[
+"Es gibt kein warmes Wasser.",
+"No hay agua caliente."
+]
+]
+},
+{
+"id": "weg",
+"name": "Unterwegs",
+"items": [
+[
+"Wo ist die Bushaltestelle?",
+"¿Dónde está la parada del bus?"
+],
+[
+"Wir müssen morgen zum Flughafen fahren.",
+"Tenemos que ir al aeropuerto mañana."
+],
+[
+"Wir haben uns verlaufen.",
+"Estamos perdidos."
+],
+[
+"Fährt dieser Bus nach Monteverde?",
+"¿Este bus va a Monteverde?"
+],
+[
+"Wie lange dauert es?",
+"¿Cuánto tiempo toma?"
+],
+[
+"Können Sie uns nach San José bringen?",
+"¿Nos puede llevar a San José?"
+],
+[
+"Ich möchte ein Auto mieten.",
+"Quiero alquilar un carro."
+],
+[
+"Wo ist die nächste Tankstelle?",
+"¿Dónde está la bomba más cercana?"
+],
+[
+"Wann fährt der Bus ab?",
+"¿A qué hora sale el bus?"
+],
+[
+"Gehen Sie geradeaus weiter.",
+"Siga derecho."
+],
+[
+"Ich suche gerade das Hotel.",
+"Estoy buscando el hotel."
+],
+[
+"Wie komme ich zum Strand?",
+"¿Cómo llego a la playa?"
+],
+[
+"Ist es weit von hier?",
+"¿Está lejos de aquí?"
+]
+]
+},
+{
+"id": "kauf",
+"name": "Einkaufen & Geld",
+"items": [
+[
+"Was kostet das?",
+"¿Cuánto cuesta?"
+],
+[
+"Kann man mit Karte bezahlen?",
+"¿Se puede pagar con tarjeta?"
+],
+[
+"Zehn Dollar pro Person.",
+"Diez dólares por persona."
+],
+[
+"Gibt es hier einen kleinen Laden?",
+"¿Hay una pulpería aquí?"
+],
+[
+"Ich schaue mich nur um.",
+"Solo estoy mirando."
+],
+[
+"Kann ich es anprobieren?",
+"¿Me lo puedo probar?"
+],
+[
+"Haben Sie Wechselgeld?",
+"¿Tiene cambio?"
+],
+[
+"Gibt es etwas Günstigeres?",
+"¿Hay algo más barato?"
+],
+[
+"Nehmen Sie Dollar?",
+"¿Acepta dólares?"
+],
+[
+"Wo gibt es einen Geldautomaten?",
+"¿Dónde hay un cajero automático?"
+]
+]
+},
+{
+"id": "natur",
+"name": "Ausflüge & Natur",
+"items": [
+[
+"Um wie viel Uhr öffnet der Park?",
+"¿A qué hora abre el parque?"
+],
+[
+"Was kostet der Eintritt pro Person?",
+"¿Cuánto cuesta la entrada por persona?"
+],
+[
+"Muss man reservieren?",
+"¿Hace falta reservar?"
+],
+[
+"Ist es sicher, hier zu schwimmen?",
+"¿Es seguro nadar aquí?"
+],
+[
+"Wir laufen am Strand entlang.",
+"Caminamos por la playa."
+],
+[
+"Ich möchte mich sonnen.",
+"Quiero tomar el sol."
+],
+[
+"Dieser Strand ist schöner als der andere.",
+"Esta playa es más bonita que la otra."
+],
+[
+"Gestern waren wir am Strand.",
+"Ayer fuimos a la playa."
+],
+[
+"Es gibt viele Touristen hier.",
+"Hay muchos turistas aquí."
+],
+[
+"Wir möchten einen Vulkan sehen.",
+"Queremos ver un volcán."
+],
+[
+"Gibt es hier Affen?",
+"¿Hay monos aquí?"
+],
+[
+"Brauchen wir einen Führer?",
+"¿Necesitamos un guía?"
+]
+]
+},
+{
+"id": "zeit",
+"name": "Zeit, Datum, Wetter",
+"items": [
+[
+"Welcher Tag ist heute?",
+"¿Qué día es hoy?"
+],
+[
+"Heute ist Donnerstag.",
+"Hoy es jueves."
+],
+[
+"Wir kommen am dritten März an.",
+"Llegamos el 3 de marzo."
+],
+[
+"Wie spät ist es?",
+"¿Qué hora es?"
+],
+[
+"Es ist halb vier.",
+"Son las tres y media."
+],
+[
+"Um acht Uhr morgens.",
+"A las ocho de la mañana."
+],
+[
+"Es regnet gerade.",
+"Está lloviendo."
+],
+[
+"Es ist sehr warm heute.",
+"Hace mucho calor hoy."
+],
+[
+"Es war heiß und das Hotel war schön.",
+"Hacía calor y el hotel era bonito."
+],
+[
+"Morgen um neun.",
+"Mañana a las nueve."
+],
+[
+"Montags ist geschlossen.",
+"Los lunes está cerrado."
+],
+[
+"In der Regenzeit regnet es nachmittags.",
+"En invierno llueve por la tarde."
+]
+]
+},
+{
+"id": "ges",
+"name": "Gesundheit & Notfall",
+"items": [
+[
+"Ich brauche einen Arzt.",
+"Necesito un médico."
+],
+[
+"Mir tut der Kopf weh.",
+"Me duele la cabeza."
+],
+[
+"Mir geht es schlecht.",
+"Me siento mal."
+],
+[
+"Wo ist die nächste Apotheke?",
+"¿Dónde está la farmacia más cercana?"
+],
+[
+"Ich bin allergisch gegen Garnelen.",
+"Soy alérgico a los camarones."
+],
+[
+"Mir tun die Füße weh.",
+"Me duelen los pies."
+],
+[
+"Haben Sie etwas gegen Insektenstiche?",
+"¿Tiene algo para las picaduras?"
+],
+[
+"Ich habe seit gestern Fieber.",
+"Tengo fiebre desde ayer."
+],
+[
+"Rufen Sie einen Krankenwagen!",
+"¡Llame a una ambulancia!"
+],
+[
+"Ich habe einen Sonnenbrand.",
+"Tengo una quemadura de sol."
+]
+]
+},
+{
+"id": "hoch",
+"name": "Hochzeitsreise & Smalltalk",
+"items": [
+[
+"Wir sind auf Hochzeitsreise.",
+"Estamos de luna de miel."
+],
+[
+"Können Sie ein Foto von uns machen?",
+"¿Nos puede tomar una foto?"
+],
+[
+"Wir mögen die Strände sehr.",
+"Nos gustan mucho las playas."
+],
+[
+"Wir haben vor zwei Wochen geheiratet.",
+"Nos casamos hace dos semanas."
+],
+[
+"Wir sind müde, aber glücklich.",
+"Estamos cansados, pero felices."
+],
+[
+"Die Leute sind sehr freundlich.",
+"La gente es muy amable."
+],
+[
+"Meine Frau ist müde, sie will schlafen.",
+"Mi esposa está cansada, quiere dormir."
+],
+[
+"Das ist für meine Frau.",
+"Esto es para mi esposa."
+],
+[
+"Danke für alles.",
+"Gracias por todo."
+],
+[
+"Ich vermisse meine Familie.",
+"Echo de menos a mi familia."
+],
+[
+"Costa Rica gefällt uns sehr.",
+"Nos encanta Costa Rica."
+]
+]
+},
+{
+"id": "gram",
+"name": "Grammatik-Muster",
+"items": [
+[
+"Ich bin vierunddreißig Jahre alt.",
+"Tengo treinta y cuatro años."
+],
+[
+"Uns ist warm und wir haben Durst.",
+"Tenemos calor y sed."
+],
+[
+"Ich habe es eilig.",
+"Tengo prisa."
+],
+[
+"Wir werden nach Costa Rica reisen.",
+"Vamos a viajar a Costa Rica."
+],
+[
+"Ich bin gerade angekommen.",
+"Acabo de llegar."
+],
+[
+"Wir können morgen kommen.",
+"Podemos venir mañana."
+],
+[
+"Es gibt kein Problem.",
+"No hay ningún problema."
+],
+[
+"Ich sehe niemanden.",
+"No veo a nadie."
+],
+[
+"Wir essen nie Fleisch.",
+"Nunca comemos carne."
+],
+[
+"Machen Sie sich keine Sorgen.",
+"No se preocupe."
+]
+]
+},
+{
+"id": "rede",
+"name": "Redewendungen & Tico",
+"items": [
+[
+"Wie läuft's?",
+"¿Qué tal?"
+],
+[
+"Kein Problem, nicht schlimm.",
+"No pasa nada."
+],
+[
+"So lala.",
+"Más o menos."
+],
+[
+"Nach und nach.",
+"Poco a poco."
+],
+[
+"Keine Ahnung.",
+"Ni idea."
+],
+[
+"Im Ernst?",
+"¿En serio?"
+],
+[
+"Für alle Fälle nehme ich eine Jacke mit.",
+"Por si acaso llevo una chaqueta."
+],
+[
+"Es lohnt sich.",
+"Vale la pena."
+],
+[
+"Ich habe Lust auf einen Kaffee.",
+"Tengo ganas de un café."
+],
+[
+"Wollen wir eine Runde drehen?",
+"¿Damos una vuelta?"
+],
+[
+"Wir sind einverstanden.",
+"Estamos de acuerdo."
+],
+[
+"Das kostet ein Vermögen.",
+"Eso cuesta un ojo de la cara."
+],
+[
+"Ich bin völlig erledigt.",
+"Estoy hecho polvo."
+],
+[
+"Gern geschehen! (typisch Costa Rica)",
+"Con mucho gusto."
+],
+[
+"Vorsicht, pass auf!",
+"¡Ojo!"
+],
+[
+"Ach so, verstehe.",
+"Ya veo."
+],
+[
+"Wie schade!",
+"¡Qué lástima!"
+]
+]
+}
+];

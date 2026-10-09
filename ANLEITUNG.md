@@ -5,18 +5,21 @@
 | Datei | Zweck |
 |---|---|
 | `index.html` | Die App selbst: Grammatik, Wortschatz, Verbtabellen, Abfrage |
+| `style.css` | Aussehen |
+| `content.js` | Grammatik, Wortschatz, Verben, Beispielsätze (reine Daten) |
+| `app.js` | Programmlogik: Suche, Abfrage, Statistik, Cloud-Sync |
 | `sw.js` | Service Worker — macht die App offline nutzbar |
 | `manifest.webmanifest` | Name, Farben, Vollbildmodus |
 | `icon-180.png` | Icon für den iPhone-Homescreen |
 | `icon-512.png` | Icon für Android und App-Umschalter |
 
-Alle fünf Dateien gehören in **dasselbe Verzeichnis**, ohne Unterordner.
+Alle Dateien gehören in **dasselbe Verzeichnis**, ohne Unterordner.
 
 ## Hochladen zu GitHub Pages
 
 1. Konto auf **github.com** anlegen, falls noch nicht vorhanden
 2. **New repository** → Name z. B. `espanol` → Sichtbarkeit **Public** → Create
-3. **Add file → Upload files** → alle fünf Dateien hineinziehen → **Commit changes**
+3. **Add file → Upload files** → alle Dateien hineinziehen → **Commit changes**
 4. **Settings → Pages** → Branch `main`, Ordner `/ (root)` → **Save**
 5. Ein bis zwei Minuten warten
 
@@ -36,6 +39,13 @@ sobald sie einmal geladen wurde.
 Neue Datei mit gleichem Namen hochladen und überschreiben. Damit der Service Worker
 die neue Fassung ausliefert, in `sw.js` die erste Zeile hochzählen:
 
-    const CACHE = 'espanol-v10';
+    const CACHE = 'espanol-v12';
 
 Ohne diese Änderung bleibt auf dem iPhone die alte Fassung im Zwischenspeicher.
+
+## Cloud-Sync mit dem Lernpartner
+
+Zum Verbinden braucht jede Person auf jedem Gerät denselben GitHub-Zugangs-Token
+(github.com → Settings → Developer settings → Personal access tokens → **Tokens (classic)**).
+Nur den Haken bei **gist** setzen, keine weiteren Rechte — der Token liegt im Browser des Geräts.
+Das Verbinden bitte zuerst auf **einem** Gerät abschließen, dann auf dem zweiten.
