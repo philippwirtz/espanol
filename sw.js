@@ -1,4 +1,4 @@
-const CACHE = 'espanol-v8';
+const CACHE = 'espanol-v10';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
@@ -16,6 +16,7 @@ self.addEventListener('activate', e => {
 // Symbole & Manifest: erst Cache, dann Netz.
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  if (new URL(e.request.url).origin !== self.location.origin) return;   // GitHub-API (Lernpartner) nie aus dem Cache
   const isPage = e.request.mode === 'navigate' || e.request.url.endsWith('/index.html');
   if (isPage) {
     e.respondWith(

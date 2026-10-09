@@ -227,6 +227,36 @@ body.tts #ref .es, body.tts #ref .words b, body.tts #ref td.mono.say{cursor:poin
 .week i.zero{background:var(--rule)}
 .week span{font-size:9.5px;color:var(--soft);line-height:1}
 .week div.now span{color:var(--ink);font-weight:700}
+.statsd{margin:0 0 14px}
+.statsd summary{padding:12px 14px;font-size:15px;font-weight:700;color:var(--ink)}
+.statsd .sbody{padding:0 14px 14px}
+.statsd h4{margin:16px 0 6px;font-size:12.5px;font-weight:700;color:var(--ink)}
+.statsd h4 small{font-weight:400;color:var(--soft);margin-left:4px}
+.st-k{display:grid;grid-template-columns:repeat(3,1fr);gap:8px 6px}
+.st-k b{display:block;font:700 20px/1.1 ui-monospace,SFMono-Regular,Menlo,monospace}
+.st-k span{font-size:11px;color:var(--soft)}
+.st-heat{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:3px}
+.st-heat i{aspect-ratio:1;border-radius:3px;background:var(--rule);display:block}
+.st-heat i.f{background:none}
+.st-heat i.l1{background:var(--teal);opacity:.3} .st-heat i.l2{background:var(--teal);opacity:.55}
+.st-heat i.l3{background:var(--teal);opacity:.8} .st-heat i.l4{background:var(--teal)}
+.st-lv{margin:8px 0 0;font-size:12px}
+.st-lv>div:first-child{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--soft);margin-bottom:3px}
+.st-lv b{color:var(--ink)}
+.st-lv .sbar{height:7px}
+.st-bars{display:flex;gap:3px;align-items:flex-end;height:84px}
+.st-bars div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:2px;min-width:0}
+.st-bars i{display:block;width:100%;background:var(--teal);border-radius:3px 3px 1px 1px;min-height:2px}
+.st-bars i.none{background:var(--rule)} .st-bars i.now{background:var(--gold)}
+.st-bars em{font:600 9.5px/1 ui-monospace,SFMono-Regular,Menlo,monospace;font-style:normal;color:var(--soft)}
+.st-bars span{font-size:9.5px;color:var(--soft);line-height:1}
+.st-note{font-size:11.5px;color:var(--soft);line-height:1.45;margin:6px 0 0}
+.st-note b{color:var(--ink)}
+.st-g svg{display:block;width:100%;height:auto;overflow:visible}
+.st-g .gb{fill:var(--teal);opacity:.35} .st-g .gc{fill:none;stroke:var(--gold);stroke-width:2}
+.st-g .gs{fill:var(--gold);opacity:.12} .st-g .gt{stroke:var(--alert);stroke-width:1.5;stroke-dasharray:3 3}
+.st-g .gm{stroke:var(--gold);stroke-width:1;stroke-dasharray:2 3}
+.st-g text{font:10px ui-monospace,SFMono-Regular,Menlo,monospace;fill:var(--soft)}
 details.settings{background:none;border:0;box-shadow:none;margin:0 0 10px}
 details.settings summary{padding:6px 2px;font-size:13px;font-weight:600;color:var(--soft)}
 details.settings summary::after{font-size:16px}
@@ -308,13 +338,14 @@ details.settings.nudge summary{color:var(--alert)}
 .whobtn small{display:block;font-size:11.5px;color:var(--soft)}
 .peers{display:flex;gap:6px;margin-left:auto;overflow-x:auto;scrollbar-width:none;min-width:0}
 .peers::-webkit-scrollbar{display:none}
-.peer{display:flex;align-items:center;gap:5px;flex:none;background:var(--card);border:1px solid var(--rule);border-radius:18px;padding:3px 10px 3px 3px;font-size:12px;white-space:nowrap;color:var(--ink)}
-.peer .ava{width:24px;height:24px;font-size:11.5px;background:var(--gold)}
-.peer .pf{width:11px;height:14px;display:inline-block;filter:grayscale(1) opacity(.35)}
+.peer{display:flex;align-items:center;gap:7px;flex:none;background:var(--card);border:1px solid var(--rule);border-radius:24px;padding:5px 14px 5px 5px;font-size:14px;font-weight:600;white-space:nowrap;color:var(--ink)}
+.peer .ava{width:32px;height:32px;font-size:14px;background:var(--gold)}
+.peer .pf{width:16px;height:20px;display:inline-block;filter:grayscale(1) opacity(.35)}
 .peer .pf.on{filter:none}
 .peer .pf svg{width:100%;height:100%}
-.peer b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
-.peer small{color:var(--soft)}
+.peer b{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:18px;line-height:1}
+.peer .pt{display:flex;flex-direction:column;line-height:1.2}
+.peer small{color:var(--soft);font-size:11.5px;font-weight:400}
 .whopanel{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:10px 12px;margin:0 0 12px;box-shadow:var(--shadow)}
 .whopanel[hidden]{display:none}
 .prow{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;border-bottom:1px solid var(--rule);padding:8px 2px;cursor:pointer;color:var(--ink);font:inherit;text-align:left}
@@ -462,6 +493,10 @@ nav button[aria-selected=true]{color:var(--teal)}
         <div class="week" id="week"></div>
         <div class="forecast"><span>Morgen fällig: <b id="fc1">0</b></span><span>Nächste 7 Tage: <b id="fc7">0</b></span></div>
       </div>
+      <details class="statsd" id="stats">
+        <summary>Lernstatistik</summary>
+        <div class="sbody" id="statsBody"></div>
+      </details>
       <details class="settings">
         <summary>Einstellungen</summary>
         <div class="setrow"><span class="seglabel">Karten pro Runde</span>
@@ -2264,6 +2299,7 @@ if(!SRS){                                // Übernahme des alten Fortschritts
   loadJ('q.weak',[]).forEach(k=>SRS.c[k]={b:1,due:t,l:1});
 }
 if(!SRS.hist) SRS.hist={};
+if(!SRS.ok) SRS.ok={};                   // richtige Antworten je Tag (Trefferquote), gleiche Tage wie hist
 const saveQ=()=>store.set('q.srs',JSON.stringify(SRS));
 let deckKind=loadJ('q.kind','s'), autoSpeak=loadJ('q.auto',false), dirMode=loadJ('q.dir','auto');
 const DIR_HINT={
@@ -2470,7 +2506,7 @@ function renderWho(){
   const flame=$('kFlame').innerHTML.replace(/kf(\d)/g,'pk$1');
   $('peers').innerHTML='';
   peerList().forEach(x=>{ const el=document.createElement('div'); el.className='peer';
-    el.innerHTML='<span class="ava"></span><span class="nm"></span><span class="pf'+(x.today?' on':'')+'">'+flame+'</span><b>'+x.streak+'</b>'+(x.today?'<small>· heute '+x.today+'</small>':'');
+    el.innerHTML='<span class="ava"></span><span class="pt"><span class="nm"></span><small>'+(x.today?'heute '+x.today+' Karten':'heute noch nichts')+'</small></span><span class="pf'+(x.today?' on':'')+'">'+flame+'</span><b>'+x.streak+'</b>';
     el.querySelector('.ava').textContent=initial(x.name); el.querySelector('.nm').textContent=x.name;
     el.title=x.name+': '+x.streak+' Tage in Folge, heute '+x.today+' Karten, '+x.begun+' begonnen';
     $('peers').appendChild(el); });
@@ -2510,6 +2546,78 @@ $('whoDel').onclick=()=>{
   PROFILES=PROFILES.filter(x=>x.id!==me.id); saveProfiles();
   switchProfile(PROFILES[0].id);
 };
+
+/* --- Lernstatistik --- */
+const wdMon=d=>(d+3)%7;                                  // Tag 0 (1.1.1970) war ein Donnerstag; Montag = 0
+const fmt1=x=>x.toFixed(1).replace('.',',');
+function longestRun(h){ let best=0,run=0,prev=null; Object.keys(h).map(Number).filter(d=>h[d]).sort((a,b)=>a-b)
+  .forEach(d=>{ run=(prev!==null&&d===prev+1)?run+1:1; prev=d; if(run>best) best=run; }); return best; }
+function gaussSvg(vals,todayN){                           // Histogramm der Tageswerte + angepasste Normalverteilung
+  const N=vals.length, mu=vals.reduce((a,b)=>a+b,0)/N, sd=Math.sqrt(vals.reduce((a,b)=>a+(b-mu)*(b-mu),0)/N);
+  const mx=Math.max(...vals,todayN||0), w=[5,10,20,25,50,100].find(x=>Math.ceil((mx+1)/x)<=10)||100, nb=Math.ceil((mx+1)/w);
+  const bins=Array(nb).fill(0); vals.forEach(v=>bins[Math.min(nb-1,Math.floor(v/w))]++);
+  const pdf=x=>Math.exp(-((x-mu)**2)/(2*sd*sd))/(sd*Math.sqrt(2*Math.PI));
+  const curve=sd>=.5, peak=curve?N*w*pdf(mu):0, ymax=Math.max(...bins,peak,1)*1.12;
+  const X0=8,X1=312,Y0=96,Y1=8, sx=x=>X0+(X1-X0)*x/(nb*w), sy=y=>Y0-(Y0-Y1)*y/ymax;
+  let g='';
+  if(curve) g+='<rect class="gs" x="'+sx(Math.max(0,mu-sd))+'" y="'+Y1+'" width="'+(sx(Math.min(nb*w,mu+sd))-sx(Math.max(0,mu-sd)))+'" height="'+(Y0-Y1)+'"/>';
+  bins.forEach((c,i)=>{ if(c) g+='<rect class="gb" x="'+(sx(i*w)+1)+'" y="'+sy(c)+'" width="'+(sx(w)-sx(0)-2)+'" height="'+(Y0-sy(c))+'" rx="2"/>'; });
+  if(curve){ const pts=[]; for(let x=0;x<=nb*w;x+=w/12) pts.push(sx(x).toFixed(1)+','+sy(N*w*pdf(x)).toFixed(1));
+    g+='<polyline class="gc" points="'+pts.join(' ')+'"/><line class="gm" x1="'+sx(mu)+'" x2="'+sx(mu)+'" y1="'+Y1+'" y2="'+Y0+'"/>'; }
+  if(todayN) g+='<line class="gt" x1="'+sx(todayN)+'" x2="'+sx(todayN)+'" y1="'+Y1+'" y2="'+Y0+'"/><text x="'+Math.min(X1-26,sx(todayN)+3)+'" y="'+(Y1+8)+'">heute</text>';
+  g+='<line x1="'+X0+'" x2="'+X1+'" y1="'+Y0+'" y2="'+Y0+'" stroke="var(--rule)"/>';
+  for(let i=0;i<=nb;i+=Math.ceil(nb/5)) g+='<text x="'+sx(i*w)+'" y="'+(Y0+12)+'" text-anchor="middle">'+i*w+'</text>';
+  return {svg:'<svg viewBox="0 0 320 112" role="img" aria-label="Verteilung der Karten pro Lerntag">'+g+'</svg>',mu,sd,N};
+}
+function renderStats(){
+  const H=SRS.hist, OK=SRS.ok||{}, t=today(), B=$('statsBody'), days=Object.keys(H).map(Number).filter(d=>H[d]>0);
+  if(!days.length){ B.innerHTML='<p class="st-note">Noch keine Daten. Nach der ersten Runde füllt sich die Statistik.</p>'; return; }
+  const tot=days.reduce((a,d)=>a+H[d],0), bestDay=Math.max(...days.map(d=>H[d]));
+  const best=Math.max(SRS.best||0,streak(),longestRun(H));
+  const kp=(v,l,c)=>'<div><b'+(c?' style="color:var(--'+c+')"':'')+'>'+v+'</b><span>'+l+'</span></div>';
+  let h='<div class="st-k">'+kp(streak(),'Serie aktuell','gold')+kp(best,'Längste Serie','gold')+kp(days.length,'Lerntage')
+    +kp(tot,'Karten')+kp(Math.round(tot/days.length),'Ø pro Lerntag')+kp(bestDay,'Bester Tag')+'</div>'
+    +'<p class="st-note">Karten und Lerntage zählen die letzten 120 Tage.</p>';
+  // Lernkalender: 16 Wochen, Spalten = Wochen (Montag oben)
+  const start=t-wdMon(t)-15*7, vmax=Math.max(1,...days.map(d=>H[d]));
+  let cells=''; for(let i=0;i<16*7;i++){ const d=start+i, v=H[d]||0;
+    cells+='<i class="'+(d>t?'f':v?'l'+Math.min(4,1+Math.floor(v/vmax*3.999)):'')+'" title="'+v+' Karten"></i>'; }
+  h+='<h4>Lernkalender<small>16 Wochen · dunkler = mehr Karten</small></h4><div class="st-heat">'+cells+'</div>';
+  // Wissensstand je Stufe
+  h+='<h4>Wissensstand</h4>';
+  const uniq=f=>{const seen=new Set();return allCards().filter(c=>f(c)&&!seen.has(c.key)&&seen.add(c.key))};
+  LEVELS.forEach(L=>{ const cs=uniq(c=>c.lv===L.id), n=[0,0,0,0]; cs.forEach(c=>n[stageOf(st(c.key).b)]++);
+    h+='<div class="st-lv"><div><span><b>'+L.name+'</b> · '+(cs.length-n[0])+' / '+cs.length+' begonnen</span><span>'
+      +'Sicher '+n[3]+' · Gefestigt '+n[2]+' · Lernphase '+n[1]+'</span></div>'+stageBar(cs)+'</div>'; });
+  // Trefferquote je Woche (nur Tage mit erfasster Quote)
+  const W=[]; for(let k=7;k>=0;k--){ const mon=t-wdMon(t)-k*7; let n=0,ok=0;
+    for(let d=mon;d<mon+7;d++){ if(OK[d]!==undefined&&H[d]){ n+=H[d]; ok+=Math.min(OK[d],H[d]); } }
+    W.push({mon,n,r:n>=5?ok/n:null}); }
+  h+='<h4>Trefferquote<small>beim ersten Versuch, pro Woche (Beginn)</small></h4>';
+  if(W.some(x=>x.r!==null)) h+='<div class="st-bars">'+W.map((x,i)=>{ const dt=new Date(x.mon*864e5), lab=dt.getUTCDate()+'.'+(dt.getUTCMonth()+1)+'.';
+    return '<div title="'+(x.r===null?'zu wenige Daten':Math.round(x.r*100)+' % von '+x.n+' Karten')+'"><em>'+(x.r===null?'–':Math.round(x.r*100))+'</em>'
+      +'<i class="'+(x.r===null?'none':i===7?'now':'')+'" style="height:'+(x.r===null?3:Math.max(4,x.r*62))+'px"></i><span>'+lab+'</span></div>'; }).join('')+'</div>';
+  else h+='<p class="st-note">Die Trefferquote wird ab diesem Update mitgezählt und erscheint, sobald eine Woche genug Karten hat.</p>';
+  // Vorschau 14 Tage
+  const A=allCards(), due0=A.filter(isDue).length, F=[]; for(let i=1;i<=14;i++) F.push(A.filter(c=>{const x=st(c.key);return x.b>0&&x.due===t+i}).length);
+  const fm=Math.max(1,due0,...F);
+  h+='<h4>Fällig in den nächsten 14 Tagen</h4><div class="st-bars">'+[due0,...F].map((v,i)=>
+    '<div title="'+v+' Karten"><em>'+v+'</em><i class="'+(i===0?'now':v?'':'none')+'" style="height:'+(v?Math.max(4,v/fm*62):3)+'px"></i><span>'+(i===0?'heute':'+'+i)+'</span></div>').join('')+'</div>';
+  // Normalverteilung der Karten pro Lerntag
+  const past=days.filter(d=>d<t).map(d=>H[d]);
+  h+='<h4>Typischer Lerntag<small>Karten pro Tag, Normalverteilung</small></h4>';
+  if(past.length<6) h+='<p class="st-note">Ab 6 abgeschlossenen Lerntagen zeigt sich hier die Verteilung — bisher '+past.length+'.</p>';
+  else { const todayN=H[t]||0, G=gaussSvg(past,todayN), lo=Math.max(0,Math.round(G.mu-G.sd)), hi=Math.round(G.mu+G.sd);
+    const inside=past.filter(v=>Math.abs(v-G.mu)<=G.sd).length;
+    let z=''; if(G.sd>=.5 && todayN){ const zz=(todayN-G.mu)/G.sd;
+      z='Heute <b>'+todayN+'</b> Karten: <b>'+(zz>=0?'+':'−')+fmt1(Math.abs(zz))+' σ</b> — '+(zz>.5?'über deinem Schnitt. ':zz<-.5?'unter deinem Schnitt. ':'im Bereich deines Schnitts. '); }
+    else if(!todayN) z='Heute noch nicht gelernt. ';
+    h+='<div class="st-g">'+G.svg+'</div><p class="st-note">'+z+'Ø <b>'+Math.round(G.mu)+'</b> Karten, σ <b>'+fmt1(G.sd)+'</b>. '
+      +'Bei einer Normalverteilung liegen gut zwei Drittel der Tage zwischen <b>'+lo+'</b> und <b>'+hi+'</b> (gelb hinterlegt) — bei dir waren es '+Math.round(inside/past.length*100)+' %. '
+      +'Die gelbe Kurve gehört zu Ø und σ; lernst du sehr unterschiedlich viel, weicht sie von den Balken ab.</p>'; }
+  B.innerHTML=h;
+}
+document.getElementById('stats').addEventListener('toggle',e=>{ if(e.target.open) renderStats(); });
 
 function setLevel(id){ level=id; store.set('q.level',JSON.stringify(id)); renderPick(); scrollTo({top:0}); }
 function renderPick(){
@@ -2588,6 +2696,7 @@ function renderPick(){
   $('dirHint').textContent=DIR_HINT[dirMode]||'';
   if(typeof bkStatus==='function') bkStatus();
   renderWho();
+  if($('stats').open) renderStats();
 }
 document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); renderDiag(); } });
 document.querySelectorAll('#segdir button').forEach(b=>b.onclick=()=>{
@@ -2692,8 +2801,10 @@ function grade(g){
   }
   const elapsed=t-lastRev(x);
   if(firstTry){ d.n++; if(g>0) d.ok++; if(x.b===0) d.nw++; if(g>0) R.first++;
-    SRS.hist[t]=(SRS.hist[t]||0)+1;
-    Object.keys(SRS.hist).forEach(k=>{ if(+k<t-120) delete SRS.hist[k]; });   // 4 Monate genügen
+    SRS.hist[t]=(SRS.hist[t]||0)+1; SRS.ok[t]=(SRS.ok[t]||0)+(g>0?1:0);
+    { const sk=streak(); if(sk>(SRS.best||0)) SRS.best=sk; }
+    if(SYNC&&SYNC.gist&&!SYNC.pending){ SYNC.pending=true; store.set('q.sync',JSON.stringify(SYNC)); }   // Verlassen der App lädt den Tagesstand hoch
+    Object.keys(SRS.hist).forEach(k=>{ if(+k<t-120){ delete SRS.hist[k]; delete SRS.ok[k]; } });   // 4 Monate genügen
   }
   if(g===0){
     if(firstTry){ x.l=(x.l||0)+1; R.missed.push(c); }
@@ -2804,7 +2915,7 @@ $('snapGo').onclick=()=>{
   if(!confirm('Lernstand auf '+new Date(x.t).toLocaleString('de-DE')+' zurücksetzen? Der jetzige Stand wird vorher als Punkt gesichert.')) return;
   snapshot('vor Zurücksetzen');
   const gen=(SRS.gen||0)+1;
-  SRS=JSON.parse(x.s); if(!SRS.hist) SRS.hist={};
+  SRS=JSON.parse(x.s); if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={};
   SRS.gen=gen;                                               // neue Generation: gilt auf allen Geräten
   saveQ(); renderPick(); renderSnaps(); scheduleSync(true);
 };
@@ -2834,6 +2945,9 @@ function mergeInto(T,rem){               // pro Karte gewinnt der neuere Stand, 
   let n=0; T.c=T.c||{}; T.hist=T.hist||{};
   for(const [k,r] of Object.entries(rem.c||{})){ const l=T.c[k]; if(!l || (r.u||0)>(l.u||0)){ T.c[k]=r; n++; } }
   for(const [d,v] of Object.entries(rem.hist||{})){ if((T.hist[d]||0)<v){ T.hist[d]=v; n++; } }
+  T.ok=T.ok||{};
+  for(const [d,v] of Object.entries(rem.ok||{})){ if(T.ok[d]===undefined||T.ok[d]<v){ T.ok[d]=v; n++; } }
+  if((rem.best||0)>(T.best||0)){ T.best=rem.best; n++; }
   if(rem.flame!==undefined && (T.flame===undefined || rem.flame>T.flame)) T.flame=rem.flame;
   if(rem.everBroken) T.everBroken=true;
   return n;
@@ -2867,7 +2981,7 @@ async function syncNow(){
       const rem=JSON.parse(txt).srs, lg=SRS.gen||0, rg=(rem&&rem.gen)||0;
       if(rem && rg>lg){                       // anderes Gerät hat zurückgesetzt oder eine Datei geladen: das gilt
         snapshot('vor Übernahme vom anderen Gerät');
-        const keepDay=SRS.day; SRS=rem; SRS.day=keepDay; if(!SRS.hist) SRS.hist={};
+        const keepDay=SRS.day; SRS=rem; SRS.day=keepDay; if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={};
         saveQ(); if(!$('pick').hidden) renderPick();
       } else if(rem && rg===lg && mergeRemote(rem)){ saveQ(); if(!$('pick').hidden) renderPick(); }
       // rg<lg: dieses Gerät hat zurückgesetzt → nur hochladen
@@ -2876,6 +2990,7 @@ async function syncNow(){
     const others=learnerFiles(g).filter(x=>x.file!==myFile());
     raw.set('app.peers',JSON.stringify(others.map(x=>({name:x.name,file:x.file,
       hist:trimHist(x.srs&&x.srs.hist),begun:x.n}))));
+    if(!$('pick').hidden) renderWho();                       // Partner sofort zeigen, auch wenn der Upload gleich scheitert
     // inaktive Profile auf diesem Gerät, die mit einer dieser Dateien verbunden sind, gleich mit auffrischen
     PROFILES.filter(q=>q.id!==CUR).forEach(q=>{
       const f=fileOfProfile(q.id), x=f&&others.find(o=>o.file===f); if(!x||!x.srs) return;
@@ -2943,7 +3058,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-05 · 6';
+const APP_VERSION='2026-10-09 · 8';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -2975,7 +3090,7 @@ $('syOff').onclick=()=>{
 // Abgleich beim Öffnen, beim Zurückkehren in die App und wenn das Netz wiederkommt
 document.addEventListener('visibilitychange',()=>{
   if(!SYNC||!SYNC.gist) return;
-  if(document.visibilityState==='visible' && (!SYNC.last || Date.now()-SYNC.last>5*6e4 || SYNC.pending)) syncNow();
+  if(document.visibilityState==='visible' && (!SYNC.last || Date.now()-SYNC.last>6e4 || SYNC.pending)) syncNow();
   if(document.visibilityState==='hidden' && SYNC.pending) syncNow();
 });
 addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
@@ -3029,7 +3144,7 @@ $('bkFile').onchange=async e=>{
     snapshot('vor Laden einer Datei');
     Object.entries(data.store).forEach(([k,v])=>{ if(BK_KEYS.includes(k)) store.set(k,v); });
     const gen=(SRS.gen||0)+1;
-    SRS=srs; if(!SRS.hist) SRS.hist={};
+    SRS=srs; if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={};
     SRS.gen=gen;                                             // neue Generation: gilt auf allen Geräten
     saveQ(); scheduleSync(true);
     roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto');
