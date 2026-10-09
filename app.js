@@ -659,7 +659,7 @@ function nextCard(){
   $('qans').className=toEs?'qans':'qans dedir';
   $('qanstxt').textContent=toEs?es:de;
   $('qans').hidden=true; $('qtap').hidden=false;
-  $('rowReveal').hidden=false; $('rowJudge').hidden=true;
+  $('rowJudge').hidden=true;
   // Lautsprecher: Spanisch nur hörbar, wenn es schon sichtbar ist
   $('qspk').hidden=!TTS; $('qspk').disabled=toEs;
   $('qspk').onclick=e=>{e.stopPropagation(); speak(es,toEs?$('qanstxt'):$('qprompt'))};
@@ -690,10 +690,9 @@ function reveal(){
   $('qans').hidden=false; $('qtap').hidden=true;
   $('qspk').disabled=false;
   if(autoSpeak && R.toEs) speak(R.queue[0].it[1],$('qanstxt'));
-  $('rowReveal').hidden=true; $('rowJudge').hidden=false;
+  $('rowJudge').hidden=false;
 }
 $('card').onclick=reveal;
-$('reveal').onclick=e=>{e.stopPropagation();reveal()};
 
 /* g: 0 = Nochmal · 1 = Knapp · 2 = Saß */
 function grade(g){
@@ -973,7 +972,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-09 · 10';
+const APP_VERSION='2026-10-09 · 11';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
