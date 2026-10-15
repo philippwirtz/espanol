@@ -183,17 +183,62 @@ clearBtn.onclick=()=>{qEl.value='';applyFilter();renderJump();qEl.focus()};
 applyFilter(); renderJump();
 
 /* ===================== Abfrage ===================== */
-/*  Leitner-System mit Fälligkeitsdaten
-    Stufe 0 = neu · 1–2 Lernphase · 3–4 gefestigt · 5–6 sicher
-    Stufe 0–1: Spanisch → Deutsch (wiedererkennen)
-    ab Stufe 2: Deutsch → Spanisch (selbst abrufen)                       */
+/*  Planung nach FSRS-6 (Free Spaced Repetition Scheduler, wie in Anki).
+    Jede Karte hat Stabilität s (Tage, bis die Abrufwahrscheinlichkeit auf 90 % fällt) und Schwierigkeit d (1–10).
+    Der nächste Termin ergibt sich aus der Zielretention. Die Stufe b (0–8) wird nur noch aus s abgeleitet
+    und steuert Anzeige und Abfragerichtung:
+    Stufe 0 = neu · 1–2 Lernphase · 3–4 gefestigt · 5–8 sicher
+    Stufe 0–1: Spanisch → Deutsch (wiedererkennen), ab Stufe 2: Deutsch → Spanisch (selbst abrufen)        */
 const $=id=>document.getElementById(id);
 const loadJ=(k,d)=>{try{const v=JSON.parse(store.get(k)||'null');return v??d}catch(e){return d}};
-const INT=[0,1,3,7,14,30,60,120,240];  // Tage bis zur nächsten Abfrage, je erreichter Stufe (7–8: Langzeit)
-const MAX=8, REDO_GAP=3, REDO_MAX=2, LEECH=4;
+const INT=[0,1,3,7,14,30,60,120,240];  // Stufengrenzen in Tagen Stabilität (früher feste Intervalle)
+const MAX=8, REDO_MAX=5, LEECH=4;     // Fehler: bis zu 5× ans Rundenende, bis die Karte einmal sitzt
 const today=()=>{const n=Date.now();return Math.floor((n-new Date(n).getTimezoneOffset()*6e4)/864e5)};
 const stageOf=b=>b===0?0:b<=2?1:b<=4?2:3;
 const STAGE=['Neu','Lernphase','Gefestigt','Sicher'];
+
+/* ---- FSRS-6, Standardparameter (py-fsrs 6.3) — eigene Parameter, falls vorhanden, in SRS.w ---- */
+const W_DEF=[0.212,1.2931,2.3065,8.2956,6.4133,0.8334,3.0194,0.001,1.8722,0.1666,0.796,1.4835,0.0614,0.2629,1.6483,0.6014,1.8729,0.5425,0.0912,0.0658,0.1542];
+const MAX_IVL=1095;
+let RET=loadJ('q.ret',0.9);                                   // Zielretention: so sicher soll eine Karte beim Termin noch sitzen
+const fw=()=>(SRS&&Array.isArray(SRS.w)&&SRS.w.length===21)?SRS.w:W_DEF;
+const clampD=d=>Math.min(10,Math.max(1,d));
+const D0=(w,G)=>w[4]-Math.exp(w[5]*(G-1))+1;                  // Anfangsschwierigkeit je Bewertung
+function retr(t,s){ const w=fw(), dec=-w[20], f=Math.pow(.9,1/dec)-1; return Math.pow(1+f*Math.max(0,t)/s,dec); }
+function nextD(w,d,G){ const d2=d+(10-d)*(-w[6]*(G-3))/9; return clampD(w[7]*D0(w,4)+(1-w[7])*d2); }
+const stageOfS=s=>{ let b=1; for(let i=2;i<=MAX;i++) if(s>=INT[i]) b=i; return b; };
+/* Gedächtniszustand einer begonnenen Karte. Ältere Daten (Leitner) oder Karten, die eine ältere App-Version
+   zuletzt geplant hat (fr ≠ r), werden aus Stufe und Fehlerzahl geschätzt. */
+function memOf(x){
+  if(x.s!==undefined && x.fr===x.r) return {s:x.s,d:x.d};
+  const w=fw(); let d=x.d;
+  if(d===undefined){ d=clampD(D0(w,3)); for(let i=0;i<(x.l||0);i++) d=nextD(w,d,1); }
+  return {s:Math.max(.5,INT[Math.max(1,x.b)]),d};
+}
+/* Neuer Gedächtniszustand nach Bewertung G (1 Nochmal · 2 Knapp · 3 Saß) am Tag t */
+function fsrsNext(x,G,t){
+  const w=fw();
+  if(!(x.b>0)) return {s:Math.max(.001,w[G-1]),d:clampD(D0(w,G))};
+  const m=memOf(x), el=t-lastRev(x); let s;
+  if(el<1){                                                    // am selben Tag erneut: Kurzzeitformel
+    let inc=Math.exp(w[17]*(G-3+w[18]))*Math.pow(m.s,-w[19]); if(G>1) inc=Math.max(inc,1); s=m.s*inc;
+  } else {
+    const r=retr(el,m.s);
+    s = G===1 ? Math.min(w[11]*Math.pow(m.d,-w[12])*(Math.pow(m.s+1,w[13])-1)*Math.exp((1-r)*w[14]), m.s/Math.exp(w[17]*w[18]))
+              : m.s*(1+Math.exp(w[8])*(11-m.d)*Math.pow(m.s,-w[9])*(Math.exp((1-r)*w[10])-1)*(G===2?w[15]:1));
+  }
+  return {s:Math.max(.001,s),d:nextD(w,m.d,G)};
+}
+/* Intervall aus Stabilität und Zielretention, mit kleiner Streuung (wie Anki), damit gemeinsam gelernte
+   Karten nicht alle am selben Tag fällig werden. Streuung pro Karte und Tag fest → Vorschau = Ergebnis. */
+function ivlOf(s,key,t){
+  const w=fw(), dec=-w[20], f=Math.pow(.9,1/dec)-1;
+  let n=Math.min(MAX_IVL,Math.max(1,Math.round(s/f*(Math.pow(RET,1/dec)-1))));
+  if(n<3) return n;
+  const delta=1+.15*Math.max(Math.min(n,7)-2.5,0)+.1*Math.max(Math.min(n,20)-7,0)+.05*Math.max(n-20,0);
+  const hi=Math.min(Math.round(n+delta),MAX_IVL), lo=Math.min(Math.max(2,Math.round(n-delta)),hi);
+  return lo+Math.floor(hashStr(key+'|'+t+'|f')/4294967296*(hi-lo+1));
+}
 
 let roundSize=loadJ('q.size',10), newPerDay=loadJ('q.newcap',10);
 let SRS=loadJ('q.srs',null);
@@ -203,8 +248,33 @@ if(!SRS){                                // Übernahme des alten Fortschritts
   loadJ('q.weak',[]).forEach(k=>SRS.c[k]={b:1,due:t,l:1});
 }
 if(!SRS.hist) SRS.hist={};
-if(!SRS.ok) SRS.ok={};                   // richtige Antworten je Tag (Trefferquote), gleiche Tage wie hist
+if(!SRS.ok) SRS.ok={};                   // richtige Antworten je Tag (erster Versuch, inkl. neuer Karten), gleiche Tage wie hist
+if(!SRS.rn) SRS.rn={};                   // Wiederholungen je Tag (ohne neue Karten, ohne freies Üben)
+if(!SRS.rok) SRS.rok={};                 // davon beim ersten Versuch gewusst → Trefferquote für die Zielretention
 const saveQ=()=>store.set('q.srs',JSON.stringify(SRS));
+/* ---- Abfrageprotokoll: jede Bewertung, Grundlage für eigene FSRS-Parameter.
+   Bleibt auf dem Gerät (und in der Sicherungsdatei), nicht im Cloud-Abgleich — es wächst mit der Zeit.
+   Eintrag: [Tag, Karten-Nr. in k, Bewertung 1–3, Tage seit letzter Abfrage (−1 = neu),
+             Art 0 Plan · 1 Wiederholung in der Runde · 2 freies Üben · 3 Zusatzrunde, Richtung 1 = ins Spanische, ms] */
+let LOG=null, LOGIX=null;
+function logLoad(){
+  if(!LOG){ LOG=loadJ('q.log',null); if(!LOG||!Array.isArray(LOG.k)||!Array.isArray(LOG.e)) LOG={k:[],e:[]};
+    LOGIX=new Map(LOG.k.map((k,i)=>[k,i])); }
+  return LOG;
+}
+function logSave(){
+  const L=logLoad();
+  for(let i=0;i<8;i++){
+    try{ localStorage.setItem(nsk('q.log'),JSON.stringify(L)); return; }
+    catch(e){ if(L.e.length<200) return; L.e.splice(0,Math.ceil(L.e.length*.1)); }   // Speicher voll: älteste 10 % opfern
+  }
+}
+function logReview(key,t,G,el,mode,toEs,ms){
+  const L=logLoad(); let ki=LOGIX.get(key);
+  if(ki===undefined){ ki=L.k.length; L.k.push(key); LOGIX.set(key,ki); }
+  L.e.push([t,ki,G,el,mode,toEs?1:0,Math.min(600000,Math.max(0,Math.round(ms)))]);
+  logSave();
+}
 let deckKind=loadJ('q.kind','s'), autoSpeak=loadJ('q.auto',false), dirMode=loadJ('q.dir','auto');
 const DIR_HINT={
   auto:'Neue Karten: erst Spanisch → Deutsch. Ab Stufe 1 auch ins Spanische, ab Stufe 2 fast nur noch ins Spanische.',
@@ -229,7 +299,7 @@ function streak(){
   while(SRS.hist[t]){ n++; t--; }
   return n;
 }
-const day=()=>{ if(SRS.day.d!==today()) SRS.day={d:today(),n:0,ok:0,nw:0}; return SRS.day; };
+const day=()=>{ if(SRS.day.d!==today()) SRS.day={d:today(),n:0,ok:0,nw:0,rn:0,rok:0}; return SRS.day; };
 const st=k=>SRS.c[k]||{b:0,due:0,l:0};
 const isNew=c=>st(c.key).b===0;
 const isDue=c=>{const x=st(c.key);return x.b>0&&x.due<=today()};
@@ -244,7 +314,7 @@ const pace=()=>Math.min(30,Math.max(4,SRS.pace||PACE_DEF));
 const budgetCards=()=>Math.max(10,Math.round(minutes*60/pace()));
 const sustainNew=()=>Math.max(1,Math.round(budgetCards()/NEW_LOAD));
 const lastRev=x=>x.r!==undefined?x.r:x.due-INT[Math.max(0,x.b)];  // Tag der letzten Abfrage (ältere Daten: geschätzt)
-const riskOf=c=>{ const x=st(c.key); return (today()-x.due+1)/Math.max(1,INT[x.b]); };   // je höher, desto eher vergessen
+const riskOf=c=>{ const x=st(c.key); if(!(x.b>0)) return 0; return 1-retr(today()-lastRev(x),memOf(x).s); };   // geschätzte Vergessenswahrscheinlichkeit
 function load7(){ const t=today(); let n=0; allCards().forEach(c=>{const x=st(c.key); if(x.b>0&&x.due>t&&x.due<=t+7) n++;}); return n; }
 function plan(cards){
   const d=day(), B=budgetCards(), left=Math.max(0,B-d.n);
@@ -493,15 +563,23 @@ function renderStats(){
   LEVELS.forEach(L=>{ const cs=uniq(c=>c.lv===L.id), n=[0,0,0,0]; cs.forEach(c=>n[stageOf(st(c.key).b)]++);
     h+='<div class="st-lv"><div><span><b>'+L.name+'</b> · '+(cs.length-n[0])+' / '+cs.length+' begonnen</span><span>'
       +'Sicher '+n[3]+' · Gefestigt '+n[2]+' · Lernphase '+n[1]+'</span></div>'+stageBar(cs)+'</div>'; });
-  // Trefferquote je Woche (nur Tage mit erfasster Quote)
+  // Trefferquote je Woche: nur Wiederholungen (ohne neue Karten, ohne freies Üben) — Vergleich mit der Zielretention
+  const RN=SRS.rn||{}, ROK=SRS.rok||{};
   const W=[]; for(let k=7;k>=0;k--){ const mon=t-wdMon(t)-k*7; let n=0,ok=0;
-    for(let d=mon;d<mon+7;d++){ if(OK[d]!==undefined&&H[d]){ n+=H[d]; ok+=Math.min(OK[d],H[d]); } }
+    for(let d=mon;d<mon+7;d++){ if(RN[d]){ n+=RN[d]; ok+=Math.min(ROK[d]||0,RN[d]); } }
     W.push({mon,n,r:n>=5?ok/n:null}); }
-  h+='<h4>Trefferquote<small>beim ersten Versuch, pro Woche (Beginn)</small></h4>';
+  h+='<h4>Trefferquote<small>Wiederholungen beim ersten Versuch, pro Woche · Ziel '+Math.round(RET*100)+' %</small></h4>';
   if(W.some(x=>x.r!==null)) h+='<div class="st-bars">'+W.map((x,i)=>{ const dt=new Date(x.mon*864e5), lab=dt.getUTCDate()+'.'+(dt.getUTCMonth()+1)+'.';
     return '<div title="'+(x.r===null?'zu wenige Daten':Math.round(x.r*100)+' % von '+x.n+' Karten')+'"><em>'+(x.r===null?'–':Math.round(x.r*100))+'</em>'
       +'<i class="'+(x.r===null?'none':i===7?'now':'')+'" style="height:'+(x.r===null?3:Math.max(4,x.r*62))+'px"></i><span>'+lab+'</span></div>'; }).join('')+'</div>';
-  else h+='<p class="st-note">Die Trefferquote wird ab diesem Update mitgezählt und erscheint, sobald eine Woche genug Karten hat.</p>';
+  else h+='<p class="st-note">Gezählt werden nur Wiederholungen (keine neuen Karten). Die Quote erscheint, sobald eine Woche genug davon hat.</p>';
+  { const rec=W.filter(x=>x.r!==null).slice(-4), n=rec.reduce((a,x)=>a+x.n,0), r=n?rec.reduce((a,x)=>a+x.r*x.n,0)/n:null;
+    if(r!==null && n>=40) h+='<p class="st-note">Letzte Wochen: <b>'+Math.round(r*100)+' %</b> bei Ziel '+Math.round(RET*100)+' % — '
+      +(r>RET+.05?'deutlich darüber: Die Abstände könnten länger sein (eigene Parameter würden das korrigieren).'
+       :r<RET-.08?'deutlich darunter: Die Abstände sind für dich eher zu lang (eigene Parameter würden das korrigieren).'
+       :'passt zum Ziel.')+'</p>'; }
+  { const L=logLoad(); if(L.e.length) h+='<p class="st-note">Abfrageprotokoll: <b>'+L.e.length+'</b> Bewertungen seit '
+      +new Date(L.e[0][0]*864e5).toLocaleDateString('de-DE',{timeZone:'UTC'})+'. Ab etwa 1000 lassen sich die Abstände an dich anpassen.</p>'; }
   // Vorschau 14 Tage
   const A=allCards(), due0=A.filter(isDue).length, F=[]; for(let i=1;i<=14;i++) F.push(A.filter(c=>{const x=st(c.key);return x.b>0&&x.due===t+i}).length);
   const fm=Math.max(1,due0,...F);
@@ -600,11 +678,17 @@ function renderPick(){
   $('autoSpeak').checked=autoSpeak; $('autoRow').hidden=!TTS;
   document.querySelectorAll('#segdir button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===dirMode));
   $('dirHint').textContent=DIR_HINT[dirMode]||'';
+  document.querySelectorAll('#segret button').forEach(b=>b.setAttribute('aria-pressed',Math.abs(+b.dataset.r-RET)<.001));
+  $('retHint').textContent='So sicher soll eine Karte am Fälligkeitstag noch sitzen. '+(RET>=.95?'95 %: kaum Vergessen, aber deutlich mehr Wiederholungen.'
+    :RET<=.85?'85 %: weniger Wiederholungen, dafür häufiger „Nochmal".':'90 %: der übliche Kompromiss.')
+    +' Gilt ab der nächsten Abfrage jeder Karte.'+(Array.isArray(SRS.w)?' Planung mit deinen eigenen Parametern.':'');
   if(typeof bkStatus==='function') bkStatus();
   renderWho();
   if($('stats').open) renderStats();
 }
 document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); renderDiag(); } });
+document.querySelectorAll('#segret button').forEach(b=>b.onclick=()=>{
+  RET=+b.dataset.r; store.set('q.ret',JSON.stringify(RET)); renderPick(); });
 document.querySelectorAll('#segdir button').forEach(b=>b.onclick=()=>{
   dirMode=b.dataset.d; store.set('q.dir',JSON.stringify(dirMode)); renderPick(); });
 $('ttsTest').onclick=()=>{
@@ -671,12 +755,10 @@ function nextCard(){
   $('qcount').textContent=Math.min(done+1,R.total)+' / '+R.total;
 }
 function nextIvl(c,g){                    // spiegelt die Logik in grade()
-  const x=st(c.key);
+  const x=st(c.key), t=today();
   if(g===0) return 0;
-  if(c.redo) return 1;
-  if(R.mode==='cram') return null;
-  if(g===1){ const b=Math.max(x.b,1); return Math.max(1,Math.ceil(INT[b]/2)); }
-  return INT[Math.min(x.b+1,MAX)];
+  if(R.mode==='cram' && !c.redo) return null;
+  return ivlOf(fsrsNext(x,g+1,t).s,c.key,t);
 }
 function fmtIvl(n){
   if(n===null) return 'unverändert';
@@ -699,37 +781,36 @@ function grade(g){
   if(!R || !R.queue.length || $('play').hidden) return;
   if(SRS.snapDay!==today()){ if(Object.keys(SRS.c).length) snapshot('Tagesbeginn'); SRS.snapDay=today(); }   // Stand vor dem ersten Lernen des Tages
   const c=R.queue.shift(), t=today(), x={...st(c.key)}, d=day();
-  const firstTry=!c.redo;
+  const firstTry=!c.redo, wasB=x.b, ms=R.shownAt?Date.now()-R.shownAt:0;
   if(firstTry && R.shownAt){                            // Tempo messen: gleitender Mittelwert, Ausreißer ignorieren
-    const sec=(Date.now()-R.shownAt)/1000;
+    const sec=ms/1000;
     if(sec>=1.5 && sec<=90) SRS.pace=+(.85*(SRS.pace||PACE_DEF)+.15*Math.min(40,Math.max(3,sec))).toFixed(2);
   }
-  const elapsed=t-lastRev(x);
+  logReview(c.key,t,g+1,wasB>0?t-lastRev(x):-1,c.redo?1:R.mode==='cram'?2:R.mode==='extra'?3:0,R.toEs,ms);
   if(firstTry){ d.n++; if(g>0) d.ok++; if(x.b===0) d.nw++; if(g>0) R.first++;
     SRS.hist[t]=(SRS.hist[t]||0)+1; SRS.ok[t]=(SRS.ok[t]||0)+(g>0?1:0);
+    if(wasB>0 && R.mode!=='cram'){                      // Trefferquote nur über echte Wiederholungen
+      d.rn=(d.rn||0)+1; SRS.rn[t]=(SRS.rn[t]||0)+1;
+      if(g>0){ d.rok=(d.rok||0)+1; SRS.rok[t]=(SRS.rok[t]||0)+1; } }
     { const sk=streak(); if(sk>(SRS.best||0)) SRS.best=sk; }
     if(SYNC&&SYNC.gist&&!SYNC.pending){ SYNC.pending=true; store.set('q.sync',JSON.stringify(SYNC)); }   // Verlassen der App lädt den Tagesstand hoch
     Object.keys(SRS.hist).forEach(k=>{ if(+k<t-365){ delete SRS.hist[k]; delete SRS.ok[k]; } });   // ein Jahr Verlauf
+    Object.keys(SRS.rn).forEach(k=>{ if(+k<t-365){ delete SRS.rn[k]; delete SRS.rok[k]; } });
   }
-  if(g===0){
-    if(firstTry){ x.l=(x.l||0)+1; R.missed.push(c); }
-    if(firstTry) x.b=Math.max(1,x.b-2);                 // milder: zwei Stufen zurück statt auf Stufe 1
-    x.due=t;
-    if(c.redo<REDO_MAX) R.queue.splice(Math.min(REDO_GAP,R.queue.length),0,{...c,redo:c.redo+1,toEs:R.toEs});
-  } else if(!firstTry){
-    x.due=t+1;                                         // in der Runde nachgelernt → morgen prüfen
-  } else if(R.mode==='cram'){
-    /* freies Üben: Erfolg verschiebt nichts — sonst würden Intervalle künstlich wachsen */
-  } else if(g===1){
-    x.b=Math.max(x.b,1); x.due=t+Math.max(1,Math.ceil(INT[x.b]/2));
+  if(R.mode==='cram' && firstTry && g>0){
+    /* freies Üben: Erfolg verschiebt nichts — die Abfrage war außerhalb des Plans */
   } else {
-    // lange überfällig und trotzdem gewusst → zwei Stufen hoch
-    const jump = x.b>=1 && elapsed>=INT[Math.min(x.b+1,MAX)]*1.5 ? 2 : 1;
-    x.b=Math.min(x.b+jump,MAX); x.due=t+INT[x.b];
+    const m=fsrsNext(x,g+1,t);
+    x.s=+m.s.toFixed(3); x.d=+m.d.toFixed(3); x.b=stageOfS(x.s); x.r=x.fr=t;
+    if(g===0){
+      if(firstTry){ x.l=(x.l||0)+1; R.missed.push(c); }
+      x.due=t;
+      // Successive Relearning: ans Rundenende, bis die Karte einmal sitzt (Sicherung gegen Endlosschleife)
+      if(c.redo<REDO_MAX) R.queue.push({...c,redo:c.redo+1,toEs:R.toEs});
+    } else x.due=t+ivlOf(x.s,c.key,t);
   }
-  if(R.mode!=='cram'||g===0) x.r=t;
   const prev=SRS.c[c.key];
-  if(!prev || prev.b!==x.b || prev.due!==x.due || prev.l!==x.l || prev.r!==x.r){   // nur echte Änderungen zählen beim Abgleich
+  if(!prev || prev.b!==x.b || prev.due!==x.due || prev.l!==x.l || prev.r!==x.r || prev.s!==x.s){   // nur echte Änderungen zählen beim Abgleich
     x.u=Date.now(); SRS.c[c.key]=x; saveQ();
   } else saveQ();                                                // Tagesstatistik trotzdem sichern
   nextCard();
@@ -744,7 +825,7 @@ function finish(){
   $('sumtxt').textContent=R.first===R.total?'Alles beim ersten Versuch gewusst.':'beim ersten Versuch gewusst';
   const all=scopeCards(), d=day(), t=today();
   $('sToday').textContent=d.n;
-  $('sRate').textContent=d.n?Math.round(d.ok/d.n*100)+' %':'–';
+  $('sRate').textContent=d.rn?Math.round((d.rok||0)/d.rn*100)+' %':'–';
   $('sLeft').textContent=all.filter(isDue).length;
   $('sTomorrow').textContent=all.filter(c=>{const x=st(c.key);return x.b>0&&x.due===t+1}).length;
   const L=$('sumlist'); L.innerHTML='';
@@ -820,7 +901,7 @@ $('snapGo').onclick=()=>{
   if(!confirm('Lernstand auf '+new Date(x.t).toLocaleString('de-DE')+' zurücksetzen? Der jetzige Stand wird vorher als Punkt gesichert.')) return;
   snapshot('vor Zurücksetzen');
   const gen=(SRS.gen||0)+1;
-  SRS=JSON.parse(x.s); if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={};
+  SRS=JSON.parse(x.s); if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={}; if(!SRS.rn) SRS.rn={}; if(!SRS.rok) SRS.rok={};
   SRS.gen=gen;                                               // neue Generation: gilt auf allen Geräten
   saveQ(); renderPick(); renderSnaps(); scheduleSync(true);
 };
@@ -853,6 +934,10 @@ function mergeInto(T,rem){               // pro Karte gewinnt der neuere Stand, 
   for(const [d,v] of Object.entries(rem.hist||{})){ if((T.hist[d]||0)<v){ T.hist[d]=v; n++; } }
   T.ok=T.ok||{};
   for(const [d,v] of Object.entries(rem.ok||{})){ if(T.ok[d]===undefined||T.ok[d]<v){ T.ok[d]=v; n++; } }
+  T.rn=T.rn||{}; T.rok=T.rok||{};
+  for(const [d,v] of Object.entries(rem.rn||{})){ if((T.rn[d]||0)<v){ T.rn[d]=v; n++; } }
+  for(const [d,v] of Object.entries(rem.rok||{})){ if((T.rok[d]||0)<v){ T.rok[d]=v; n++; } }
+  if(Array.isArray(rem.w) && (rem.wu||0)>(T.wu||0)){ T.w=rem.w; T.wu=rem.wu; n++; }   // eigene FSRS-Parameter
   if((rem.best||0)>(T.best||0)){ T.best=rem.best; n++; }
   if(rem.flame!==undefined && (T.flame===undefined || rem.flame>T.flame)) T.flame=rem.flame;
   if(rem.everBroken) T.everBroken=true;
@@ -889,7 +974,7 @@ async function syncNow(){
       const rem=JSON.parse(txt).srs, lg=SRS.gen||0, rg=(rem&&rem.gen)||0;
       if(rem && rg>lg){                       // anderes Gerät hat zurückgesetzt oder eine Datei geladen: das gilt
         snapshot('vor Übernahme vom anderen Gerät');
-        const keepDay=SRS.day; SRS=rem; SRS.day=keepDay; if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={};
+        const keepDay=SRS.day; SRS=rem; SRS.day=keepDay; if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={}; if(!SRS.rn) SRS.rn={}; if(!SRS.rok) SRS.rok={};
         saveQ(); if(!$('pick').hidden) renderPick();
       } else if(rem && rg===lg && mergeRemote(rem)){ saveQ(); if(!$('pick').hidden) renderPick(); }
       // rg<lg: dieses Gerät hat zurückgesetzt → nur hochladen
@@ -972,7 +1057,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-09 · 11';
+const APP_VERSION='2026-10-15 · 12';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -1011,7 +1096,7 @@ addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
 if(SYNC&&SYNC.gist) setTimeout(syncNow,800);
 
 /* --- Lernstand sichern / wiederherstellen --- */
-const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes'];
+const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log'];
 function bkStatus(){
   const last=loadJ('q.backup',null), started=Object.keys(SRS.c).length;
   const days=last===null?null:today()-last;
@@ -1028,13 +1113,15 @@ $('bkOut').onclick=async()=>{
   BK_KEYS.forEach(k=>{const v=store.get(k); if(v!==null) data.store[k]=v;});
   data.store['q.srs']=JSON.stringify(SRS);
   const name='espanol-lernstand-'+slug(curProfile().name)+'-'+new Date().toISOString().slice(0,10)+'.json';
-  const text=JSON.stringify(data);
   const done=()=>{store.set('q.backup',JSON.stringify(today())); bkStatus();};
+  await giveFile(name,JSON.stringify(data),'application/json','Español – Lernstand',done,'Gesichert. Am besten in „Dateien" oder iCloud Drive ablegen.');
+};
+/* Datei übergeben: Teilen-Menü (iPhone), sonst Download, sonst Zwischenablage */
+async function giveFile(name,text,type,title,done,okMsg){
   try{
-    const file=new File([text],name,{type:'application/json'});
+    const file=new File([text],name,{type});
     if(navigator.canShare && navigator.canShare({files:[file]})){
-      await navigator.share({files:[file],title:'Español – Lernstand'}); done();
-      bkMsg('Gesichert. Am besten in „Dateien" oder iCloud Drive ablegen.'); return;
+      await navigator.share({files:[file],title}); done(); bkMsg(okMsg); return;
     }
     const a=document.createElement('a'); a.href=URL.createObjectURL(file); a.download=name;
     document.body.appendChild(a); a.click(); a.remove(); done();
@@ -1042,8 +1129,19 @@ $('bkOut').onclick=async()=>{
   }catch(e){
     if(e && e.name==='AbortError') return;                     // Teilen abgebrochen
     try{ await navigator.clipboard.writeText(text); done(); bkMsg('Als Text in die Zwischenablage kopiert.'); }
-    catch(_){ bkMsg('Sichern nicht möglich: '+(e&&e.message||e),true); }
+    catch(_){ bkMsg('Export nicht möglich: '+(e&&e.message||e),true); }
   }
+}
+/* Abfrageprotokoll als CSV — Eingabe für die Anpassung der FSRS-Parameter */
+function logCsv(){
+  const L=logLoad(), q=v=>'"'+String(v).replace(/"/g,'""')+'"', M=['plan','redo','frei','zusatz'];
+  return 'card_id,card,day,date,rating,elapsed_days,mode,to_spanish,duration_ms\n'+L.e.map(e=>
+    [e[1],q(L.k[e[1]]),e[0],new Date(e[0]*864e5).toISOString().slice(0,10),e[2],e[3],M[e[4]]||e[4],e[5],e[6]].join(',')).join('\n')+'\n';
+}
+$('logOut').onclick=async()=>{
+  const L=logLoad(); if(!L.e.length){ bkMsg('Noch keine Abfragen protokolliert — das beginnt mit diesem Update.'); return; }
+  const name='espanol-protokoll-'+slug(curProfile().name)+'-'+new Date().toISOString().slice(0,10)+'.csv';
+  await giveFile(name,logCsv(),'text/csv','Español – Abfrageprotokoll',()=>{},L.e.length+' Bewertungen exportiert.');
 };
 const readText=f=>f.text?f.text():new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error);r.readAsText(f)});
 $('bkIn').onclick=()=>$('bkFile').click();
@@ -1058,9 +1156,10 @@ $('bkFile').onchange=async e=>{
     snapshot('vor Laden einer Datei');
     Object.entries(data.store).forEach(([k,v])=>{ if(BK_KEYS.includes(k)) store.set(k,v); });
     const gen=(SRS.gen||0)+1;
-    SRS=srs; if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={};
+    SRS=srs; if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={}; if(!SRS.rn) SRS.rn={}; if(!SRS.rok) SRS.rok={};
     SRS.gen=gen;                                             // neue Generation: gilt auf allen Geräten
     saveQ(); scheduleSync(true);
+    LOG=null; RET=loadJ('q.ret',0.9);
     roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto');
     renderPick(); bkStatus(); bkMsg('Lernstand vom '+when+' geladen ('+n+' Karten).');
   }catch(err){ bkMsg('Datei konnte nicht gelesen werden: '+err.message,true); }
