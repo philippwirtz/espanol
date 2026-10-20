@@ -1,4 +1,4 @@
-const CACHE = 'espanol-v14';
+const CACHE = 'espanol-v15';
 const FILES = ['./', './index.html', './style.css', './content.js', './app.js', './manifest.webmanifest', './icon-180.png', './icon-512.png'];
 
 self.addEventListener('install', e => {

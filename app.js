@@ -208,12 +208,17 @@ function retr(t,s){ const w=fw(), dec=-w[20], f=Math.pow(.9,1/dec)-1; return Mat
 function nextD(w,d,G){ const d2=d+(10-d)*(-w[6]*(G-3))/9; return clampD(w[7]*D0(w,4)+(1-w[7])*d2); }
 const stageOfS=s=>{ let b=1; for(let i=2;i<=MAX;i++) if(s>=INT[i]) b=i; return b; };
 /* Gedächtniszustand einer begonnenen Karte. Ältere Daten (Leitner) oder Karten, die eine ältere App-Version
-   zuletzt geplant hat (fr ≠ r), werden aus Stufe und Fehlerzahl geschätzt. */
+   zuletzt geplant hat (fr ≠ r), werden aus Stufe und Fehlerzahl geschätzt:
+   Stabilität = Leitner-Intervall der Stufe; Schwierigkeit so, dass die nächste pünktliche richtige Abfrage
+   den bisherigen Leitner-Schritt nachbildet (≈ ×2) — die Karte hat bisher nur dieses Tempo bewiesen.
+   (Anki übernimmt SM-2-Karten nach demselben Prinzip.) Jeder frühere Fehler macht sie schwerer. */
 function memOf(x){
   if(x.s!==undefined && x.fr===x.r) return {s:x.s,d:x.d};
-  const w=fw(); let d=x.d;
-  if(d===undefined){ d=clampD(D0(w,3)); for(let i=0;i<(x.l||0);i++) d=nextD(w,d,1); }
-  return {s:Math.max(.5,INT[Math.max(1,x.b)]),d};
+  const w=fw(), b=Math.max(1,Math.min(MAX,x.b||1)), s=Math.max(.5,INT[b]);
+  const grow=b<MAX?INT[b+1]/INT[b]:2, k=Math.exp(w[8])*Math.pow(s,-w[9])*(Math.exp(.1*w[10])-1);
+  let d=clampD(11-(grow-1)/k);
+  for(let i=0;i<(x.l||0);i++) d=nextD(w,d,1);
+  return {s,d};
 }
 /* Neuer Gedächtniszustand nach Bewertung G (1 Nochmal · 2 Knapp · 3 Saß) am Tag t */
 function fsrsNext(x,G,t){
@@ -277,7 +282,7 @@ function logReview(key,t,G,el,mode,toEs,ms){
 }
 let deckKind=loadJ('q.kind','s'), autoSpeak=loadJ('q.auto',false), dirMode=loadJ('q.dir','auto');
 const DIR_HINT={
-  auto:'Neue Karten: erst Spanisch → Deutsch. Ab Stufe 1 auch ins Spanische, ab Stufe 2 fast nur noch ins Spanische.',
+  auto:'Neue Karten: erst Spanisch → Deutsch, ab der ersten Wiederholung ins Spanische. Ab Stufe 4 gelegentlich zurück.',
   es:'Immer Deutsch → Spanisch: selbst formulieren. Am anspruchsvollsten.',
   de:'Immer Spanisch → Deutsch: verstehen. Gut zum Einstieg in ein neues Kapitel.',
   mix:'Jede Karte zufällig in eine der beiden Richtungen.'};
@@ -288,8 +293,9 @@ function chooseDir(c,x){                   // true = Deutsch → Spanisch
   if(dirMode==='de') return false;
   if(dirMode==='mix') return r%2===0;
   if(x.b===0) return false;                // neu: erst verstehen
-  if(x.b===1) return r%2===0;              // Lernphase: beide Richtungen
-  if(x.b<=3) return true;                  // Stufe 2–3: selbst bilden
+  // ab der ersten Wiederholung selbst bilden: Die Planung soll auf der schwereren Richtung beruhen,
+  // sonst trägt eine leicht verdiente Stabilität (wiedererkennen) lange Abstände fürs Bilden
+  if(x.b<=3) return true;
   return r%4!==0;                          // ab Stufe 4: meist bilden, gelegentlich zurück
 }
 let level=loadJ('q.level','basis');
@@ -338,6 +344,38 @@ function spreadBacklog(){
   excess.forEach((c,i)=>{ const x={...st(c.key)}; x.due=t+1+Math.floor(i/perDay); x.u=now; SRS.c[c.key]=x; });
   saveQ(); if(typeof scheduleSync==='function') scheduleSync();
   return excess.length;
+}
+
+/* Neuberechnung aus dem Abfrageprotokoll: spielt für jede seit Protokollbeginn abgefragte Karte alle Bewertungen
+   mit den aktuellen Regeln (und Parametern) erneut durch. Ausgangszustand: neu, oder — bei Karten aus der
+   Leitner-Zeit — geschätzt aus dem Abstand zur vorherigen Abfrage. Karten, deren letzter Stand nicht von
+   diesem Gerät stammt, bleiben unberührt. Gibt die Zahl geänderter Karten zurück. */
+function rescheduleFromLog(){
+  const L=logLoad(); if(!L.e.length) return 0;
+  const by=new Map(); L.e.forEach(e=>{ const k=L.k[e[1]]; if(!by.has(k)) by.set(k,[]); by.get(k).push(e); });
+  let n=0; const now=Date.now();
+  by.forEach((E,key)=>{
+    const cur=SRS.c[key], last=E[E.length-1];
+    if(!cur || !(cur.b>0) || cur.r!==last[0] || cur.fr!==cur.r) return;
+    const first=E[0], lapsesIn=E.filter(e=>e[2]===1&&e[4]!==1).length;
+    let x;
+    if(first[3]<0) x={b:0,due:0,l:0};
+    else { let b=1; for(let i=2;i<=MAX;i++) if(INT[i]<=first[3]) b=i;
+      x={b,due:first[0],l:Math.max(0,(cur.l||0)-lapsesIn),r:first[0]-first[3]}; }
+    let due=cur.due, touched=false;
+    E.forEach(([t,,G,,mode])=>{
+      if(mode===2 && G>1) return;                          // freies Üben: Erfolg plant nichts
+      const m=fsrsNext(x,G,t);
+      x={...x,s:+m.s.toFixed(3),d:+m.d.toFixed(3),b:stageOfS(m.s),r:t,fr:t};
+      if(G===1 && mode!==1) x.l=(x.l||0)+1;
+      due = G===1 ? t : t+ivlOf(x.s,key,t); touched=true;
+    });
+    if(!touched) return;
+    if(x.s!==cur.s || x.d!==cur.d || due!==cur.due){
+      SRS.c[key]={...cur,s:x.s,d:x.d,b:x.b,due,r:x.r,fr:x.r,u:now}; n++; }
+  });
+  if(n){ SRS.spreadDay=null; saveQ(); }                     // was jetzt fällig wird, verteilt der Tagesplan
+  return n;
 }
 
 /* --- Vokabelstapel aus den Wortschatzblöcken --- */
@@ -1057,7 +1095,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-15 · 12';
+const APP_VERSION='2026-10-20 · 13';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -1171,6 +1209,13 @@ $('back').onclick=()=>{if(TTS)speechSynthesis.cancel();renderPick();show('pick')
 $('back2').onclick=()=>{renderPick();show('pick')};
 function quizEnter(){ spreadBacklog();
    if(!R || !$('pick').hidden || !$('sum').hidden || !$('empty').hidden){ renderPick(); show('pick'); } }
+
+/* Einmalig (Version 13): Karten, die seit der FSRS-Umstellung mit zu niedriger Schwierigkeit geplant wurden,
+   aus dem Protokoll neu berechnen — vorher Wiederherstellungspunkt. */
+if(!loadJ('q.fix1',false)){
+  try{ if(logLoad().e.length){ snapshot('vor Neuberechnung der Abstände'); const n=rescheduleFromLog(); if(n) scheduleSync(); } }catch(e){}
+  store.set('q.fix1','true');
+}
 
 /* ===================== Hinweise ===================== */
 const tip=document.createElement('div'); tip.className='tip'; tip.hidden=true; document.body.appendChild(tip);
