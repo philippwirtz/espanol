@@ -105,6 +105,9 @@
         <div class="setrow"><span class="seglabel">Abfragerichtung</span>
           <div class="seg" id="segdir"><button data-d="auto">Auto</button><button data-d="es">→ ES</button><button data-d="de">→ DE</button><button data-d="mix">Mix</button></div></div>
         <p class="shint" id="dirHint"></p>
+        <div class="setrow"><span class="seglabel">Beispielsätze</span>
+          <div class="seg" id="segex"><button data-x="word">Aus</button><button data-x="show">Zeigen</button><button data-x="cloze">Im Satz</button></div></div>
+        <p class="shint" id="exHint"></p>
         <div class="store" id="ttsBox" style="margin-top:4px">
           <div class="strow"><span>Sprachausgabe</span><span id="ttsStat">–</span></div>
           <button class="act" id="ttsTest" style="width:100%">Aussprache testen</button>
@@ -164,8 +167,9 @@
           <button class="spk" id="qspk" aria-label="Anhören" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg></button>
         </div>
         <div class="qprompt" id="qprompt"></div>
+        <div class="qex qcloze" id="qpex" hidden></div>
         <div class="qtap" id="qtap">Tippen zum Aufdecken</div>
-        <div class="qans" id="qans" hidden><div class="txt" id="qanstxt"></div></div>
+        <div class="qans" id="qans" hidden><div class="txt" id="qanstxt"></div><div class="qex" id="qaex" hidden></div></div>
       </div>
       <div class="judge" id="rowJudge" hidden>
         <button class="act warn" id="again">Nochmal<small id="iv0"></small></button>
@@ -229,6 +233,7 @@
 </nav>
 
 <script src="content.js"></script>
+<script src="examples.js"></script>
 <script src="app.js"></script>
 
 </body>

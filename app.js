@@ -290,6 +290,29 @@ const DIR_HINT={
   es:'Immer Deutsch → Spanisch: selbst formulieren. Am anspruchsvollsten.',
   de:'Immer Spanisch → Deutsch: verstehen. Gut zum Einstieg in ein neues Kapitel.',
   mix:'Jede Karte zufällig in eine der beiden Richtungen.'};
+/* Beispielsätze (examples.js): Abfrageform pro Profil. Die Karte und ihre Planung bleiben dieselben —
+   nur die Darstellung ändert sich. word = nur Wort · show = Satz nach dem Aufdecken · cloze = im Satz abfragen */
+let exMode=loadJ('q.exmode','word'); if(!['word','show','cloze'].includes(exMode)) exMode='word';
+const EX_HINT={
+  word:'Abgefragt wird nur das Wort.',
+  show:'Wie bisher; nach dem Aufdecken erscheint ein Beispielsatz mit Übersetzung.',
+  cloze:'Ins Spanische: deutscher Satz und spanischer Lückensatz — das fehlende Wort ergänzen. Ins Deutsche: spanischer Satz, das markierte Wort übersetzen. Zwei Sätze pro Wort wechseln sich ab.'};
+const EXD=typeof EX==='object'?EX:{};
+function exPick(c){                       // abwechselnd nach Zahl der Lerntage dieser Karte; am selben Tag immer derselbe Satz
+  const L=EXD[c.key]; if(!L||!L.length) return null;
+  const Lg=logLoad(), ki=LOGIX.get(c.key), t=today(), days=new Set();
+  if(ki!==undefined) for(const e of Lg.e) if(e[1]===ki && e[0]<t) days.add(e[0]);
+  const n=days.size;
+  return L[n%L.length];
+}
+const esc=t=>t.replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+const exPlain=t=>t.replace(/[\[\]]/g,'');
+const exTarget=t=>{ const m=t.match(/\[([^\]]+)\]/); return m?m[1]:''; };
+function exHtml(t,gap){                   // markiertes Wort hervorheben oder als Lücke zeigen
+  return esc(t).replace(/\[([^\]]+)\]/,(_,w)=>gap?'<span class="gap" aria-label="Lücke">&nbsp;</span>':'<mark>'+w+'</mark>');
+}
+const fold=t=>t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[¿?¡!.,]/g,'').replace(/^(el|la|los|las|un|una) /,'').trim();
+
 function hashStr(t){ let h=2166136261; for(let i=0;i<t.length;i++){ h^=t.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
 function chooseDir(c,x){                   // true = Deutsch → Spanisch
   const r=hashStr(c.key+'|'+today());      // pro Karte und Tag fest, damit Wiederholungen stabil bleiben
@@ -824,6 +847,8 @@ function renderPick(){
   $('autoSpeak').checked=autoSpeak; $('autoRow').hidden=!TTS;
   document.querySelectorAll('#segdir button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===dirMode));
   $('dirHint').textContent=DIR_HINT[dirMode]||'';
+  document.querySelectorAll('#segex button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.x===exMode));
+  $('exHint').textContent=EX_HINT[exMode]+' Gilt nur für dieses Profil.';
   document.querySelectorAll('#segret button').forEach(b=>b.setAttribute('aria-pressed',Math.abs(+b.dataset.r-RET)<.001));
   $('retHint').textContent='So sicher soll eine Karte am Fälligkeitstag noch sitzen. '+(RET>=.95?'95 %: kaum Vergessen, aber deutlich mehr Wiederholungen.'
     :RET<=.85?'85 %: weniger Wiederholungen, dafür häufiger „Nochmal".':'90 %: der übliche Kompromiss.')
@@ -912,6 +937,8 @@ $('optSet').onclick=()=>{
 };
 document.querySelectorAll('#segret button').forEach(b=>b.onclick=()=>{
   RET=+b.dataset.r; store.set('q.ret',JSON.stringify(RET)); renderPick(); });
+document.querySelectorAll('#segex button').forEach(b=>b.onclick=()=>{
+  exMode=b.dataset.x; store.set('q.exmode',JSON.stringify(exMode)); renderPick(); });
 document.querySelectorAll('#segdir button').forEach(b=>b.onclick=()=>{
   dirMode=b.dataset.d; store.set('q.dir',JSON.stringify(dirMode)); renderPick(); });
 $('ttsTest').onclick=()=>{
@@ -956,6 +983,8 @@ function nextCard(){
   const toEs = c.redo ? c.toEs : chooseDir(c,x); // Wiederholung in derselben Richtung wie der Fehlversuch
   R.toEs=toEs;
   const [de,es]=c.it;
+  const E=exMode!=='word'?exPick(c):null, cloze=!!E&&exMode==='cloze';
+  R.say=es;                                                   // was die Sprachausgabe vorliest
   $('qchip').textContent=toEs?'Ins Spanische':'Ins Deutsche';
   $('qchip').className=toEs?'qchip':'qchip rev';
   $('qstage').textContent=x.b===0?'Neu':'Stufe '+x.b;
@@ -965,12 +994,30 @@ function nextCard(){
   $('qprompt').className=toEs?'qprompt':'qprompt esdir';
   $('qans').className=toEs?'qans':'qans dedir';
   $('qanstxt').textContent=toEs?es:de;
+  $('qpex').hidden=true; $('qaex').hidden=true;
+  if(cloze){
+    const [sEs,sDe]=E, tgt=exTarget(sEs);
+    R.say=exPlain(sEs); $('qprompt').classList.add('sent');
+    if(toEs){                                                 // deutscher Satz + spanischer Lückensatz → Wort ergänzen
+      $('qprompt').innerHTML=exHtml(sDe);
+      $('qpex').innerHTML=exHtml(sEs,true); $('qpex').hidden=false;
+      $('qanstxt').innerHTML=exHtml(sEs);
+      if(fold(tgt)!==fold(es)){ $('qaex').innerHTML='<span class="base">Wörterbuchform: '+esc(es)+'</span>'; $('qaex').hidden=false; }
+    } else {                                                  // spanischer Satz → markiertes Wort übersetzen
+      $('qprompt').innerHTML=exHtml(sEs);
+      $('qanstxt').textContent=de;
+      $('qaex').innerHTML='<span class="de">'+exHtml(sDe)+'</span>'+(fold(tgt)!==fold(es)?'<span class="base">Wörterbuchform: '+esc(es)+'</span>':'');
+      $('qaex').hidden=false;
+    }
+  } else if(E){                                               // „Zeigen": Satz nach dem Aufdecken
+    $('qaex').innerHTML='<span class="es">'+exHtml(E[0])+'</span><span class="de">'+exHtml(E[1])+'</span>'; $('qaex').hidden=false;
+  }
   $('qans').hidden=true; $('qtap').hidden=false;
   $('rowJudge').hidden=true;
   // Lautsprecher: Spanisch nur hörbar, wenn es schon sichtbar ist
   $('qspk').hidden=!TTS; $('qspk').disabled=toEs;
-  $('qspk').onclick=e=>{e.stopPropagation(); speak(es,toEs?$('qanstxt'):$('qprompt'))};
-  if(autoSpeak && !toEs) speak(es,$('qprompt'));
+  $('qspk').onclick=e=>{e.stopPropagation(); speak(R.say,toEs?$('qanstxt'):$('qprompt'))};
+  if(autoSpeak && !toEs) speak(R.say,$('qprompt'));
   [0,1,2].forEach(g=>$('iv'+g).textContent=fmtIvl(nextIvl(c,g)));
   const card=$('card'); card.classList.remove('enter'); void card.offsetWidth; card.classList.add('enter');
   const done=R.total-R.queue.filter(q=>!q.redo).length;
@@ -994,7 +1041,7 @@ function reveal(){
   if(!$('qans').hidden) return;
   $('qans').hidden=false; $('qtap').hidden=true;
   $('qspk').disabled=false;
-  if(autoSpeak && R.toEs) speak(R.queue[0].it[1],$('qanstxt'));
+  if(autoSpeak && R.toEs) speak(R.say||R.queue[0].it[1],$('qanstxt'));
   $('rowJudge').hidden=false;
 }
 $('card').onclick=reveal;
@@ -1309,7 +1356,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-27 · 15';
+const APP_VERSION='2026-10-27 · 16';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -1348,7 +1395,7 @@ addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
 if(SYNC&&SYNC.gist) setTimeout(syncNow,800);
 
 /* --- Lernstand sichern / wiederherstellen --- */
-const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log'];
+const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log','q.exmode'];
 function bkStatus(){
   const last=loadJ('q.backup',null), started=Object.keys(SRS.c).length;
   const days=last===null?null:today()-last;
@@ -1412,7 +1459,7 @@ $('bkFile').onchange=async e=>{
     SRS.gen=gen;                                             // neue Generation: gilt auf allen Geräten
     saveQ(); scheduleSync(true);
     LOG=null; RET=loadJ('q.ret',0.9);
-    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto');
+    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto'); exMode=loadJ('q.exmode','word');
     renderPick(); bkStatus(); bkMsg('Lernstand vom '+when+' geladen ('+n+' Karten).');
   }catch(err){ bkMsg('Datei konnte nicht gelesen werden: '+err.message,true); }
 };

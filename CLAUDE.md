@@ -8,6 +8,7 @@ Statische PWA für GitHub Pages, kein Build-Schritt, keine Abhängigkeiten.
 | `style.css` | alle Stile | selten, per Grep nach Selektor |
 | `index.html` | nur Markup und Tab-Leiste | selten |
 | `content.js` | **~250 KB reine Daten** (GRAM, VOC, VERBS, SENT_DECKS) | nur bei Inhaltsänderung, nie komplett lesen |
+| `examples.js` | ~140 KB Daten: `EX` = 2 Beispielsätze je Vokabelkarte (Schlüssel wie `c.key`, Zielwort in `[ ]` in ES und DE) | nur bei Inhaltsänderung, per Grep nach Schlüssel |
 | `sw.js` | Service Worker | bei Änderungen an Dateiliste/Caching |
 | `opt-worker.js` | Worker für den FSRS-Optimierer | selten |
 | `fsrs/` | fsrs-browser 6.6 (WASM, angepasst, siehe `fsrs/LIESMICH.md`) | nie von Hand ändern |
@@ -20,6 +21,7 @@ Statische PWA für GitHub Pages, kein Build-Schritt, keine Abhängigkeiten.
 - Planung: FSRS-6 mit Standardparametern (`W_DEF`, abgeglichen mit py-fsrs 6.3), Zielretention `q.ret`. Karte `{b,due,l,r,u,s,d,fr,x}`: `x`=1 „Brauche ich nicht“ (fällt über `cardsOf`/`allCards` aus allen Listen, Zurückholen in den Einstellungen), `s` Stabilität, `d` Schwierigkeit, `fr` = Tag, an dem s/d berechnet wurden. `b` (Stufe 0–8) wird nur aus `s` abgeleitet (`stageOfS`), bleibt aber gepflegt, damit ältere App-Versionen weiterlaufen. Fehlt `s` oder ist `fr≠r`, schätzt `memOf` den Zustand: `s` = Leitner-Intervall der Stufe, `d` so zurückgerechnet, dass die nächste pünktliche richtige Abfrage den Leitner-Schritt (≈ ×2) nachbildet, plus Fehler. (Bis 2026-10-20 stand dort pauschal d = 2,1 → Abstände ×4; einmalig über `q.fix1` korrigiert.) `nextIvl` (Knopf-Vorschau) und `grade` nutzen dieselben Funktionen; die Streuung in `ivlOf` hängt nur von Karte und Tag ab.
 - Abfrageprotokoll `q.log` (`{k:[Kartenschlüssel], e:[[Tag,Nr,Bewertung 1–3,Tage seit letzter Abfrage|−1,Art,Richtung,ms]]}`): nur lokal und in der Sicherungsdatei, nie im Gist und nie in Wiederherstellungspunkten (zu groß). CSV-Export in den Einstellungen; daraus lassen sich mit py-fsrs eigene Parameter fitten und als `SRS.w` (+ `SRS.wu` = Zeitstempel) setzen. Nach jeder Regel- oder Parameteränderung `rescheduleFromLog()` laufen lassen (spielt alle protokollierten Bewertungen neu durch, nur Karten mit letztem Stand von diesem Gerät).
 - Abfragerichtung `auto`: neu → Deutsch, ab Stufe 1 → Spanisch (die Planung soll auf der schwereren Richtung beruhen).
+- Beispielsätze: `q.exmode` je Profil (`word` · `show` · `cloze`). Nur Darstellung — Karte, Planung, Protokoll bleiben gleich. `exPick` wechselt den Satz nach Zahl der früheren Lerntage der Karte (am selben Tag stabil). Neue Vokabeln brauchen zwei Einträge in `EX`, sonst wird die Karte wie bisher als Wort abgefragt.
 - Profile haben Präfix `P:<id>:` für `q.*`-Schlüssel; Cloud-Datei je Person im selben Gist.
 
 ## Prüfen ohne iPhone

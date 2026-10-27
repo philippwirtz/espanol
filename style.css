@@ -449,3 +449,14 @@ details.settings details.optman>summary::after{font-size:16px}
 .skiplist li b{display:block;font-weight:600}
 .skiplist li span{color:var(--soft);font-size:12px}
 .skiplist li button{flex:none;padding:7px 10px;font-size:12.5px}
+
+/* ---------- Beispielsätze ---------- */
+.qprompt.sent{font-size:19px;line-height:1.4}
+.qex{font-size:15.5px;line-height:1.45;margin-top:10px;color:var(--ink);font-style:normal;font-weight:400}
+.qex[hidden]{display:none}
+.qex .es{font-style:italic;font-weight:400;color:var(--teal)}
+.qex .de{display:block;color:var(--soft);font-size:14px;margin-top:3px}
+.qex .base{display:block;color:var(--soft);font-size:12.5px;margin-top:4px}
+.qcloze{font-size:18px;font-style:italic;color:var(--teal);padding-bottom:6px}
+.qcloze .gap{display:inline-block;min-width:3.2em;border-bottom:2px solid var(--gold);margin:0 2px;transform:translateY(-3px)}
+.qprompt mark,.qex mark,.qans mark{background:none;color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px;text-underline-offset:3px}
