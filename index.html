@@ -85,6 +85,18 @@
         <div class="setrow"><span class="seglabel">Zielretention</span>
           <div class="seg" id="segret"><button data-r="0.85">85%</button><button data-r="0.9">90%</button><button data-r="0.95">95%</button></div></div>
         <p class="shint" id="retHint"></p>
+        <div class="store" id="optBox">
+          <h4>Abstände an dich anpassen</h4>
+          <div class="strow"><span>Planung mit</span><span id="optStat">–</span></div>
+          <p class="shint" id="optHint"></p>
+          <label class="toggle">Automatisch neu berechnen <input type="checkbox" id="optAuto" switch></label>
+          <div class="btnrow"><button class="act" id="optNow">Jetzt berechnen</button><button class="act" id="optDef">Standardwerte</button></div>
+          <p class="shint" id="optMsg" hidden></p>
+          <details class="optman"><summary>Parameter von Hand</summary>
+            <textarea id="optW" rows="4" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+            <button class="act" id="optSet" style="width:100%">Übernehmen</button>
+          </details>
+        </div>
         <div class="setrow"><span class="seglabel">Abfragerichtung</span>
           <div class="seg" id="segdir"><button data-d="auto">Auto</button><button data-d="es">→ ES</button><button data-d="de">→ DE</button><button data-d="mix">Mix</button></div></div>
         <p class="shint" id="dirHint"></p>

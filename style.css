@@ -429,3 +429,12 @@ nav button[aria-selected=true]{color:var(--teal)}
 .kflame.risk{filter:none;animation:fpulse 1.6s ease-in-out infinite}
 @keyframes fpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
 @media (prefers-reduced-motion:reduce){.kflame.risk{animation:none}}
+
+/* ---------- Eigene Parameter ---------- */
+#optBox{margin-top:6px}
+#optBox .toggle{padding:6px 2px 2px}
+details.settings details.optman{margin:8px 0 0;background:none;border:0;border-radius:0;box-shadow:none;overflow:visible}
+details.settings details.optman>summary{padding:4px 2px;font-size:12.5px;font-weight:600;color:var(--soft)}
+details.settings details.optman>summary::after{font-size:16px}
+.optman textarea{width:100%;font:13px/1.45 ui-monospace,Menlo,monospace;padding:8px 10px;border:1px solid var(--rule);border-radius:10px;background:var(--card);color:var(--ink);margin:6px 0;resize:vertical}
+#optMsg.err{color:var(--alert)}

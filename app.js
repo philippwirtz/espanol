@@ -204,7 +204,7 @@ let RET=loadJ('q.ret',0.9);                                   // Zielretention: 
 const fw=()=>(SRS&&Array.isArray(SRS.w)&&SRS.w.length===21)?SRS.w:W_DEF;
 const clampD=d=>Math.min(10,Math.max(1,d));
 const D0=(w,G)=>w[4]-Math.exp(w[5]*(G-1))+1;                  // Anfangsschwierigkeit je Bewertung
-function retr(t,s){ const w=fw(), dec=-w[20], f=Math.pow(.9,1/dec)-1; return Math.pow(1+f*Math.max(0,t)/s,dec); }
+function retr(t,s,w=fw()){ const dec=-w[20], f=Math.pow(.9,1/dec)-1; return Math.pow(1+f*Math.max(0,t)/s,dec); }
 function nextD(w,d,G){ const d2=d+(10-d)*(-w[6]*(G-3))/9; return clampD(w[7]*D0(w,4)+(1-w[7])*d2); }
 const stageOfS=s=>{ let b=1; for(let i=2;i<=MAX;i++) if(s>=INT[i]) b=i; return b; };
 /* Gedächtniszustand einer begonnenen Karte. Ältere Daten (Leitner) oder Karten, die eine ältere App-Version
@@ -222,13 +222,17 @@ function memOf(x){
 }
 /* Neuer Gedächtniszustand nach Bewertung G (1 Nochmal · 2 Knapp · 3 Saß) am Tag t */
 function fsrsNext(x,G,t){
-  const w=fw();
-  if(!(x.b>0)) return {s:Math.max(.001,w[G-1]),d:clampD(D0(w,G))};
-  const m=memOf(x), el=t-lastRev(x); let s;
+  return x.b>0 ? fsrsStep(fw(),memOf(x),G,t-lastRev(x)) : fsrsStep(fw(),null,G,0);
+}
+/* Ein FSRS-Schritt mit beliebigen Parametern w — Planung und Gütetest der eigenen Parameter rechnen identisch.
+   m = bisheriger Zustand {s,d} oder null (neue Karte), el = Tage seit der letzten Abfrage. */
+function fsrsStep(w,m,G,el){
+  if(!m) return {s:Math.max(.001,w[G-1]),d:clampD(D0(w,G))};
+  let s;
   if(el<1){                                                    // am selben Tag erneut: Kurzzeitformel
     let inc=Math.exp(w[17]*(G-3+w[18]))*Math.pow(m.s,-w[19]); if(G>1) inc=Math.max(inc,1); s=m.s*inc;
   } else {
-    const r=retr(el,m.s);
+    const r=retr(el,m.s,w);
     s = G===1 ? Math.min(w[11]*Math.pow(m.d,-w[12])*(Math.pow(m.s+1,w[13])-1)*Math.exp((1-r)*w[14]), m.s/Math.exp(w[17]*w[18]))
               : m.s*(1+Math.exp(w[8])*(11-m.d)*Math.pow(m.s,-w[9])*(Math.exp((1-r)*w[10])-1)*(G===2?w[15]:1));
   }
@@ -377,6 +381,104 @@ function rescheduleFromLog(){
   if(n){ SRS.spreadDay=null; saveQ(); }                     // was jetzt fällig wird, verteilt der Tagesplan
   return n;
 }
+
+/* ---- Eigene Parameter: FSRS-Optimierer im Hintergrund ----
+   fsrs-browser (fsrs-rs als WebAssembly, derselbe Optimierer wie in Anki) rechnet aus dem Abfrageprotokoll
+   eigene Parameter — in einem Worker, erst bei Bedarf geladen. Das WASM ist auf nicht-geteilten Speicher
+   umgestellt (fsrs/LIESMICH.md), damit es ohne Cross-Origin-Isolation läuft (GitHub Pages setzt die Header nicht).
+   Ablauf: Gütetest — Training nur mit den früheren Tagen, Vergleich mit den aktuellen Parametern an den letzten
+   ~20 % der Wiederholungen. Nur wenn die neuen dort nicht schlechter vorhersagen: Training mit allem, übernehmen,
+   alle Karten aus dem Protokoll neu planen.
+   Auslöser: ab OPT_MIN Bewertungen, dann bei jeder Verdopplung oder nach OPT_DAYS Tagen (+200 Bewertungen).
+   SRS.w Parameter · SRS.wu Zeitpunkt der Änderung (entscheidet beim Abgleich) · SRS.wauto false = Automatik aus ·
+   SRS.wi Angaben zur letzten Übernahme (Anzeige). Auslöserstand je Gerät in q.opt {day,n,err,ok}. */
+const OPT_MIN=1000, OPT_DAYS=30;
+let optBusy=false;
+const validW=w=>Array.isArray(w)&&w.length===21&&w.every(Number.isFinite);
+function optSeqs(){                       // vollständige Kartenverläufe (erste Abfrage im Protokoll = neue Karte)
+  const L=logLoad(), by=new Map();
+  L.e.forEach(e=>{ if(e[4]===2 && e[2]>1) return;            // freies Üben: Erfolg zählt nicht (wie in der Planung)
+    let a=by.get(e[1]); if(!a){ a=[]; by.set(e[1],a); } a.push(e); });
+  const seqs=[];
+  by.forEach((E,ci)=>{ if(E[0][3]>=0) return;                 // vor dem Protokoll begonnen: Vorgeschichte fehlt
+    seqs.push({ci,days:E.map(e=>e[0]),g:E.map(e=>e[2])}); });
+  return seqs;
+}
+function optItems(seqs,maxDay){           // Eingabe für computeParameters: jeder Verlauf bis zu einer Wiederholung über eine Tagesgrenze
+  const r=[],t=[],l=[],c=[];
+  seqs.forEach(q=>{ const dt=q.days.map((d,i)=>i?d-q.days[i-1]:0);
+    for(let i=1;i<q.g.length;i++){ if(dt[i]<1 || q.days[i]>=maxDay) continue;
+      for(let j=0;j<=i;j++){ r.push(q.g[j]); t.push(dt[j]); } l.push(i+1); c.push(q.ci); } });
+  return {r,t,l,c};
+}
+function optLoss(w,seqs,fromDay){         // mittlerer Log-Loss der Vorhersagen über Tagesgrenzen ab fromDay (kleiner = besser)
+  let sum=0,n=0;
+  seqs.forEach(q=>{ let m=null;
+    for(let i=0;i<q.g.length;i++){ const el=i?q.days[i]-q.days[i-1]:0, G=q.g[i];
+      if(i && el>=1 && q.days[i]>=fromDay){ const p=Math.min(1-1e-4,Math.max(1e-4,retr(el,m.s,w))); sum-=Math.log(G>1?p:1-p); n++; }
+      m=fsrsStep(w,m,G,el); } });
+  return {ll:n?sum/n:NaN,n};
+}
+async function optFitHere(D){             // Rückfallebene ohne Worker
+  const m=await import('./fsrs/fsrs_browser.js'); await m.default();
+  return Array.from(new m.Fsrs().computeParameters(Uint32Array.from(D.r),Uint32Array.from(D.t),Uint32Array.from(D.l),
+    null,true,BigInt64Array.from(D.c,BigInt)));
+}
+function optFit(D){
+  return new Promise((res,rej)=>{
+    let wk; try{ wk=new Worker('opt-worker.js',{type:'module'}); }catch(e){ optFitHere(D).then(res,rej); return; }
+    let done=false; const end=()=>{ done=true; clearTimeout(to); wk.terminate(); };
+    const to=setTimeout(()=>{ if(!done){ end(); rej(new Error('Zeitüberschreitung')); } },120000);
+    wk.onmessage=e=>{ if(done) return; end(); e.data&&e.data.err?rej(new Error(e.data.err)):res(e.data.w); };
+    wk.onerror=e=>{ if(done) return; end(); if(e&&e.preventDefault) e.preventDefault(); optFitHere(D).then(res,rej); };
+    wk.postMessage(D);
+  });
+}
+function optDue(){
+  const N=logLoad().e.length, t=today(), o=loadJ('q.opt',{});
+  if(SRS.wauto===false || N<OPT_MIN) return false;
+  if(o.err && o.day===t) return false;                                     // Fehler: frühestens morgen erneut
+  if(!o.n) return true;
+  return N>=2*o.n || (t-o.day>=OPT_DAYS && N>=o.n+200);
+}
+/* Rechnet und übernimmt, wenn besser. Ergebnis: {ok, ll0, ll1, test, n, items, moved} oder Fehler */
+async function optimize(src){
+  if(optBusy) return null;
+  optBusy=true; optRender();
+  const t=today(), N=logLoad().e.length;
+  try{
+    const seqs=optSeqs(), cur=fw().slice();
+    const ds=[]; seqs.forEach(q=>q.days.forEach((d,i)=>{ if(i && d-q.days[i-1]>=1) ds.push(d); })); ds.sort((a,b)=>a-b);
+    if(ds.length<100) throw new Error('erst '+ds.length+' auswertbare Wiederholungen, nötig sind 100');
+    const cut=ds[Math.floor(ds.length*.8)], nTest=ds.filter(d=>d>=cut).length;
+    let ll0=null, ll1=null, test=0, ok=true;
+    if(nTest>=40 && ds.length-nTest>=100){
+      const wT=await optFit(optItems(seqs,cut));
+      if(!validW(wT)) throw new Error('Optimierer lieferte ungültige Werte');
+      const a=optLoss(cur,seqs,cut), b=optLoss(wT,seqs,cut);
+      ll0=a.ll; ll1=b.ll; test=a.n; ok=b.ll<=a.ll+.002;
+    }
+    let w=null;
+    if(ok){
+      w=await optFit(optItems(seqs,Infinity));
+      if(!validW(w)) throw new Error('Optimierer lieferte ungültige Werte');
+      w=w.map(x=>+x.toFixed(4));
+      if(ll0===null){ const a=optLoss(cur,seqs,-Infinity), b=optLoss(w,seqs,-Infinity); ll0=a.ll; ll1=b.ll; ok=b.ll<a.ll; }
+    }
+    const info={day:t,n:N,items:ds.length,test,ll0:+ll0.toFixed(4),ll1:+ll1.toFixed(4),src};
+    store.set('q.opt',JSON.stringify({day:t,n:N,ok,ll0:info.ll0,ll1:info.ll1,test,ts:Date.now()}));
+    if(ok){
+      snapshot('vor Anpassung der Abstände');
+      SRS.w=w; SRS.wu=Date.now(); SRS.wi=info; saveQ();
+      info.moved=rescheduleFromLog(); saveQ(); scheduleSync();
+    }
+    return {...info,ok};
+  }catch(e){
+    store.set('q.opt',JSON.stringify({...loadJ('q.opt',{}),day:t,err:String(e&&e.message||e),ts:Date.now()}));
+    throw e;
+  }finally{ optBusy=false; optRender(); if(!$('pick').hidden) renderPick(); }
+}
+function optAuto(){ if(optDue()) optimize('auto').catch(()=>{}); }
 
 /* --- Vokabelstapel aus den Wortschatzblöcken --- */
 function wordsFrom(html,withPhr){
@@ -617,7 +719,7 @@ function renderStats(){
        :r<RET-.08?'deutlich darunter: Die Abstände sind für dich eher zu lang (eigene Parameter würden das korrigieren).'
        :'passt zum Ziel.')+'</p>'; }
   { const L=logLoad(); if(L.e.length) h+='<p class="st-note">Abfrageprotokoll: <b>'+L.e.length+'</b> Bewertungen seit '
-      +new Date(L.e[0][0]*864e5).toLocaleDateString('de-DE',{timeZone:'UTC'})+'. Ab etwa 1000 lassen sich die Abstände an dich anpassen.</p>'; }
+      +new Date(L.e[0][0]*864e5).toLocaleDateString('de-DE',{timeZone:'UTC'})+'. '+(validW(SRS.w)?'Die Abstände sind an dich angepasst (Einstellungen).':L.e.length<OPT_MIN?'Ab '+OPT_MIN+' rechnet die App eigene Abstände für dich aus.':'Eigene Abstände: siehe Einstellungen.')+'</p>'; }
   // Vorschau 14 Tage
   const A=allCards(), due0=A.filter(isDue).length, F=[]; for(let i=1;i<=14;i++) F.push(A.filter(c=>{const x=st(c.key);return x.b>0&&x.due===t+i}).length);
   const fm=Math.max(1,due0,...F);
@@ -719,12 +821,73 @@ function renderPick(){
   document.querySelectorAll('#segret button').forEach(b=>b.setAttribute('aria-pressed',Math.abs(+b.dataset.r-RET)<.001));
   $('retHint').textContent='So sicher soll eine Karte am Fälligkeitstag noch sitzen. '+(RET>=.95?'95 %: kaum Vergessen, aber deutlich mehr Wiederholungen.'
     :RET<=.85?'85 %: weniger Wiederholungen, dafür häufiger „Nochmal".':'90 %: der übliche Kompromiss.')
-    +' Gilt ab der nächsten Abfrage jeder Karte.'+(Array.isArray(SRS.w)?' Planung mit deinen eigenen Parametern.':'');
+    +' Gilt ab der nächsten Abfrage jeder Karte.';
+  optRender();
   if(typeof bkStatus==='function') bkStatus();
   renderWho();
   if($('stats').open) renderStats();
 }
-document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); renderDiag(); } });
+document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); renderDiag(); optRender(); } });
+
+/* Einstellungen: eigene Parameter */
+// Funktionsdeklarationen (nicht const): renderPick ruft optRender schon beim Start auf, bevor diese Zeilen laufen
+function fmtDay(d){ return new Date(d*864e5).toLocaleDateString('de-DE',{timeZone:'UTC',day:'numeric',month:'numeric',year:'2-digit'}); }
+function fmtLL(x){ return x.toFixed(3).replace('.',','); }
+function llText(a,b){ return fmtLL(a)+' → '+fmtLL(b)+', '+Math.abs(Math.round((1-b/a)*100))+' % '+(b<=a?'besser':'schlechter'); }
+function optMsg(t,err){ const m=$('optMsg'); m.textContent=t; m.className='shint'+(err?' err':''); m.hidden=!t; }
+function optRender(){
+  if(!$('optStat')) return;
+  const own=validW(SRS.w), o=loadJ('q.opt',{}), N=logLoad().e.length, wi=SRS.wi||{}, auto=SRS.wauto!==false;
+  $('optStat').textContent=optBusy?'rechnet …':own?'eigenen Werten':'Standardwerten';
+  $('optStat').className=optBusy?'':own?'ok':'';
+  const s=[];
+  if(own && wi.src==='hand') s.push('Von Hand eingetragen am '+fmtDay(wi.day)+'.');
+  else if(own && wi.ll0!=null) s.push('Berechnet am '+fmtDay(wi.day)+' aus '+wi.n+' Bewertungen ('+wi.items+' Wiederholungen über Tagesgrenzen). '
+    +'Vorhersagefehler'+(wi.test?' an den letzten Lerntagen':'')+' (Log-Loss): '+llText(wi.ll0,wi.ll1)+'.');
+  else if(own) s.push('Eigene Werte (übernommen'+(wi.day!==undefined?' am '+fmtDay(wi.day):'')+').');
+  else s.push(N<OPT_MIN ? 'Ab '+OPT_MIN+' Bewertungen rechnet die App aus deinem Abfrageprotokoll eigene Werte aus (jetzt '+N+').'
+    : 'Dein Protokoll hat '+N+' Bewertungen — genug für eigene Werte.');
+  const fresh=(o.ts||0)>(SRS.wu||0);
+  if(o.err && fresh) s.push('Letzte Berechnung am '+fmtDay(o.day)+' nicht möglich: '+o.err+'.');
+  else if(o.ok===false && o.ll0!=null && fresh) s.push('Letzte Berechnung am '+fmtDay(o.day)+': keine Verbesserung ('+llText(o.ll0,o.ll1)+'), Werte behalten.');
+  if(!auto) s.push('Automatik aus.');
+  else if(o.n && N>=OPT_MIN) s.push('Nächste Berechnung bei '+(2*o.n)+' Bewertungen oder ab '+fmtDay(o.day+OPT_DAYS)+'.');
+  $('optHint').textContent=s.join(' ');
+  $('optAuto').checked=auto;
+  $('optNow').disabled=optBusy; $('optDef').disabled=optBusy||!own;
+  if(document.activeElement!==$('optW')) $('optW').value=fw().join(', ');
+}
+function optChanged(){ saveQ(); const n=rescheduleFromLog(); saveQ(); scheduleSync(); renderPick(); return n; }
+$('optNow').onclick=async()=>{
+  optMsg('Rechne …');
+  try{ const r=await optimize('hand');
+    if(!r) return;
+    optMsg(r.ok ? 'Übernommen. '+(r.moved?r.moved+' Karten neu eingeplant.':'Keine Karte musste verschoben werden.')
+      : 'Keine Verbesserung gegenüber den jetzigen Werten — sie bleiben.');
+  }catch(e){ optMsg('Nicht möglich: '+(e&&e.message||e),true); }
+};
+$('optDef').onclick=()=>{
+  if(!confirm('Zurück zu den Standardwerten? Die automatische Berechnung wird dabei ausgeschaltet.')) return;
+  snapshot('vor Rückkehr zu den Standardwerten');
+  delete SRS.w; SRS.wauto=false; SRS.wu=Date.now(); SRS.wi={day:today(),src:'standard'};
+  const n=optChanged(); optMsg('Standardwerte gelten.'+(n?' '+n+' Karten neu eingeplant.':''));
+};
+$('optAuto').onchange=()=>{
+  SRS.wauto=$('optAuto').checked; SRS.wu=Date.now(); saveQ(); scheduleSync(); optMsg(''); optRender();
+  if(!SRS.wauto) return;
+  if(validW(SRS.w)) optAuto();
+  else if(logLoad().e.length>=OPT_MIN){ optMsg('Rechne …');                   // zurück aus „Standardwerte": gleich neu rechnen
+    optimize('auto').then(r=>optMsg(r&&r.ok?'Eigene Werte übernommen.':'Keine Verbesserung gegenüber den Standardwerten.'))
+      .catch(e=>optMsg('Nicht möglich: '+(e&&e.message||e),true)); }
+};
+$('optSet').onclick=()=>{
+  const w=$('optW').value.split(/[\s,;]+/).filter(Boolean).map(x=>+x.replace(/^\[|\]$/g,''));
+  if(!validW(w) || w.slice(0,4).some(x=>x<=0)) { optMsg('Bitte genau 21 Zahlen eingeben, getrennt durch Kommas.',true); return; }
+  snapshot('vor Eintrag eigener Parameter');
+  SRS.w=w; SRS.wu=Date.now(); SRS.wi={day:today(),n:logLoad().e.length,src:'hand'};
+  const n=optChanged(); $('optW').blur(); optRender();
+  optMsg('Übernommen.'+(n?' '+n+' Karten neu eingeplant.':''));
+};
 document.querySelectorAll('#segret button').forEach(b=>b.onclick=()=>{
   RET=+b.dataset.r; store.set('q.ret',JSON.stringify(RET)); renderPick(); });
 document.querySelectorAll('#segdir button').forEach(b=>b.onclick=()=>{
@@ -975,7 +1138,9 @@ function mergeInto(T,rem){               // pro Karte gewinnt der neuere Stand, 
   T.rn=T.rn||{}; T.rok=T.rok||{};
   for(const [d,v] of Object.entries(rem.rn||{})){ if((T.rn[d]||0)<v){ T.rn[d]=v; n++; } }
   for(const [d,v] of Object.entries(rem.rok||{})){ if((T.rok[d]||0)<v){ T.rok[d]=v; n++; } }
-  if(Array.isArray(rem.w) && (rem.wu||0)>(T.wu||0)){ T.w=rem.w; T.wu=rem.wu; n++; }   // eigene FSRS-Parameter
+  if((rem.wu||0)>(T.wu||0)){                                 // eigene FSRS-Parameter: der neuere Stand gilt, auch „zurück auf Standard"
+    if(Array.isArray(rem.w)) T.w=rem.w; else delete T.w;
+    T.wu=rem.wu; if(rem.wi) T.wi=rem.wi; if(rem.wauto!==undefined) T.wauto=rem.wauto; else delete T.wauto; n++; }
   if((rem.best||0)>(T.best||0)){ T.best=rem.best; n++; }
   if(rem.flame!==undefined && (T.flame===undefined || rem.flame>T.flame)) T.flame=rem.flame;
   if(rem.everBroken) T.everBroken=true;
@@ -1095,7 +1260,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-20 · 13';
+const APP_VERSION='2026-10-27 · 14';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -1216,6 +1381,11 @@ if(!loadJ('q.fix1',false)){
   try{ if(logLoad().e.length){ snapshot('vor Neuberechnung der Abstände'); const n=rescheduleFromLog(); if(n) scheduleSync(); } }catch(e){}
   store.set('q.fix1','true');
 }
+
+/* Eigene Parameter: im Hintergrund prüfen, ob eine Neuberechnung fällig ist — nicht mitten in einer Runde */
+function optWhenIdle(){ if($('play').hidden) optAuto(); else setTimeout(optWhenIdle,6e4); }
+setTimeout(optWhenIdle,4000);
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible') setTimeout(optWhenIdle,4000); });
 
 /* ===================== Hinweise ===================== */
 const tip=document.createElement('div'); tip.className='tip'; tip.hidden=true; document.body.appendChild(tip);
