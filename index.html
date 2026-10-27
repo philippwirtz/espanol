@@ -97,6 +97,11 @@
             <button class="act" id="optSet" style="width:100%">Übernehmen</button>
           </details>
         </div>
+        <div class="store" id="skipBox">
+          <div class="strow"><span>Ausgeblendete Karten</span><span id="skipN">keine</span></div>
+          <p class="shint">Karten, bei denen du in der Abfrage „Brauche ich nicht“ gewählt hast. Sie kommen nicht mehr dran und zählen nirgends mit; ihr Lernstand bleibt erhalten.</p>
+          <details class="optman" id="skipList" hidden><summary>Anzeigen und zurückholen</summary><ul class="skiplist" id="skipUl"></ul></details>
+        </div>
         <div class="setrow"><span class="seglabel">Abfragerichtung</span>
           <div class="seg" id="segdir"><button data-d="auto">Auto</button><button data-d="es">→ ES</button><button data-d="de">→ DE</button><button data-d="mix">Mix</button></div></div>
         <p class="shint" id="dirHint"></p>
@@ -167,6 +172,7 @@
         <button class="act mid" id="hard">Knapp<small id="iv1"></small></button>
         <button class="act pri" id="got">Saß<small id="iv2"></small></button>
       </div>
+      <button class="skipbtn" id="qskip">Brauche ich nicht</button>
     </section>
 
     <section class="screen" id="empty" hidden>

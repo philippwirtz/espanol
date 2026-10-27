@@ -529,9 +529,15 @@ const WORD_DECKS=VOC.map((b,i)=>{const lv=levelOf(b.g), adv=lv!=='basis'; return
   .filter(d=>d.items.length>=4);
 SENT_DECKS.forEach(d=>{d.kind='s'; d.lv='basis'; d.lvl=1;});
 const ALL=[...SENT_DECKS,...WORD_DECKS];
-const cardsOf=d=>d.items.map(it=>({it,key:d.kind+':'+it[1],deck:d.name,lvl:d.lvl||1,lv:d.lv||'basis'}));
+const cardsRaw=d=>d.items.map(it=>({it,key:d.kind+':'+it[1],deck:d.name,lvl:d.lvl||1,lv:d.lv||'basis'}));
+/* „Brauche ich nicht": Karte mit x=1 im Lernstand. Sie fällt aus allen Kartenlisten heraus — keine Abfrage,
+   keine Fälligkeit, zählt nirgends mit. Ihr Lernstand bleibt erhalten; Zurückholen in den Einstellungen. */
+const isSkipped=key=>!!(SRS.c[key]&&SRS.c[key].x);
+const cardsOf=d=>cardsRaw(d).filter(c=>!isSkipped(c.key));
 // Gleiche Karte in mehreren Stapeln (z. B. „la cuenta") nur einmal zählen und abfragen
 const allCards=()=>{const seen=new Set();return ALL.flatMap(cardsOf).filter(c=>!seen.has(c.key)&&seen.add(c.key))};
+const skippedCards=()=>{const seen=new Set();return ALL.flatMap(cardsRaw).filter(c=>isSkipped(c.key)&&!seen.has(c.key)&&seen.add(c.key))};
+const begunN=c=>Object.values(c||{}).filter(x=>x&&x.b>0&&!x.x).length;   // begonnene Karten ohne ausgeblendete
 
 /* --- Rundenzusammenstellung --- */
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -587,7 +593,7 @@ const saveProfiles=()=>raw.set('app.profiles',JSON.stringify(PROFILES));
 function streakOf(hist){ let t=today(), n=0; if(!hist[t]) t--; while(hist[t]){ n++; t--; } return n; }
 function summaryOf(srs,name,src){
   const h=(srs&&srs.hist)||{};
-  return {name,src,streak:streakOf(h),today:h[today()]||0,begun:Object.keys((srs&&srs.c)||{}).length};
+  return {name,src,streak:streakOf(h),today:h[today()]||0,begun:begunN(srs&&srs.c)};
 }
 const lastDay=h=>Math.max(-1,...Object.keys(h||{}).map(Number));
 const isDefaultName=n=>/^ich$/i.test((n||'').trim());
@@ -595,7 +601,7 @@ function peerEntries(){                                // alle anderen Lernenden
   const mine=(SYNC&&SYNC.gist)?myFile():null, out=[];
   PROFILES.filter(x=>x.id!==CUR).forEach(x=>{ let srs=null; try{srs=JSON.parse(raw.get(pfx(x.id)+'q.srs')||'null')}catch(e){}
     const f=fileOfProfile(x.id); if(f&&f===mine) return;
-    out.push({name:x.name,file:f,src:'lokal',hist:(srs&&srs.hist)||{},begun:Object.keys((srs&&srs.c)||{}).length}); });
+    out.push({name:x.name,file:f,src:'lokal',hist:(srs&&srs.hist)||{},begun:begunN(srs&&srs.c)}); });
   let remote=[]; try{remote=JSON.parse(raw.get('app.peers')||'[]')}catch(e){}
   remote.forEach(r=>{ if(!r.hist||!r.file||r.file===mine) return;
     out.push({name:r.name,file:r.file,src:'cloud',hist:r.hist,begun:r.begun||0}); });
@@ -822,12 +828,28 @@ function renderPick(){
   $('retHint').textContent='So sicher soll eine Karte am Fälligkeitstag noch sitzen. '+(RET>=.95?'95 %: kaum Vergessen, aber deutlich mehr Wiederholungen.'
     :RET<=.85?'85 %: weniger Wiederholungen, dafür häufiger „Nochmal".':'90 %: der übliche Kompromiss.')
     +' Gilt ab der nächsten Abfrage jeder Karte.';
-  optRender();
+  optRender(); renderSkips();
   if(typeof bkStatus==='function') bkStatus();
   renderWho();
   if($('stats').open) renderStats();
 }
-document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); renderDiag(); optRender(); } });
+document.querySelector('details.settings').addEventListener('toggle',e=>{ if(e.target.open){ askPersist(); renderSnaps(); syncStatus(); ttsInfo(); renderDiag(); optRender(); renderSkips(); } });
+
+/* Einstellungen: ausgeblendete Karten */
+function renderSkips(){
+  const L=skippedCards(), ul=$('skipUl');
+  $('skipN').textContent=L.length?L.length+' Karte'+(L.length===1?'':'n'):'keine';
+  $('skipList').hidden=!L.length;
+  ul.innerHTML='';
+  L.sort((a,b)=>a.it[1].localeCompare(b.it[1],'es')).forEach(c=>{
+    const li=document.createElement('li');
+    li.innerHTML='<div><b></b><span></span></div><button class="act">Zurückholen</button>';
+    li.querySelector('b').textContent=c.it[1]; li.querySelector('span').textContent=c.it[0]+' · '+c.deck;
+    li.querySelector('button').onclick=()=>{
+      const x={...SRS.c[c.key]}; delete x.x; x.u=Date.now(); SRS.c[c.key]=x;
+      saveQ(); scheduleSync(); renderPick(); };
+    ul.appendChild(li); });
+}
 
 /* Einstellungen: eigene Parameter */
 // Funktionsdeklarationen (nicht const): renderPick ruft optRender schon beim Start auf, bevor diese Zeilen laufen
@@ -1016,6 +1038,33 @@ function grade(g){
   } else saveQ();                                                // Tagesstatistik trotzdem sichern
   nextCard();
 }
+/* „Brauche ich nicht": Karte ausblenden, aus der Runde nehmen (auch Wiederholungen), 6 s Rückgängig */
+let skipUndo=null;
+function skipCard(){
+  if(!R || !R.queue.length || $('play').hidden) return;
+  const c=R.queue[0], prev=SRS.c[c.key], removed=R.queue.filter(q=>q.key===c.key);
+  R.queue=R.queue.filter(q=>q.key!==c.key);
+  const counted=!c.redo;                                   // noch nicht beantwortet → zählt nicht mehr zur Runde
+  if(counted) R.total=Math.max(0,R.total-1);
+  SRS.c[c.key]={...st(c.key),x:1,u:Date.now()}; saveQ(); scheduleSync();
+  showSkipToast(c,()=>{                                    // Rückgängig
+    if(prev) SRS.c[c.key]={...prev,u:Date.now()}; else delete SRS.c[c.key];
+    saveQ(); scheduleSync();
+    if(R && !$('play').hidden){ R.queue.unshift(...removed); if(counted) R.total++; nextCard(); }
+  });
+  if(!R.queue.length && R.total===0){ show('pick'); renderPick(); return; }   // Runde bestand nur aus dieser Karte
+  nextCard();
+}
+function showSkipToast(c,undo){
+  if(skipUndo) skipUndo.el.remove();
+  const el=document.createElement('div'); el.className='upd skiptoast';
+  el.innerHTML='<span></span><button>Rückgängig</button>';
+  el.querySelector('span').textContent='„'+c.it[1]+'“ ausgeblendet';
+  const t=setTimeout(()=>{ el.remove(); if(skipUndo&&skipUndo.el===el) skipUndo=null; },6000);
+  el.querySelector('button').onclick=()=>{ clearTimeout(t); el.remove(); skipUndo=null; undo(); };
+  document.body.appendChild(el); skipUndo={el};
+}
+$('qskip').onclick=e=>{ e.stopPropagation(); skipCard(); };
 $('again').onclick=()=>grade(0);
 $('hard').onclick=()=>grade(1);
 $('got').onclick=()=>grade(2);
@@ -1117,7 +1166,7 @@ const payload=()=>JSON.stringify({app:'espanol-de-bolsillo',v:3,name:curProfile(
 function learnerFiles(g){
   return Object.entries(g.files||{}).filter(([f])=>LEARN_RE.test(f)).map(([f,v])=>{
     let d={}; try{d=JSON.parse(v.content||'{}')}catch(e){}
-    return {file:f,name:d.name||'Profil ohne Namen',n:d.srs?Object.keys(d.srs.c||{}).length:0,srs:d.srs}; });
+    return {file:f,name:d.name||'Profil ohne Namen',n:d.srs?begunN(d.srs.c):0,srs:d.srs}; });
 }
 let SYNC=loadJ('q.sync',null), syncTimer=null, syncing=false;
 async function gh(path,opt={}){
@@ -1260,7 +1309,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-27 · 14';
+const APP_VERSION='2026-10-27 · 15';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
