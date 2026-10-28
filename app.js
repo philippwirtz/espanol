@@ -296,7 +296,7 @@ let exMode=loadJ('q.exmode','word'); if(!['word','show','cloze'].includes(exMode
 const EX_HINT={
   word:'Abgefragt wird nur das Wort.',
   show:'Wie bisher; nach dem Aufdecken erscheint ein Beispielsatz mit Übersetzung.',
-  cloze:'Ins Spanische: deutscher Satz und spanischer Lückensatz — das fehlende Wort ergänzen. Ins Deutsche: spanischer Satz, das markierte Wort übersetzen. Zwei Sätze pro Wort wechseln sich ab.'};
+  cloze:'Ins Spanische: deutsches Wort und spanischer Lückensatz — das fehlende Wort ergänzen, die Satzübersetzung erscheint erst nach dem Aufdecken. Ins Deutsche: spanischer Satz, das markierte Wort übersetzen. Zwei Sätze pro Wort wechseln sich ab.'};
 const EXD=typeof EX==='object'?EX:{};
 function exPick(c){                       // abwechselnd nach Zahl der Lerntage dieser Karte; am selben Tag immer derselbe Satz
   const L=EXD[c.key]; if(!L||!L.length) return null;
@@ -998,11 +998,12 @@ function nextCard(){
   if(cloze){
     const [sEs,sDe]=E, tgt=exTarget(sEs);
     R.say=exPlain(sEs); $('qprompt').classList.add('sent');
-    if(toEs){                                                 // deutscher Satz + spanischer Lückensatz → Wort ergänzen
-      $('qprompt').innerHTML=exHtml(sDe);
+    if(toEs){                                                 // deutsches Wort + spanischer Lückensatz → Wort ergänzen; Satzübersetzung erst nach dem Aufdecken
+      $('qprompt').classList.remove('sent'); $('qprompt').textContent=de;
       $('qpex').innerHTML=exHtml(sEs,true); $('qpex').hidden=false;
       $('qanstxt').innerHTML=exHtml(sEs);
-      if(fold(tgt)!==fold(es)){ $('qaex').innerHTML='<span class="base">Wörterbuchform: '+esc(es)+'</span>'; $('qaex').hidden=false; }
+      $('qaex').innerHTML='<span class="de">'+exHtml(sDe)+'</span>'+(fold(tgt)!==fold(es)?'<span class="base">Wörterbuchform: '+esc(es)+'</span>':'');
+      $('qaex').hidden=false;
     } else {                                                  // spanischer Satz → markiertes Wort übersetzen
       $('qprompt').innerHTML=exHtml(sEs);
       $('qanstxt').textContent=de;
@@ -1356,7 +1357,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-27 · 16';
+const APP_VERSION='2026-10-28 · 17';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
