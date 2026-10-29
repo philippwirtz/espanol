@@ -192,7 +192,8 @@ applyFilter(); renderJump();
 const $=id=>document.getElementById(id);
 const loadJ=(k,d)=>{try{const v=JSON.parse(store.get(k)||'null');return v??d}catch(e){return d}};
 const INT=[0,1,3,7,14,30,60,120,240];  // Stufengrenzen in Tagen Stabilität (früher feste Intervalle)
-const MAX=8, REDO_MAX=5, LEECH=4;     // Fehler: bis zu 5× ans Rundenende, bis die Karte einmal sitzt
+const MAX=8, REDO_MAX=5, LEECH=4, LEECH_OUT=5;     // Fehler: bis zu 5× ans Rundenende, bis die Karte einmal sitzt
+// Problemkarte: ab LEECH Fehlern, aber nur solange die Karte unter Stufe LEECH_OUT (30 Tage Stabilität) liegt
 const today=()=>{const n=Date.now();return Math.floor((n-new Date(n).getTimezoneOffset()*6e4)/864e5)};
 const stageOf=b=>b===0?0:b<=2?1:b<=4?2:3;
 const STAGE=['Neu','Lernphase','Gefestigt','Sicher'];
@@ -336,7 +337,8 @@ const day=()=>{ if(SRS.day.d!==today()) SRS.day={d:today(),n:0,ok:0,nw:0,rn:0,ro
 const st=k=>SRS.c[k]||{b:0,due:0,l:0};
 const isNew=c=>st(c.key).b===0;
 const isDue=c=>{const x=st(c.key);return x.b>0&&x.due<=today()};
-const isWeak=c=>{const x=st(c.key);return x.b>0&&((x.l>0&&x.b<=2)||x.l>=LEECH)};
+const isLeech=x=>(x.l||0)>=LEECH&&x.b<LEECH_OUT;
+const isWeak=c=>{const x=st(c.key);return x.b>0&&((x.l>0&&x.b<=2)||isLeech(x))};
 const newLeft=()=>Math.max(0,newPerDay-day().nw);
 /* ---- Tagesplan: Zeitbudget statt „alles Fällige" ----
    Budget = Minuten × 60 / gemessenes Tempo. Neue Karten nur, wenn die Wiederholungen in den Plan passen
@@ -989,7 +991,7 @@ function nextCard(){
   $('qchip').className=toEs?'qchip':'qchip rev';
   $('qstage').textContent=x.b===0?'Neu':'Stufe '+x.b;
   $('qredo').hidden=!c.redo;
-  $('qleech').hidden=!(x.l>=LEECH);
+  $('qleech').hidden=!isLeech(x);
   $('qprompt').textContent=toEs?de:es;
   $('qprompt').className=toEs?'qprompt':'qprompt esdir';
   $('qans').className=toEs?'qans':'qans dedir';
@@ -1355,7 +1357,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-28 · 18';
+const APP_VERSION='2026-10-29 · 19';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
