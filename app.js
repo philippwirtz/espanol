@@ -24,7 +24,7 @@ document.getElementById('theme').onclick=()=>{
   const cur=html.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
   const next=cur==='dark'?'light':'dark';
   html.dataset.theme=next; store.set('theme',next);
-  document.querySelector('meta[name=theme-color]').content=next==='dark'?'#1A1916':'#F4F1EA';
+  document.querySelector('meta[name=theme-color]').content=next==='dark'?'#1F2E31':'#F4F1EA';
 };
 
 /* ===================== Aufbau ===================== */
@@ -1381,7 +1381,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-08 · 26';
+const APP_VERSION='2026-11-08 · 27';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
