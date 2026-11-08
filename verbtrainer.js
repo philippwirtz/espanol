@@ -91,6 +91,7 @@ function vtShow(){
   vtEl().innerHTML=
     '<div class="vtbox"><div class="vttop"><button class="back" id="vtleave">‹ Zurück</button><span class="vtcount">'+Math.min(done+1,VTR.total)+' / '+VTR.total+'</span></div>'+
     '<div class="qcard vtcard"><div class="chips"><span class="qchip vtform">'+VT_FORMS.find(f=>f.id===c.form).label+'</span>'+
+    '<span class="qchip stagechip">'+ruedaSvg((SRS.c[c.key]||{}).b||0,MAX)+((SRS.c[c.key]||{}).b?'Stufe '+SRS.c[c.key].b:'Neu')+'</span>'+
     (e.redo?'<span class="qchip redo">Wiederholung</span>':'')+'</div>'+
     '<div class="vtverb">'+vtEsc(c.verb)+'</div><div class="vtsub">'+vtEsc(c.sub)+'</div>'+
     '<div class="vtkeys" id="vtkeys">'+['á','é','í','ó','ú','ñ','ü'].map(ch=>'<button type="button" data-ch="'+ch+'">'+ch+'</button>').join('')+'</div>'+
@@ -119,7 +120,9 @@ function vtCheckNow(giveUp){
     }
   });
   document.getElementById('vtkeys').style.display='none';
-  document.getElementById('vtres').innerHTML='<div class="vtnext">Nächster Termin: '+(g.G===1?'heute noch einmal':fmtIvl(g.days))+'</div>';
+  const nOk=c.items.length-wrong.length;                  // Rad nur ab 3 Formen: bei Gerundio/Partizip wäre es ein einzelnes Blatt
+  document.getElementById('vtres').innerHTML=(c.items.length>=3?ruedaSvg(c.items.length,c.items.length,{cls:'big spin',label:nOk+' von '+c.items.length+' richtig',classes:res.map(r=>r==='ok'?'ok':'bad')}):'')+
+    '<div class="vtnext">Nächster Termin: '+(g.G===1?'heute noch einmal':fmtIvl(g.days))+'</div>';
   document.getElementById('vtbtns').innerHTML='<button class="act pri" id="vtnext">Weiter</button>';
   document.getElementById('vtnext').focus();
 }
