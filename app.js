@@ -1380,7 +1380,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-08 · 22';
+const APP_VERSION='2026-11-08 · 23';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;

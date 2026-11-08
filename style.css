@@ -491,12 +491,8 @@ details.settings details.optman>summary::after{font-size:16px}
 /* ---------- Verbtrainer ---------- */
 #vtrain{padding-top:14px;padding-bottom:24px}
 .vtbox{display:flex;flex-direction:column;gap:12px}
-.vtcounts{font-size:15px;color:var(--soft)}
-.vtcounts b{color:var(--ink);font:800 34px/1 var(--font);font-stretch:75%}
-.vtgo small{display:block;font:500 12px/1 var(--font);opacity:.85;margin-top:3px}
-.vtset{border-top:2px solid var(--ink);padding-top:6px}
-.vtsethead{font:800 18px/1.1 var(--font);font-stretch:75%;color:var(--ink);margin:14px 0 2px}
-.vtset .toggle input[type=number]{width:64px;height:auto;padding:6px 8px;font:16px var(--font);border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);text-align:right}
+.vtsethead{font:700 14px/1.1 var(--font);color:var(--ink);margin:14px 2px 2px}
+details.settings .toggle input[type=number]{width:64px;height:auto;padding:6px 8px;font:16px var(--font);border:1px solid var(--rule);border-radius:8px;background:var(--card);color:var(--ink);text-align:right}
 .vttop{display:flex;align-items:center;justify-content:space-between}
 .vtcount{font:600 13px/1 var(--font);color:var(--soft)}
 .vtcard{display:flex;flex-direction:column;gap:2px}

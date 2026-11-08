@@ -62,21 +62,28 @@ function vtEnter(){ VTR=null; vtHome(); }
 function vtRefresh(){ if(tab==='vt' && !VTR) vtHome(); }
 
 function vtHome(){
-  const s=vtSettings(), p=vtPlan(), n=vtBuildRound().length;
-  const hint = !s.forms.length ? 'Keine Form eingeschaltet. Schalte unten mindestens eine ein.'
+  const s=vtSettings(), p=vtPlan(), n=vtBuildRound().length, pool=vtPool();
+  const open=!!vtEl().querySelector('details.settings[open]');   // die Einstellungen bleiben beim Umschalten offen
+  const hint = !s.forms.length ? 'Keine Form eingeschaltet. Schalte unter Einstellungen mindestens eine ein.'
              : !n ? 'Heute fertig. Morgen gibt es wieder Fälliges und neue Karten.' : '';
+  const begun=pool.filter(c=>st(c.key).b>0).length;
   vtEl().innerHTML=
-    '<div class="vtbox">'+
-    '<div class="vtcounts" id="vtcounts"><b>'+p.due.length+'</b> fällig · <b>'+Math.min(p.fresh.length,p.newLeft)+'</b> neu heute</div>'+
+    '<div class="vtbox"><div class="hero">'+
+    '<div class="kpis"><div class="kpi due"><b id="vtdue">'+p.due.length+'</b><span>fällig</span></div>'+
+    '<div class="kpi"><b id="vtnewn">'+Math.min(p.fresh.length,p.newLeft)+'</b><span>neu für heute</span></div>'+
+    '<div class="kpi"><b>'+begun+'</b><span>von '+pool.length+' begonnen</span></div></div>'+
     '<p class="shint" id="vthint"'+(hint?'':' hidden')+'>'+hint+'</p>'+
-    '<button class="act pri vtgo" id="vtstart"'+(n?'':' disabled')+'>Üben<small>'+(n?n+' Karten':'')+'</small></button>'+
-    '<div class="vtset"><div class="vtsethead">Formen</div>'+
+    '<button class="today" id="vtstart"'+(n?'':' disabled')+'>'+(n?'<b>Tagesrunde · Verben</b><span>'+n+' Karten</span>':'<b>Für heute erledigt ✓</b><span>Verben sind für heute durch</span>')+'</button>'+
+    stageBar(pool)+
+    '<div class="legend2"><span><i style="background:var(--rule)"></i>Neu</span><span><i style="background:var(--saf)"></i>Lernphase</span><span><i style="background:var(--pri)"></i>Gefestigt</span><span><i style="background:var(--ok)"></i>Sicher</span></div></div>'+
+    '<details class="settings"'+(open?' open':'')+'><summary><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h2M10 12h10M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></svg>Einstellungen</summary>'+
+    '<div class="vtsethead">Formen</div>'+
     VT_FORMS.map(f=>'<label class="toggle"><span>'+f.label+'</span><input type="checkbox" data-form="'+f.id+'"'+(s.forms.includes(f.id)?' checked':'')+'></label>').join('')+
     '<div class="vtsethead">Runde</div>'+
     '<label class="toggle"><span>Karten pro Runde</span><input type="number" id="vtsize" min="1" max="30" value="'+s.size+'"></label>'+
     '<label class="toggle"><span>Neue Karten pro Tag</span><input type="number" id="vtnew" min="0" max="20" value="'+s.newPerDay+'"></label>'+
     '<label class="toggle"><span>Akzente müssen stimmen</span><input type="checkbox" id="vtacc"'+(s.strict?' checked':'')+'></label>'+
-    '</div></div>';
+    '</details></div>';
 }
 
 function vtStart(){

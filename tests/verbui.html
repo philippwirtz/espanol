@@ -19,7 +19,7 @@ q('nav button[data-tab="vt"]').click();
 t('Tab: Trainer sichtbar', shown(q('#vtrain')));
 t('Tab: Sprachhinweis weg', !shown(q('#ttshint')));
 t('Tab: Abfrage und Referenz weg', !shown(q('#quiz')) && !shown(q('#ref')) && !shown(q('.searchrow')));
-t('Start: 2 neue', /2 neu/.test(q('#vtcounts').textContent));
+t('Start: 2 neue', q('#vtnewn').textContent==='2');
 t('Start: Knopf frei', !q('#vtstart').disabled);
 t('Neun Schalter', qa('input[data-form]').length===9);
 t('Drei vorgewählt', qa('input[data-form]:checked').map(i=>i.dataset.form).join()==='pres,ind,imp');

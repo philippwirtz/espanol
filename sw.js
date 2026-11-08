@@ -1,4 +1,4 @@
-const CACHE = 'espanol-v24';
+const CACHE = 'espanol-v25';
 const FILES = ['./', './index.html', './style.css', './content.js', './examples.js', './app.js', './verbcore.js', './verbtrainer.js', './fonts/bricolage.woff2', './manifest.webmanifest', './icon-180.png', './icon-512.png',
   './opt-worker.js', './fsrs/fsrs_browser.js', './fsrs/fsrs_browser_bg.wasm',
   './fsrs/snippets/wasm-bindgen-rayon-38edf6e439f6d70d/src/workerHelpers.js'];
