@@ -198,7 +198,8 @@ function ruedaSvg(filled,total,o={}){
   const pet=Array.from({length:total},(_,i)=>'<path class="p'+(i<filled?' '+(o.classes&&o.classes[i]||'on'):'')+'" style="--i:'+i+'" transform="rotate('+(i*360/total).toFixed(1)+')" d="M0 -6C7 -12 7 -24 0 -31C-7 -24 -7 -12 0 -6Z"/>').join('');
   return '<svg class="rueda'+(o.cls?' '+o.cls:'')+'" viewBox="-36 -36 72 72"'+(o.label?' role="img" aria-label="'+o.label+'"':' aria-hidden="true"')+'><circle class="rim" r="34"/>'+pet+'<circle class="hub" r="4"/></svg>';
 }
-$('brandmark').innerHTML=ruedaSvg(8,8,{classes:['c0','c1','c2','c3','c0','c1','c2','c3']});
+const RUEDA_BUNT=['c0','c1','c2','c3','c0','c1','c2','c3'];   // Blattfarben wie im App-Symbol
+$('brandmark').innerHTML=ruedaSvg(8,8,{classes:RUEDA_BUNT});
 /* Kopf- und Tableistenhöhe als CSS-Variablen: Tastenleiste, Hinweise und Seitenrand richten sich danach */
 { const bars=()=>{ const r=html.style; r.setProperty('--hdr',document.querySelector('header').offsetHeight+'px'); r.setProperty('--nav',document.querySelector('nav').offsetHeight+'px'); };
   bars(); if(window.ResizeObserver){ const ro=new ResizeObserver(bars); ro.observe(document.querySelector('header')); ro.observe(document.querySelector('nav')); } else addEventListener('resize',bars); }
@@ -1004,7 +1005,7 @@ function nextCard(){
   R.say=es;                                                   // was die Sprachausgabe vorliest
   $('qchip').textContent=toEs?'Ins Spanische':'Ins Deutsche';
   $('qchip').className=toEs?'qchip':'qchip rev';
-  $('qstage').innerHTML=ruedaSvg(x.b,MAX)+(x.b===0?'Neu':'Stufe '+x.b);
+  $('qstage').innerHTML=ruedaSvg(x.b,MAX,{classes:RUEDA_BUNT})+(x.b===0?'Neu':'Stufe '+x.b);
   $('qredo').hidden=!c.redo;
   $('qleech').hidden=!isLeech(x);
   $('qprompt').textContent=toEs?de:es;
@@ -1380,7 +1381,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-08 · 25';
+const APP_VERSION='2026-11-08 · 26';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;

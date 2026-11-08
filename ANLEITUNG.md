@@ -51,7 +51,7 @@ Der Tab **Konjugieren** übt Verbformen: Du tippst alle Personen einer Form (z. 
 Neue Datei mit gleichem Namen hochladen und überschreiben. Damit der Service Worker
 die neue Fassung ausliefert, in `sw.js` die erste Zeile hochzählen:
 
-    const CACHE = 'espanol-v27';
+    const CACHE = 'espanol-v28';
 
 Ohne diese Änderung bleibt auf dem iPhone die alte Fassung im Zwischenspeicher.
 

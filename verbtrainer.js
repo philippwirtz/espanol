@@ -98,7 +98,7 @@ function vtShow(){
   vtEl().innerHTML=
     '<div class="vtbox"><div class="vttop"><button class="back" id="vtleave">‹ Zurück</button><span class="vtcount">'+Math.min(done+1,VTR.total)+' / '+VTR.total+'</span></div>'+
     '<div class="qcard vtcard"><div class="chips"><span class="qchip vtform">'+VT_FORMS.find(f=>f.id===c.form).label+'</span>'+
-    '<span class="qchip stagechip">'+ruedaSvg((SRS.c[c.key]||{}).b||0,MAX)+((SRS.c[c.key]||{}).b?'Stufe '+SRS.c[c.key].b:'Neu')+'</span>'+
+    '<span class="qchip stagechip">'+ruedaSvg((SRS.c[c.key]||{}).b||0,MAX,{classes:RUEDA_BUNT})+((SRS.c[c.key]||{}).b?'Stufe '+SRS.c[c.key].b:'Neu')+'</span>'+
     (e.redo?'<span class="qchip redo">Wiederholung</span>':'')+'</div>'+
     '<div class="vtverb">'+vtEsc(c.verb)+'</div><div class="vtsub">'+vtEsc(c.sub)+'</div>'+
     '<div class="vtkeys" id="vtkeys">'+['á','é','í','ó','ú','ñ','ü'].map(ch=>'<button type="button" data-ch="'+ch+'">'+ch+'</button>').join('')+'</div>'+
