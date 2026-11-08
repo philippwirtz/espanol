@@ -24,7 +24,7 @@ document.getElementById('theme').onclick=()=>{
   const cur=html.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
   const next=cur==='dark'?'light':'dark';
   html.dataset.theme=next; store.set('theme',next);
-  document.querySelector('meta[name=theme-color]').content=next==='dark'?'#0C1030':'#EDEFF4';
+  document.querySelector('meta[name=theme-color]').content=next==='dark'?'#12163A':'#F1F2F6';
 };
 
 /* ===================== Aufbau ===================== */
@@ -1380,7 +1380,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-08 · 23';
+const APP_VERSION='2026-11-08 · 24';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
