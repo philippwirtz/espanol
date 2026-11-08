@@ -1,0 +1,49 @@
+<!doctype html><meta charset="utf-8"><title>verbcore</title><body>
+<script src="../content.js"></script>
+<script src="../verbcore.js"></script>
+<script src="harness.js"></script>
+<script>
+const C=vtCards(), by=k=>C.find(c=>c.key===k);
+t('410 Karten', C.length===410);
+const cnt=f=>C.filter(c=>c.form===f).length;
+['pres','ind','imp','fut','kond','subj','ger','part'].forEach(f=>t('46 '+f, cnt(f)===46));
+t('42 impv', cnt('impv')===42);
+t('erste Karte', C[0].key==='vb:ser:pres');
+t('ind beginnt mit ser', C.find(c=>c.form==='ind').key==='vb:ser:ind');
+const order=VT_FORMS.map(f=>f.id); let mono=true;
+for(let i=1;i<C.length;i++) if(order.indexOf(C[i].form)<order.indexOf(C[i-1].form)) mono=false;
+t('nach Form sortiert', mono);
+const ti=by('vb:tener:ind');
+t('tener ind 6 Items', ti.items.length===6);
+t('tener yo', JSON.stringify(ti.items[0])===JSON.stringify({label:'yo',answers:['tuve'],irregular:true}));
+t('tener nosotros', ti.items[3].answers[0]==='tuvimos');
+t('hablar pres regulär', by('vb:hablar:pres').items[0].irregular===false);
+['gustar','costar','doler'].forEach(v=>{
+  const c=by('vb:'+v+':pres');
+  t(v+' 2 Items', c.items.length===2 && c.items[0].label==='él/ella/Ud.' && c.items[1].label==='ellos/ellas/Uds.');
+});
+t('gustar Antworten', by('vb:gustar:pres').items[0].answers[0]==='gusta' && by('vb:gustar:pres').items[1].answers[0]==='gustan');
+t('gustar kein impv', !by('vb:gustar:impv'));
+t('haber ha/hay', JSON.stringify(by('vb:haber:pres').items[2].answers)==='["ha","hay"]');
+t('haber kein impv', !by('vb:haber:impv'));
+const im=by('vb:tener:impv');
+t('tener impv Labels', im.items.map(i=>i.label).join()==='usted,ustedes,tú');
+t('tener impv Antworten', im.items.map(i=>i.answers[0]).join()==='tenga,tengan,ten');
+t('tener ger', by('vb:tener:ger').items.length===1 && by('vb:tener:ger').items[0].answers[0]==='teniendo');
+t('tener part', by('vb:tener:part').items[0].answers[0]==='tenido');
+t('Antworten sauber', C.every(c=>c.items.every(i=>i.answers.length>0 && i.answers.every(a=>a===a.trim() && a && !/[<&¡!]/.test(a)))));
+t('ok', vtCheck('tuve',['tuve'],true)==='ok');
+t('trim+Groß', vtCheck('  Tuve ',['tuve'],true)==='ok');
+t('Akzent streng', vtCheck('tomo',['tomó'],true)==='accent');
+t('Akzent locker', vtCheck('tomo',['tomó'],false)==='ok');
+t('falsch', vtCheck('toma',['tomó'],true)==='wrong');
+t('Alternative', vtCheck('hay',['ha','hay'],true)==='ok');
+t('leer', vtCheck('',['tuve'],true)==='wrong');
+t('Leerzeichen', vtCheck('   ',['tuve'],true)==='wrong');
+t('impv ¡!', vtCheck('¡Tenga!',['tenga'],true,true)==='ok');
+t('impv Leerzeichen', vtCheck('  ¡ TENGA ! ',['tenga'],true,true)==='ok');
+t('ñ eigen', vtCheck('nino',['niño'],false)==='wrong');
+[[0,6,3],[1,6,2],[2,6,2],[3,6,1],[6,6,1],[0,3,3],[1,3,2],[2,3,1],[0,2,3],[1,2,1],[0,1,3],[1,1,1]]
+  .forEach(([e,n,g])=>t('Stufe '+e+'/'+n, vtGradeOf(e,n)===g));
+done();
+</script>

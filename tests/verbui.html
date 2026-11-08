@@ -1,0 +1,84 @@
+<!doctype html><meta charset="utf-8"><title>verbui</title><body>
+<iframe id="app" src="../index.html" style="width:400px;height:800px"></iframe>
+<script src="harness.js"></script>
+<script>
+const fr=document.getElementById('app');
+fr.onload=()=>setTimeout(run,300);
+async function run(){
+const w=fr.contentWindow, D=w.document, ev=c=>w.eval(c);
+w.onerror=m=>t('iframe-Fehler: '+m,false);
+const q=s=>D.querySelector(s), qa=s=>[...D.querySelectorAll(s)];
+const shown=el=>!!el && w.getComputedStyle(el).display!=='none' && !el.hidden;
+const type=(i,v)=>{ i.value=v; i.dispatchEvent(new w.Event('input',{bubbles:true})); };
+const sleep=ms=>new Promise(r=>setTimeout(r,ms)), next=async()=>{ await sleep(450); q('#vtnext').click(); };   // „Weiter“ ist kurz nach dem Prüfen gesperrt
+const fill=a=>qa('.vtrow input').forEach((i,k)=>type(i,a[k]));
+ev(`SRS.c={};SRS.hist={};delete SRS.vnw;['q.vbforms','q.vbsize','q.vbnew','q.vbacc'].forEach(k=>localStorage.removeItem(nsk(k)))`);
+const t0=ev('today()');
+
+q('nav button[data-tab="vt"]').click();
+t('Tab: Trainer sichtbar', shown(q('#vtrain')));
+t('Tab: Sprachhinweis weg', !shown(q('#ttshint')));
+t('Tab: Abfrage und Referenz weg', !shown(q('#quiz')) && !shown(q('#ref')) && !shown(q('.searchrow')));
+t('Start: 2 neue', /2 neu/.test(q('#vtcounts').textContent));
+t('Start: Knopf frei', !q('#vtstart').disabled);
+t('Neun Schalter', qa('input[data-form]').length===9);
+t('Drei vorgewählt', qa('input[data-form]:checked').map(i=>i.dataset.form).join()==='pres,ind,imp');
+for(let el; (el=q('input[data-form]:checked')); ) el.click();           // jeder Klick zeichnet neu: jedes Mal neu abfragen
+t('Alle aus: Start gesperrt', q('#vtstart').disabled && /Keine Form/.test(q('#vthint').textContent));
+t('Alle aus: gespeichert', ev('localStorage.getItem(nsk("q.vbforms"))')==='[]');
+['pres','ind','imp'].forEach(f=>q('input[data-form="'+f+'"]').click());
+t('Wieder an: Start frei', !q('#vtstart').disabled);
+
+let synced=0; ev("SYNC={token:'t',gist:'g',last:Date.now()}"); w.syncNow=()=>{ synced++; };
+q('#vtstart').click();
+t('Karte 1', q('.vtverb').textContent.trim()==='ser' && q('.vtform').textContent.trim()==='Präsens' && qa('.vtrow input').length===6);
+q('#vtcheck').click();
+t('Leer: alle falsch', qa('.vtrow.bad').length===6);
+t('Leer: noch einmal', /heute noch einmal/.test(q('.vtnext').textContent));
+q('#vtnext').click();       // sofort, wie ein zweiter Tipp
+t('Doppeltipp: Ergebnis bleibt stehen', !!q('.vtnext') && q('.vtverb').textContent.trim()==='ser');
+await next();
+
+t('Karte 2', q('.vtverb').textContent.trim()==='estar');
+fill(['estoy','estas','está','estamos','estáis','están']);
+q('#vtcheck').click();
+t('Akzent: Zeile 2 falsch mit Hinweis', qa('.vtrow')[1].classList.contains('bad') && !!qa('.vtrow')[1].querySelector('.vtacc') && qa('.vtrow.ok').length===5);
+await next();
+
+t('Wiederholung: ser, 6 Zeilen', q('.vtverb').textContent.trim()==='ser' && qa('.vtrow input').length===6);
+fill(['soy','eres','es','somos','sois','son']);
+q('#vtcheck').click();
+t('Wiederholung: alle richtig', qa('.vtrow.ok').length===6 && /Nächster Termin/.test(q('.vtnext').textContent));
+t('ser geplant', ev('SRS.c["vb:ser:pres"].due')>t0);
+await next();
+t('Rundenende', shown(q('#vtback')));
+await sleep(2700);
+t('Rundenende: Abgleich wird angestoßen', synced>=1);
+ev('SYNC=null');
+q('#vtback').click();
+t('Heute fertig', q('#vtstart').disabled && /fertig/.test(q('#vthint').textContent));
+
+ev('SRS.vnw.d=today()-1'); ev('vtEnter()');       // wie ein Tab-Wechsel am nächsten Tag
+q('input#vtacc').click();
+t('Akzente aus gespeichert', ev('localStorage.getItem(nsk("q.vbacc"))')==='false');
+q('#vtstart').click();
+t('Karte haber', q('.vtverb').textContent.trim()==='haber');
+qa('.vtrow input')[0].focus();
+q('#vtkeys button[data-ch="ó"]').click();
+t('Sonderzeichen', qa('.vtrow input')[0].value.endsWith('ó'));
+t('Sonderzeichenleiste klebt oben, vor den Feldern', w.getComputedStyle(q('#vtkeys')).position==='sticky' && !!(q('#vtkeys').compareDocumentPosition(q('.vtrow'))&w.Node.DOCUMENT_POSITION_FOLLOWING));
+qa('.vtrow input').pop().dispatchEvent(new w.KeyboardEvent('keydown',{key:'Enter',repeat:true,bubbles:true}));
+t('Enter-Wiederholung schickt nichts ab', qa('.vtrow.bad').length===0 && !!q('#vtcheck'));
+fill(['he','has','ha','hemos','habeis','han']);
+q('#vtcheck').click();
+t('Akzente locker: alles richtig', qa('.vtrow.ok').length===6);
+
+{ const el=D.getElementById('vtrain'); el.remove(); let err=0; w.onerror=()=>{ err++; };    // altes index.html ohne #vtrain
+  q('nav button[data-tab="gram"]').click();
+  w.onerror=m=>t('iframe-Fehler: '+m,false);
+  t('Tab-Wechsel ohne #vtrain', err===0); D.querySelector('main').appendChild(el); }
+q('nav button[data-tab="quiz"]').click();
+t('Abfrage unberührt', shown(q('#quiz')) && !shown(q('#vtrain')) && ev('SRS.day.n')===0);
+done();
+}
+</script>

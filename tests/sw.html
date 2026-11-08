@@ -1,0 +1,60 @@
+<!doctype html><meta charset="utf-8"><title>sw</title><body>
+<script src="harness.js"></script>
+<script>
+/* Service Worker mit Attrappen laden (kein echter Worker nötig): Zeitlimit, nur gute Antworten speichern */
+(async()=>{
+const src=await (await fetch('../sw.js')).text(), ORIGIN=location.origin, sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const mk=fetchMock=>{
+  const h={}, store=new Map(), puts=[];
+  const self_={location:{origin:ORIGIN},addEventListener:(t,f)=>{h[t]=f;},skipWaiting(){},clients:{claim(){}}};
+  const key=k=>typeof k==='string'?k:k.url;
+  const caches_={open:async()=>({put:async(k,v)=>{puts.push(key(k));store.set(key(k),v);},addAll:async()=>{}}),
+    match:async k=>store.get(key(k)),keys:async()=>[],delete:async()=>true};
+  new Function('self','caches','fetch',src)(self_,caches_,fetchMock);          // wirft bei Syntaxfehler
+  const call=async(url,mode)=>{ let resp; const waits=[], t0=Date.now();
+    h.fetch({request:{method:'GET',url,mode:mode||'cors'},respondWith:p=>{resp=Promise.resolve(p);},waitUntil:p=>waits.push(p)});
+    const res=await resp, dt=Date.now()-t0; return {res,dt,done:()=>Promise.all(waits)}; };
+  return {store,puts,call};
+};
+const R=(body,o={})=>new Response(body,{status:o.status||200,headers:{'content-type':o.type||'text/javascript'}});
+const js=ORIGIN+'/app.js';
+const tt=async(name,fn)=>{ try{ t(name,await fn()); }catch(e){ t(name+' ('+e.message+')',false); } };
+
+await tt('sw.js lädt ohne Syntaxfehler', ()=>{ mk(async()=>R('x')); return true; });
+
+await tt('Netz langsam, Cache da: Cache nach etwa 4 s', async()=>{
+  const m=mk(()=>new Promise(r=>setTimeout(()=>r(R('NEW')),10000))); m.store.set(js,R('OLD'));
+  const {res,dt,done}=await m.call(js); const body=await res.text(); await done();
+  return body==='OLD' && dt<6000 && (await m.store.get(js).text())==='NEW';        // Netz aktualisiert den Cache trotzdem
+});
+await tt('Netz langsam, kein Cache: auf das Netz warten', async()=>{
+  const m=mk(()=>new Promise(r=>setTimeout(()=>r(R('NEW')),7000)));
+  const {res,dt}=await m.call(js); return (await res.text())==='NEW' && dt>=6500;
+});
+await tt('Netz schnell: Netz gewinnt und wird gespeichert', async()=>{
+  const m=mk(async()=>R('NEW')); m.store.set(js,R('OLD'));
+  const {res,done}=await m.call(js); await done(); return (await res.text())==='NEW' && (await m.store.get(js).text())==='NEW';
+});
+await tt('Fehlerantwort (404) mit Kopie: Kopie, nichts gespeichert', async()=>{
+  const m=mk(async()=>R('weg',{status:404})); m.store.set(js,R('OLD'));
+  const {res,done}=await m.call(js); await done(); return (await res.text())==='OLD' && m.puts.length===0;
+});
+await tt('Fehlerantwort (404) ohne Kopie: wird weitergegeben, nichts gespeichert', async()=>{
+  const m=mk(async()=>R('weg',{status:404}));
+  const {res,done}=await m.call(js); await done(); return res.status===404 && m.puts.length===0;
+});
+await tt('HTML statt Skript (Anmeldeseite) wird nicht gespeichert', async()=>{
+  const m=mk(async()=>R('<html>Login</html>',{type:'text/html'})); m.store.set(js,R('OLD'));
+  const {res,done}=await m.call(js); await done(); return m.puts.length===0 && (await res.text())==='OLD';
+});
+await tt('Netz weg: Cache', async()=>{
+  const m=mk(async()=>{ throw new TypeError('offline'); }); m.store.set(js,R('OLD'));
+  const {res}=await m.call(js); return (await res.text())==='OLD';
+});
+await tt('Seite (navigate): Cache-Schlüssel index.html', async()=>{
+  const m=mk(async()=>R('<html>ok</html>',{type:'text/html'}));
+  const {done}=await m.call(ORIGIN+'/','navigate'); await done(); return m.puts.includes('./index.html');
+});
+done();
+})();
+</script>

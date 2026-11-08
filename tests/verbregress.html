@@ -1,0 +1,31 @@
+<!doctype html><meta charset="utf-8"><title>verbregress</title><body>
+<iframe id="app" src="../index.html" style="width:400px;height:800px"></iframe>
+<script src="harness.js"></script>
+<script>
+/* Vokabelabfrage unverändert, Verbkarten überstehen Neuladen, Vokabeln laufen neben Verbkarten */
+const fr=document.getElementById('app'); let stage=0;
+fr.onload=()=>setTimeout(()=>{ stage===0 ? first() : second(); },300);
+function first(){
+  const w=fr.contentWindow, ev=c=>w.eval(c);
+  w.onerror=m=>t('iframe-Fehler: '+m,false);
+  ev('SRS.c={};SRS.hist={};delete SRS.vnw');
+  ev('vtGrade(vtCards()[0],[],false)');                     // eine Verbkarte lernen
+  ev("startRound('Test',()=>allCards().slice(0,3),'normal')");
+  ev('grade(2)');                                          // eine Vokabel beantworten (Saß)
+  t('Vokabel: day.n=1', ev('SRS.day.n')===1);
+  t('Vokabel: Karte im Lernstand', ev('Object.keys(SRS.c).filter(k=>!k.startsWith("vb:")).length')===1);
+  t('Vokabel: im Protokoll', ev('logLoad().e.length')===1);
+  t('Verbkarte weiter da', ev('!!SRS.c["vb:ser:pres"]'));
+  t('hist = Vokabel + Verb', ev('SRS.hist[today()]')===2);
+  t('Plan der Vokabeln ohne Verbkarten', ev('plan(allCards()).due.every(c=>!c.key.startsWith("vb:"))'));
+  stage=1; fr.contentWindow.location.reload();
+}
+function second(){
+  const w=fr.contentWindow, ev=c=>w.eval(c);
+  t('Neuladen: Verbkarte bleibt', ev('!!SRS.c["vb:ser:pres"] && SRS.c["vb:ser:pres"].b>0'));
+  t('Neuladen: SRS.vnw bleibt', ev('SRS.vnw && SRS.vnw.n===1'));
+  t('Neuladen: Vokabel bleibt', ev('Object.keys(SRS.c).filter(k=>!k.startsWith("vb:")).length')===1);
+  t('Sicherung enthält Verbkarten', ev('JSON.stringify(SRS).includes("vb:ser:pres")'));
+  done();
+}
+</script>

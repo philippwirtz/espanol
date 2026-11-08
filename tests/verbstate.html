@@ -1,0 +1,115 @@
+<!doctype html><meta charset="utf-8"><title>verbstate</title><body>
+<iframe id="app" src="../index.html" style="width:400px;height:800px"></iframe>
+<script src="harness.js"></script>
+<script>
+const fr=document.getElementById('app');
+fr.onload=()=>setTimeout(run,300);
+async function run(){
+const w=fr.contentWindow, ev=c=>w.eval(c), j=c=>JSON.parse(w.eval('JSON.stringify('+c+')'));
+const reset=()=>ev(`SRS.c={'vb:seed:pres':{b:1,due:99999,l:0,s:5,d:5,r:1,fr:1}};SRS.hist={};delete SRS.vnw;delete SRS.snapDay;
+  ['q.vbforms','q.vbsize','q.vbnew','q.vbacc','q.snaps','q.log'].forEach(k=>localStorage.removeItem(nsk(k)))`);
+const all6=[0,1,2,3,4,5];
+reset();
+t('Defaults', JSON.stringify(j('vtSettings()'))==='{"forms":["pres","ind","imp"],"size":5,"newPerDay":2,"strict":true}');
+ev("SRS.c={}");
+t('leer: nichts fällig', j('vtPlan().due').length===0);
+t('leer: 138 neue', j('vtPlan().fresh').length===138);
+t('leer: newLeft 2', ev('vtPlan().newLeft')===2);
+t('leer: Runde', JSON.stringify(j('vtBuildRound().map(c=>c.key)'))==='["vb:ser:pres","vb:estar:pres"]');
+
+reset();
+const before=JSON.stringify(j('({ok:SRS.ok,rn:SRS.rn,rok:SRS.rok,pace:SRS.pace,day:SRS.day})'));
+const t0=ev('today()');
+const r1=j('vtGrade(vtCards()[0],[],false)');
+t('Grade: G=3', r1.G===3 && r1.days>0);
+const c1=j('SRS.c["vb:ser:pres"]');
+t('Grade: Karte gesetzt', c1.b>0 && c1.s>0 && c1.due>t0);
+t('Grade: hist', ev('SRS.hist[today()]')===1);
+t('Grade: vnw', JSON.stringify(j('SRS.vnw'))===JSON.stringify({d:t0,n:1}));
+t('Grade: kein q.log', ev('localStorage.getItem(nsk("q.log"))')===null);
+t('Grade: Snapshot', j('loadJ("q.snaps",[])').length>=1 && ev('SRS.snapDay')===t0);
+t('Grade: Vokabeln unberührt', before===JSON.stringify(j('({ok:SRS.ok,rn:SRS.rn,rok:SRS.rok,pace:SRS.pace,day:SRS.day})')));
+t('Grade: Karte nicht in allCards', ev('allCards().some(c=>c.key.startsWith("vb:"))')===false);
+
+const r2=j('vtGrade(vtCards()[1],[0,1,2,3,4,5],false)');
+t('Alle falsch: G=1', r2.G===1 && r2.days===0);
+const c2=j('SRS.c["vb:estar:pres"]');
+t('Alle falsch: due heute, l=1', c2.due===t0 && c2.l===1);
+j('vtGrade(vtCards()[1],[],true)');
+t('Redo: hist gleich', ev('SRS.hist[today()]')===2);
+t('Redo: vnw gleich', ev('SRS.vnw.n')===2);
+t('Redo: l gleich', ev('SRS.c["vb:estar:pres"].l')===1);
+
+t('Limit: newLeft 0', ev('vtNewLeft()')===0);
+t('Limit: keine neue Karte in Runde', j('vtBuildRound()').every(c=>ev('st("'+c.key+'").b')>0));
+ev('SRS.vnw.d=today()-1');
+t('Limit: neuer Tag', ev('vtNewLeft()')===2);
+
+reset();
+ev('SRS.c["vb:ser:pres"]={b:3,due:today(),l:0,s:10,d:5,r:today()-10,fr:today()-10}');
+t('Fällig: in due', j('vtPlan().due').some(c=>c.key==='vb:ser:pres'));
+ev('vtSave("vbforms",["ind"])');
+t('Form aus: fehlt', !j('vtPlan().due').some(c=>c.key==='vb:ser:pres'));
+ev('vtSave("vbforms",["pres","ind","imp"])');
+t('Form an: zurück', j('vtPlan().due').some(c=>c.key==='vb:ser:pres'));
+ev('vtSave("vbforms",[])');
+t('Alle Formen aus', j('vtPlan().due').length===0 && j('vtPlan().fresh').length===0 && j('vtBuildRound()').length===0);
+
+reset();
+ev('SRS=JSON.parse(JSON.stringify(SRS))');
+ev('vtGrade(vtCards()[2],[],false)');
+t('SRS ersetzt: neuer Stand beschrieben', ev('!!SRS.c["vb:haber:pres"]'));
+
+reset();
+ev('SRS.hist[today()-400]=7; SRS.ok=SRS.ok||{}; SRS.ok[today()-400]=5');
+j('vtGrade(vtCards()[0],[],false)');
+t('hist älter als ein Jahr wird gekürzt', ev('SRS.hist[today()-400]')===undefined && ev('SRS.ok[today()-400]')===undefined);
+
+t('merge: größeres n', ev('(()=>{const T={c:{},vnw:{d:5,n:1}};mergeInto(T,{c:{},vnw:{d:5,n:2}});return T.vnw.n})()')===2);
+t('merge: älterer Tag ignoriert', ev('(()=>{const T={c:{},vnw:{d:5,n:1}};mergeInto(T,{c:{},vnw:{d:4,n:9}});return T.vnw.n+"/"+T.vnw.d})()')==='1/5');
+t('merge: späterer Tag', ev('(()=>{const T={c:{},vnw:{d:5,n:1}};mergeInto(T,{c:{},vnw:{d:6,n:1}});return T.vnw.d})()')===6);
+t('merge: ohne vnw', ev('(()=>{const T={c:{}};mergeInto(T,{c:{},vnw:{d:3,n:1}});return T.vnw.d})()')===3);
+t('begunN ohne vb:', ev("begunN({'vb:a:b':{b:1},'x':{b:1}})")===1);
+t('BK_KEYS', ev("['q.vbforms','q.vbsize','q.vbnew','q.vbacc'].every(k=>BK_KEYS.includes(k))"));
+
+const tt=async(name,fn)=>{ try{ t(name,await fn()); }catch(e){ t(name+' ('+e.message+')',false); } };
+const M=(l,r)=>JSON.parse(ev(`(()=>{const T={c:{k:${JSON.stringify(l)}}};mergeInto(T,{c:{k:${JSON.stringify(r)}}});return JSON.stringify(T.c.k)})()`));
+await tt('merge: neuere Abfrage schlägt neueres u', ()=>M({s:10,r:100,u:2000},{s:1,r:90,u:3000}).s===10);
+await tt('merge: neuere Abfrage vom anderen Gerät gewinnt', ()=>M({s:1,r:90,u:3000},{s:10,r:100,u:2000}).s===10);
+await tt('merge: gleicher Tag, neueres u gewinnt', ()=>M({s:1,r:100,u:2000},{s:7,r:100,u:3000}).s===7);
+await tt('merge: ohne r wie bisher nach u', ()=>M({s:1,u:1},{s:2,u:2}).s===2);
+await tt('merge: Ausblenden am selben Tag gewinnt', ()=>M({r:100,u:2000},{r:100,u:3000,x:1}).x===1);
+await tt('merge: neue Karte kommt dazu', ()=>JSON.parse(ev('(()=>{const T={c:{}};mergeInto(T,{c:{n:{s:3,r:1,u:1}}});return JSON.stringify(T.c.n)})()')).s===3);
+
+await tt('Karten-Neuberechnung: grade() und vtGrade() wie Bausteine', ()=>ev(`(()=>{
+  const t=today(), seed=()=>({b:3,due:t-2,l:1,s:10,d:5,r:t-12,fr:t-12});
+  const pick=x=>JSON.stringify({s:x.s,d:x.d,b:x.b,due:x.due,l:x.l,r:x.r,fr:x.fr});
+  const want=(key,G,lAdd)=>{ const x0=seed(), m=fsrsNext(x0,G,t), s=+m.s.toFixed(3);
+    return JSON.stringify({s,d:+m.d.toFixed(3),b:stageOfS(s),due:G===1?t:t+ivlOf(s,key,t),l:(x0.l||0)+lAdd,r:t,fr:t}); };
+  const vk=allCards()[0].key; let ok=true;
+  for(const g of [0,1,2]){ SRS.c[vk]=seed(); startRound('T',()=>allCards().filter(c=>c.key===vk),'normal'); grade(g);
+    if(pick(SRS.c[vk])!==want(vk,g+1,g===0?1:0)) ok=false; }
+  for(const G of [1,2,3]){ const card=vtCards()[0]; SRS.c[card.key]=seed(); vtGrade(card,G===3?[]:G===2?[0]:[0,1,2,3,4,5],false);
+    if(pick(SRS.c[card.key])!==want(card.key,G,G===1?1:0)) ok=false; }
+  return ok; })()`));
+
+await tt('Eigene Werte: w[20]=0 wird abgelehnt', ()=>{ ev("$('optW').value=W_DEF.slice(0,20).join(',')+',0'; $('optSet').click()"); return ev('SRS.w')===undefined; });
+await tt('Eigene Werte: gültige Liste wird übernommen', ()=>{ ev("$('optW').value=W_DEF.join(','); $('optSet').click()"); const ok=Array.isArray(ev('SRS.w')); ev('delete SRS.w'); return ok; });
+
+await tt('Gist-Liste: alle Seiten', async()=>{
+  ev("SYNC={token:'t'}"); const calls=[], orig=w.fetch;
+  w.fetch=async u=>{ calls.push(u); const p=+/[?&]page=(\d+)/.exec(u)[1], n=p<3?100:30;
+    return {status:200,ok:true,json:async()=>Array.from({length:n},(_,i)=>({id:'g'+p+'_'+i}))}; };
+  try{ const all=await ev("ghList('/gists')"); return all.length===230 && calls.length===3; }
+  finally{ w.fetch=orig; ev('SYNC=null'); }
+});
+
+await tt('Speicher voll: Hinweis genau einmal', ()=>{
+  const P=w.Storage.prototype, orig=P.setItem; P.setItem=function(){ throw new Error('quota'); };
+  try{ ev('store.set("q.zz","1")'); ev('store.set("q.zz","2")'); } finally{ P.setItem=orig; }
+  const n=w.document.querySelectorAll('.storefull');
+  return n.length===1 && /Speicher/.test(n[0].textContent);
+});
+done();
+}
+</script>
