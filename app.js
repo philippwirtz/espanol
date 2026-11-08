@@ -24,7 +24,7 @@ document.getElementById('theme').onclick=()=>{
   const cur=html.dataset.theme||(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light');
   const next=cur==='dark'?'light':'dark';
   html.dataset.theme=next; store.set('theme',next);
-  document.querySelector('meta[name=theme-color]').content=next==='dark'?'#0F1C16':'#F1F3EE';
+  document.querySelector('meta[name=theme-color]').content=next==='dark'?'#0C1030':'#EDEFF4';
 };
 
 /* ===================== Aufbau ===================== */
@@ -192,6 +192,16 @@ applyFilter(); renderJump();
     Stufe 0 = neu · 1–2 Lernphase · 3–4 gefestigt · 5–8 sicher
     Stufe 0–1: Spanisch → Deutsch (wiedererkennen), ab Stufe 2: Deutsch → Spanisch (selbst abrufen)        */
 const $=id=>document.getElementById(id);
+/* Rueda: Rad mit n Speichen (Blütenblättern); die ersten `filled` sind gefüllt. classes[i] färbt einzelne Blätter (ok/bad).
+   Ohne label ist das Rad Schmuck (aria-hidden); mit label liest der Screenreader es vor. */
+function ruedaSvg(filled,total,o={}){
+  const pet=Array.from({length:total},(_,i)=>'<path class="p'+(i<filled?' '+(o.classes&&o.classes[i]||'on'):'')+'" style="--i:'+i+'" transform="rotate('+(i*360/total).toFixed(1)+')" d="M0 -6C7 -12 7 -24 0 -31C-7 -24 -7 -12 0 -6Z"/>').join('');
+  return '<svg class="rueda'+(o.cls?' '+o.cls:'')+'" viewBox="-36 -36 72 72"'+(o.label?' role="img" aria-label="'+o.label+'"':' aria-hidden="true"')+'><circle class="rim" r="34"/>'+pet+'<circle class="hub" r="4"/></svg>';
+}
+$('brandmark').innerHTML=ruedaSvg(8,8,{classes:['c0','c1','c2','c3','c0','c1','c2','c3']});
+/* Kopf- und Tableistenhöhe als CSS-Variablen: Tastenleiste, Hinweise und Seitenrand richten sich danach */
+{ const bars=()=>{ const r=html.style; r.setProperty('--hdr',document.querySelector('header').offsetHeight+'px'); r.setProperty('--nav',document.querySelector('nav').offsetHeight+'px'); };
+  bars(); if(window.ResizeObserver){ const ro=new ResizeObserver(bars); ro.observe(document.querySelector('header')); ro.observe(document.querySelector('nav')); } else addEventListener('resize',bars); }
 const loadJ=(k,d)=>{try{const v=JSON.parse(store.get(k)||'null');return v??d}catch(e){return d}};
 const INT=[0,1,3,7,14,30,60,120,240];  // Stufengrenzen in Tagen Stabilität (früher feste Intervalle)
 const MAX=8, REDO_MAX=5, LEECH=4, LEECH_OUT=5;     // Fehler: bis zu 5× ans Rundenende, bis die Karte einmal sitzt
@@ -994,7 +1004,7 @@ function nextCard(){
   R.say=es;                                                   // was die Sprachausgabe vorliest
   $('qchip').textContent=toEs?'Ins Spanische':'Ins Deutsche';
   $('qchip').className=toEs?'qchip':'qchip rev';
-  $('qstage').textContent=x.b===0?'Neu':'Stufe '+x.b;
+  $('qstage').innerHTML=ruedaSvg(x.b,MAX)+(x.b===0?'Neu':'Stufe '+x.b);
   $('qredo').hidden=!c.redo;
   $('qleech').hidden=!isLeech(x);
   $('qprompt').textContent=toEs?de:es;
@@ -1370,7 +1380,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-08 · 20';
+const APP_VERSION='2026-11-08 · 22';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
