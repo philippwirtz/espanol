@@ -8,12 +8,14 @@
 | `style.css` | Aussehen |
 | `content.js` | Grammatik, Wortschatz, Verben, Beispielsätze (reine Daten) |
 | `app.js` | Programmlogik: Suche, Abfrage, Statistik, Cloud-Sync |
+| `verbcore.js` | Verbtrainer: Formen aus den Verbtabellen lesen, Antworten prüfen |
+| `verbtrainer.js` | Verbtrainer: Planung (FSRS) und Übungsbildschirm |
 | `sw.js` | Service Worker — macht die App offline nutzbar |
 | `manifest.webmanifest` | Name, Farben, Vollbildmodus |
 | `icon-180.png` | Icon für den iPhone-Homescreen |
 | `icon-512.png` | Icon für Android und App-Umschalter |
 
-Alle Dateien gehören in **dasselbe Verzeichnis**, ohne Unterordner.
+Alle Dateien liegen im selben Verzeichnis. Der Ordner `fsrs/` (WebAssembly für die eigenen Abstände) gehört mit hinein. `tests/` und `docs/` sind nur für die Entwicklung und müssen nicht hochgeladen werden.
 
 ## Hochladen zu GitHub Pages
 
@@ -39,7 +41,7 @@ sobald sie einmal geladen wurde.
 Neue Datei mit gleichem Namen hochladen und überschreiben. Damit der Service Worker
 die neue Fassung ausliefert, in `sw.js` die erste Zeile hochzählen:
 
-    const CACHE = 'espanol-v21';
+    const CACHE = 'espanol-v22';
 
 Ohne diese Änderung bleibt auf dem iPhone die alte Fassung im Zwischenspeicher.
 

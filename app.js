@@ -2,7 +2,7 @@
 const mem={};
 const raw={
   get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]??null}},
-  set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}},
+  set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v; storeFull()}},
   del(k){try{localStorage.removeItem(k)}catch(e){delete mem[k]}},
   keys(){try{return Object.keys(localStorage)}catch(e){return Object.keys(mem)}}
 };
@@ -129,7 +129,7 @@ function renderJump(){
     b.onclick=()=>{const top=h.getBoundingClientRect().top+scrollY-document.querySelector('header').offsetHeight-6;scrollTo({top,behavior:'smooth'})};
     jumpEl.appendChild(b)});
   jumpEl.hidden = tab==='quiz' || !!qEl.value.trim() || heads.length<2;
-  document.getElementById('ttshint').hidden = !TTS || tab==='quiz' || tab==='gram';
+  document.getElementById('ttshint').hidden = !TTS || tab==='quiz' || tab==='gram' || tab==='vt';
 }
 
 /* ===================== Tabs ===================== */
@@ -139,13 +139,15 @@ document.querySelectorAll('nav button').forEach(b=>{
   b.onclick=()=>{
     tab=b.dataset.tab;
     document.querySelectorAll('nav button').forEach(x=>x.setAttribute('aria-selected',x===b));
-    ref.style.display = tab==='quiz'?'none':'block';
+    ref.style.display = tab==='quiz'||tab==='vt'?'none':'block';
     quizEl.style.display = tab==='quiz'?'block':'none';
-    document.querySelector('.searchrow').style.display = tab==='quiz'?'none':'block';
+    const vtEl0=document.getElementById('vtrain'); if(vtEl0) vtEl0.style.display = tab==='vt'?'block':'none';   // fehlt in einem noch zwischengespeicherten alten index.html
+    document.querySelector('.searchrow').style.display = tab==='quiz'||tab==='vt'?'none':'block';
     document.getElementById('q').placeholder = tab==='verb'
       ? 'Verb suchen — z. B. volver oder schlafen'
       : 'Suchen — deutsch oder spanisch';
     if(tab==='quiz') quizEnter();
+    if(tab==='vt' && typeof vtEnter==='function') vtEnter();
     applyFilter(); renderJump();
     scrollTo({top:0});
   };
@@ -241,6 +243,13 @@ function fsrsStep(w,m,G,el){
 }
 /* Intervall aus Stabilität und Zielretention, mit kleiner Streuung (wie Anki), damit gemeinsam gelernte
    Karten nicht alle am selben Tag fällig werden. Streuung pro Karte und Tag fest → Vorschau = Ergebnis. */
+/* Kartenzustand nach Bewertung G (1–3) am Tag t — gemeinsam für Vokabeln (grade) und Verben (vtGrade).
+   Fehlerzähler l und Wiederholung in der Runde regeln die Aufrufer. */
+function reviewState(x,G,t,key){
+  const m=fsrsNext(x,G,t), y={...x,s:+m.s.toFixed(3),d:+m.d.toFixed(3)};
+  y.b=stageOfS(y.s); y.r=y.fr=t; y.due=G===1?t:t+ivlOf(y.s,key,t);
+  return y;
+}
 function ivlOf(s,key,t){
   const w=fw(), dec=-w[20], f=Math.pow(.9,1/dec)-1;
   let n=Math.min(MAX_IVL,Math.max(1,Math.round(s/f*(Math.pow(RET,1/dec)-1))));
@@ -252,11 +261,7 @@ function ivlOf(s,key,t){
 
 let roundSize=loadJ('q.size',10), newPerDay=loadJ('q.newcap',10);
 let SRS=loadJ('q.srs',null);
-if(!SRS){                                // Übernahme des alten Fortschritts
-  const t=today(); SRS={c:{},day:{d:t,n:0,ok:0,nw:0}};
-  loadJ('q.done',[]).forEach((k,i)=>SRS.c[k]={b:3,due:t+(i%4),l:0});
-  loadJ('q.weak',[]).forEach(k=>SRS.c[k]={b:1,due:t,l:1});
-}
+if(!SRS){ const t=today(); SRS={c:{},day:{d:t,n:0,ok:0,nw:0}}; }       // neues Profil oder Gerät: leerer Lernstand
 if(!SRS.hist) SRS.hist={};
 if(!SRS.ok) SRS.ok={};                   // richtige Antworten je Tag (erster Versuch, inkl. neuer Karten), gleiche Tage wie hist
 if(!SRS.rn) SRS.rn={};                   // Wiederholungen je Tag (ohne neue Karten, ohne freies Üben)
@@ -562,7 +567,7 @@ const cardsOf=d=>cardsRaw(d).filter(c=>!isSkipped(c.key));
 // Gleiche Karte in mehreren Stapeln (z. B. „la cuenta") nur einmal zählen und abfragen
 const allCards=()=>{const seen=new Set();return ALL.flatMap(cardsOf).filter(c=>!seen.has(c.key)&&seen.add(c.key))};
 const skippedCards=()=>{const seen=new Set();return ALL.flatMap(cardsRaw).filter(c=>isSkipped(c.key)&&!seen.has(c.key)&&seen.add(c.key))};
-const begunN=c=>Object.values(c||{}).filter(x=>x&&x.b>0&&!x.x).length;   // begonnene Karten ohne ausgeblendete
+const begunN=c=>Object.entries(c||{}).filter(([k,x])=>x&&x.b>0&&!x.x&&!k.startsWith('vb:')).length;   // begonnene Karten ohne ausgeblendete
 
 /* --- Rundenzusammenstellung --- */
 const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
@@ -931,7 +936,7 @@ $('optAuto').onchange=()=>{
 };
 $('optSet').onclick=()=>{
   const w=$('optW').value.split(/[\s,;]+/).filter(Boolean).map(x=>+x.replace(/^\[|\]$/g,''));
-  if(!validW(w) || w.slice(0,4).some(x=>x<=0)) { optMsg('Bitte genau 21 Zahlen eingeben, getrennt durch Kommas.',true); return; }
+  if(!validW(w) || w.slice(0,4).some(x=>x<=0) || w[20]<=0) { optMsg('Bitte genau 21 Zahlen eingeben, getrennt durch Kommas.',true); return; }
   snapshot('vor Eintrag eigener Parameter');
   SRS.w=w; SRS.wu=Date.now(); SRS.wi={day:today(),n:logLoad().e.length,src:'hand'};
   const n=optChanged(); $('optW').blur(); optRender();
@@ -1071,14 +1076,12 @@ function grade(g){
   if(R.mode==='cram' && firstTry && g>0){
     /* freies Üben: Erfolg verschiebt nichts — die Abfrage war außerhalb des Plans */
   } else {
-    const m=fsrsNext(x,g+1,t);
-    x.s=+m.s.toFixed(3); x.d=+m.d.toFixed(3); x.b=stageOfS(x.s); x.r=x.fr=t;
+    Object.assign(x,reviewState(x,g+1,t,c.key));
     if(g===0){
       if(firstTry){ x.l=(x.l||0)+1; R.missed.push(c); }
-      x.due=t;
       // Successive Relearning: ans Rundenende, bis die Karte einmal sitzt (Sicherung gegen Endlosschleife)
       if(c.redo<REDO_MAX) R.queue.push({...c,redo:c.redo+1,toEs:R.toEs});
-    } else x.due=t+ivlOf(x.s,c.key,t);
+    }
   }
   const prev=SRS.c[c.key];
   if(!prev || prev.b!==x.b || prev.due!==x.due || prev.l!==x.l || prev.r!==x.r || prev.s!==x.s){   // nur echte Änderungen zählen beim Abgleich
@@ -1217,6 +1220,12 @@ function learnerFiles(g){
     return {file:f,name:d.name||'Profil ohne Namen',n:d.srs?begunN(d.srs.c):0,srs:d.srs}; });
 }
 let SYNC=loadJ('q.sync',null), syncTimer=null, syncing=false;
+async function ghList(path){                              // alle Seiten einer Liste (100 je Seite)
+  // shortcut: höchstens 10 Seiten (1000 Gists), bei mehr Gists die ID von Hand eintragen lassen
+  const all=[];
+  for(let p=1;p<=10;p++){ const r=await gh(path+'?per_page=100&page='+p); all.push(...r); if(r.length<100) break; }
+  return all;
+}
 async function gh(path,opt={}){
   const r=await fetch(GH+path,{...opt,cache:'no-store',headers:{Authorization:'Bearer '+SYNC.token,Accept:'application/vnd.github+json',
     ...(opt.body?{'Content-Type':'application/json'}:{})}});
@@ -1226,9 +1235,12 @@ async function gh(path,opt={}){
   if(r.status===204) return null;
   return r.json();
 }
+/* Pro Karte gewinnt zuerst die spätere echte Abfrage (r), erst bei gleichem Tag der spätere Zeitstempel (u).
+   Nur u zu vergleichen ließ ein offline gebliebenes Gerät, das beim Rückstand-Verteilen u neu setzt, eine Abfrage vom anderen Gerät überschreiben. */
+const cardNewer=(a,b)=>(a.r||0)!==(b.r||0) ? (a.r||0)>(b.r||0) : (a.u||0)>(b.u||0);
 function mergeInto(T,rem){               // pro Karte gewinnt der neuere Stand, Lerntage werden vereinigt
   let n=0; T.c=T.c||{}; T.hist=T.hist||{};
-  for(const [k,r] of Object.entries(rem.c||{})){ const l=T.c[k]; if(!l || (r.u||0)>(l.u||0)){ T.c[k]=r; n++; } }
+  for(const [k,r] of Object.entries(rem.c||{})){ const l=T.c[k]; if(!l || cardNewer(r,l)){ T.c[k]=r; n++; } }
   for(const [d,v] of Object.entries(rem.hist||{})){ if((T.hist[d]||0)<v){ T.hist[d]=v; n++; } }
   T.ok=T.ok||{};
   for(const [d,v] of Object.entries(rem.ok||{})){ if(T.ok[d]===undefined||T.ok[d]<v){ T.ok[d]=v; n++; } }
@@ -1241,6 +1253,7 @@ function mergeInto(T,rem){               // pro Karte gewinnt der neuere Stand, 
   if((rem.best||0)>(T.best||0)){ T.best=rem.best; n++; }
   if(rem.flame!==undefined && (T.flame===undefined || rem.flame>T.flame)) T.flame=rem.flame;
   if(rem.everBroken) T.everBroken=true;
+  if(rem.vnw && (!T.vnw || rem.vnw.d>T.vnw.d || (rem.vnw.d===T.vnw.d && rem.vnw.n>T.vnw.n))){ T.vnw=rem.vnw; n++; }   // neue Verbkarten heute
   return n;
 }
 const mergeRemote=rem=>mergeInto(SRS,rem);
@@ -1275,8 +1288,8 @@ async function syncNow(){
       if(rem && rg>lg){                       // anderes Gerät hat zurückgesetzt oder eine Datei geladen: das gilt
         snapshot('vor Übernahme vom anderen Gerät');
         const keepDay=SRS.day; SRS=rem; SRS.day=keepDay; if(!SRS.hist) SRS.hist={}; if(!SRS.ok) SRS.ok={}; if(!SRS.rn) SRS.rn={}; if(!SRS.rok) SRS.rok={};
-        saveQ(); if(!$('pick').hidden) renderPick();
-      } else if(rem && rg===lg && mergeRemote(rem)){ saveQ(); if(!$('pick').hidden) renderPick(); }
+        saveQ(); if(!$('pick').hidden) renderPick(); if(typeof vtRefresh==='function') vtRefresh();
+      } else if(rem && rg===lg && mergeRemote(rem)){ saveQ(); if(!$('pick').hidden) renderPick(); if(typeof vtRefresh==='function') vtRefresh(); }
       // rg<lg: dieses Gerät hat zurückgesetzt → nur hochladen
     }
     // Lernpartner: Lerntage roh merken — Serie und „heute" werden erst beim Anzeigen berechnet
@@ -1314,13 +1327,13 @@ $('syConnect').onclick=async()=>{
   }
   SYNC={token}; syncStatus('verbinde …');
   try{
-    const list=await gh('/gists?per_page=100');
+    const list=await ghList('/gists');
     const hit=list.find(x=>x.files&&Object.keys(x.files).some(f=>LEARN_RE.test(f)));
     if(!hit){                                             // erster Lernender überhaupt: Gist anlegen
       const file=fileFor(curProfile().name);
       const g=await gh('/gists',{method:'POST',body:JSON.stringify({description:'Español de bolsillo – Lernstand',public:false,
         files:{[file]:{content:payload()}}})});
-      const dup=(await gh('/gists?per_page=100')).filter(x=>x.id!==g.id&&x.files&&Object.keys(x.files).some(f=>LEARN_RE.test(f)))
+      const dup=(await ghList('/gists')).filter(x=>x.id!==g.id&&x.files&&Object.keys(x.files).some(f=>LEARN_RE.test(f)))
         .sort((p,q)=>(p.created_at+p.id<q.created_at+q.id?-1:1))[0];
       if(dup && (dup.created_at+dup.id) < (g.created_at+g.id)){   // anderes Gerät war schneller: dessen Gist nehmen
         await gh('/gists/'+g.id,{method:'DELETE'});
@@ -1357,7 +1370,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-10-29 · 19';
+const APP_VERSION='2026-11-08 · 20';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -1396,7 +1409,7 @@ addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
 if(SYNC&&SYNC.gist) setTimeout(syncNow,800);
 
 /* --- Lernstand sichern / wiederherstellen --- */
-const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log','q.exmode'];
+const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log','q.exmode','q.vbforms','q.vbsize','q.vbnew','q.vbacc'];
 function bkStatus(){
   const last=loadJ('q.backup',null), started=Object.keys(SRS.c).length;
   const days=last===null?null:today()-last;
@@ -1472,13 +1485,6 @@ $('back2').onclick=()=>{renderPick();show('pick')};
 function quizEnter(){ spreadBacklog();
    if(!R || !$('pick').hidden || !$('sum').hidden || !$('empty').hidden){ renderPick(); show('pick'); } }
 
-/* Einmalig (Version 13): Karten, die seit der FSRS-Umstellung mit zu niedriger Schwierigkeit geplant wurden,
-   aus dem Protokoll neu berechnen — vorher Wiederherstellungspunkt. */
-if(!loadJ('q.fix1',false)){
-  try{ if(logLoad().e.length){ snapshot('vor Neuberechnung der Abstände'); const n=rescheduleFromLog(); if(n) scheduleSync(); } }catch(e){}
-  store.set('q.fix1','true');
-}
-
 /* Eigene Parameter: im Hintergrund prüfen, ob eine Neuberechnung fällig ist — nicht mitten in einer Runde */
 function optWhenIdle(){ if($('play').hidden) optAuto(); else setTimeout(optWhenIdle,6e4); }
 setTimeout(optWhenIdle,4000);
@@ -1493,6 +1499,14 @@ document.addEventListener('click',e=>{                    // Werte aus title-Att
   tip.textContent=el.getAttribute('title'); tip.hidden=false;
   clearTimeout(tipTimer); tipTimer=setTimeout(()=>tip.hidden=true,2600);
 });
+
+/* localStorage voll: raw.set hält den Wert nur im Arbeitsspeicher — einmal warnen, sonst geht Fortschritt beim Neuladen unbemerkt verloren */
+function storeFull(){
+  if(storeFull.shown) return; storeFull.shown=true;
+  const u=document.createElement('div'); u.className='upd storefull';
+  u.innerHTML='<span>Speicher voll: Fortschritt bleibt nur bis zum Schließen erhalten. Bitte Lernstand sichern.</span><button>OK</button>';
+  u.querySelector('button').onclick=()=>u.remove(); document.body.appendChild(u);
+}
 
 /* ===================== Offline ===================== */
 if('serviceWorker' in navigator){

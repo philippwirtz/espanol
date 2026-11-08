@@ -8,12 +8,14 @@
 | `style.css` | Aussehen |
 | `content.js` | Grammatik, Wortschatz, Verben, Beispielsätze (reine Daten) |
 | `app.js` | Programmlogik: Suche, Abfrage, Statistik, Cloud-Sync |
+| `verbcore.js` | Verbtrainer: Formen aus den Verbtabellen lesen, Antworten prüfen |
+| `verbtrainer.js` | Verbtrainer: Planung (FSRS) und Übungsbildschirm |
 | `sw.js` | Service Worker — macht die App offline nutzbar |
 | `manifest.webmanifest` | Name, Farben, Vollbildmodus |
 | `icon-180.png` | Icon für den iPhone-Homescreen |
 | `icon-512.png` | Icon für Android und App-Umschalter |
 
-Alle Dateien gehören in **dasselbe Verzeichnis**, ohne Unterordner.
+Alle Dateien liegen im selben Verzeichnis. Der Ordner `fsrs/` (WebAssembly für die eigenen Abstände) gehört mit hinein. `tests/` und `docs/` sind nur für die Entwicklung und müssen nicht hochgeladen werden.
 
 ## Hochladen zu GitHub Pages
 
@@ -34,12 +36,22 @@ Teilen-Symbol → **Zum Home-Bildschirm** → Hinzufügen.
 Die App startet danach im Vollbild ohne Browserleiste und funktioniert offline,
 sobald sie einmal geladen wurde.
 
+## Konjugieren (Verbtrainer)
+
+Der Tab **Konjugieren** übt Verbformen: Du tippst alle Personen einer Form (z. B. *tener · Indefinido*), die App prüft und plant die Karte wie bei den Vokabeln mit FSRS.
+
+- **Formen:** Präsens, Indefinido, Imperfecto, Futur, Konditional, Subjuntivo, Imperativ, Gerundio und Partizip lassen sich einzeln ein- und ausschalten. Voreingestellt sind die ersten drei. Der Lernstand ausgeschalteter Formen bleibt erhalten.
+- **Bewertung:** Alles richtig = *Saß*, bis zu ein Drittel der Formen falsch = *Knapp*, mehr = *Nochmal*. Eine *Nochmal*-Karte kommt am Rundenende noch einmal, dann nur mit den falschen Formen.
+- **Akzente** müssen stimmen (abschaltbar). Eine Leiste mit á é í ó ú ñ ü klebt unter der Kopfzeile und bleibt beim Scrollen sichtbar.
+- **Tageslimit:** eigene Zahl neuer Karten pro Tag (Standard 2) und eigene Rundengröße (Standard 5); sie hängen nicht am Zeitbudget der Vokabelabfrage.
+- Die Serie zählt mit, Trefferquote und Abfrageprotokoll bleiben bei den Vokabeln. Der Lernstand wird wie alles andere synchronisiert und gesichert.
+
 ## Aktualisieren
 
 Neue Datei mit gleichem Namen hochladen und überschreiben. Damit der Service Worker
 die neue Fassung ausliefert, in `sw.js` die erste Zeile hochzählen:
 
-    const CACHE = 'espanol-v21';
+    const CACHE = 'espanol-v22';
 
 Ohne diese Änderung bleibt auf dem iPhone die alte Fassung im Zwischenspeicher.
 
