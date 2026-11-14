@@ -205,8 +205,9 @@ $('brandmark').innerHTML=ruedaSvg(8,8,{classes:RUEDA_BUNT});
   bars(); if(window.ResizeObserver){ const ro=new ResizeObserver(bars); ro.observe(document.querySelector('header')); ro.observe(document.querySelector('nav')); } else addEventListener('resize',bars); }
 const loadJ=(k,d)=>{try{const v=JSON.parse(store.get(k)||'null');return v??d}catch(e){return d}};
 const INT=[0,1,3,7,14,30,60,120,240];  // Stufengrenzen in Tagen Stabilität (früher feste Intervalle)
-const MAX=8, REDO_MAX=5, LEECH=4, LEECH_OUT=5;     // Fehler: bis zu 5× ans Rundenende, bis die Karte einmal sitzt
-// Problemkarte: ab LEECH Fehlern, aber nur solange die Karte unter Stufe LEECH_OUT (30 Tage Stabilität) liegt
+const MAX=8, REDO_MAX=5, LEECH=4, LEECH_OUT=5, LEECH_OK=3;     // Fehler: bis zu 5× ans Rundenende, bis die Karte einmal sitzt
+// Problemkarte: ab LEECH Fehlern, solange die Karte unter Stufe LEECH_OUT (30 Tage Stabilität) liegt
+// und noch nicht LEECH_OK-mal in Folge gewusst wurde (k: Abfragen an verschiedenen Tagen, erster Versuch, kein Fehler dazwischen)
 const today=()=>{const n=Date.now();return Math.floor((n-new Date(n).getTimezoneOffset()*6e4)/864e5)};
 const stageOf=b=>b===0?0:b<=2?1:b<=4?2:3;
 const STAGE=['Neu','Lernphase','Gefestigt','Sicher'];
@@ -353,7 +354,10 @@ const day=()=>{ if(SRS.day.d!==today()) SRS.day={d:today(),n:0,ok:0,nw:0,rn:0,ro
 const st=k=>SRS.c[k]||{b:0,due:0,l:0};
 const isNew=c=>st(c.key).b===0;
 const isDue=c=>{const x=st(c.key);return x.b>0&&x.due<=today()};
-const isLeech=x=>(x.l||0)>=LEECH&&x.b<LEECH_OUT;
+/* Serie k für den Ausstieg aus „Problemkarte“: Fehler → 0, gewusst an einem neuen Tag (≥ 1 Tag seit der letzten Abfrage) → +1.
+   Nur erste Versuche; Erfolge im freien Üben zählen nicht (sie planen nichts). */
+const nextK=(k,G,el)=>G===1?0:el>=1?(k||0)+1:(k||0);
+const isLeech=x=>(x.l||0)>=LEECH&&x.b<LEECH_OUT&&(x.k||0)<LEECH_OK;
 const isWeak=c=>{const x=st(c.key);return x.b>0&&((x.l>0&&x.b<=2)||isLeech(x))};
 const newLeft=()=>Math.max(0,newPerDay-day().nw);
 /* ---- Tagesplan: Zeitbudget statt „alles Fällige" ----
@@ -362,7 +366,10 @@ const newLeft=()=>Math.max(0,newPerDay-day().nw);
 let minutes=loadJ('q.minutes',10);
 const PACE_DEF=10, NEW_LOAD=6;           // ~6 Abfragen zieht eine neue Karte im ersten Monat nach sich
 const pace=()=>Math.min(30,Math.max(4,SRS.pace||PACE_DEF));
-const budgetCards=()=>Math.max(10,Math.round(minutes*60/pace()));
+const budgetRaw=()=>Math.max(10,Math.round(minutes*60/pace()));
+// Budget des Tages: beim ersten Verteilen festgehalten (day().B) — das Tempo ändert sich mit jeder Antwort,
+// sonst wüchse oder schrumpfte der Tagesplan im Lauf des Tages. Neues Tempo gilt ab morgen.
+const budgetCards=()=>day().B||budgetRaw();
 const sustainNew=()=>Math.max(1,Math.round(budgetCards()/NEW_LOAD));
 const lastRev=x=>x.r!==undefined?x.r:x.due-INT[Math.max(0,x.b)];  // Tag der letzten Abfrage (ältere Daten: geschätzt)
 const riskOf=c=>{ const x=st(c.key); if(!(x.b>0)) return 0; return 1-retr(today()-lastRev(x),memOf(x).s); };   // geschätzte Vergessenswahrscheinlichkeit
@@ -382,7 +389,7 @@ function plan(cards){
 function spreadBacklog(){
   const t=today(); if(SRS.spreadDay===t) return 0;
   SRS.spreadDay=t;
-  const B=budgetCards(), left=Math.max(0,B-day().n);
+  const B=day().B=budgetRaw(), left=Math.max(0,B-day().n);
   const due=allCards().filter(isDue).sort((a,b)=>riskOf(b)-riskOf(a));
   const excess=due.slice(left); if(!excess.length){ saveQ(); return 0; }
   const perDay=Math.max(5,Math.round(B*.4)), now=Date.now();
@@ -413,7 +420,7 @@ function rescheduleFromLog(){
       const m=fsrsNext(x,G,t);
       x={...x,s:+m.s.toFixed(3),d:+m.d.toFixed(3),b:stageOfS(m.s),r:t,fr:t};
       if(G===1 && mode!==1) x.l=(x.l||0)+1;
-      due = G===1 ? t : t+ivlOf(x.s,key,t); touched=true;
+      due = G===1 ? t+1 : t+ivlOf(x.s,key,t); touched=true;          // Fehler: morgen (wie grade)
     });
     if(!touched) return;
     if(x.s!==cur.s || x.d!==cur.d || due!==cur.due){
@@ -1087,8 +1094,11 @@ function grade(g){
   if(R.mode==='cram' && firstTry && g>0){
     /* freies Üben: Erfolg verschiebt nichts — die Abfrage war außerhalb des Plans */
   } else {
+    const el=wasB>0?t-lastRev(x):-1;
     Object.assign(x,reviewState(x,g+1,t,c.key));
+    if(firstTry) x.k=nextK(x.k,g+1,el);
     if(g===0){
+      x.due=t+1;      // nicht heute: die Wiederholung läuft in dieser Runde; bricht sie ab, bleibt der Tagesplan trotzdem stabil
       if(firstTry){ x.l=(x.l||0)+1; R.missed.push(c); }
       // Successive Relearning: ans Rundenende, bis die Karte einmal sitzt (Sicherung gegen Endlosschleife)
       if(c.redo<REDO_MAX) R.queue.push({...c,redo:c.redo+1,toEs:R.toEs});
@@ -1381,7 +1391,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-08 · 27';
+const APP_VERSION='2026-11-14 · 28';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -1493,7 +1503,22 @@ $('nextround').onclick=()=>startRound(R.name,R.getCards,R.mode==='cram'?'cram':'
 $('topick').onclick=()=>{renderPick();show('pick')};
 $('back').onclick=()=>{if(TTS)speechSynthesis.cancel();renderPick();show('pick')};
 $('back2').onclick=()=>{renderPick();show('pick')};
-function quizEnter(){ spreadBacklog();
+/* Einmalig je Profil: Serie k für bestehende Problemkarten aus dem Abfrageprotokoll nachtragen,
+   damit Karten, die seit ihrem letzten Fehler schon mehrfach gewusst wurden, das Etikett sofort verlieren.
+   Nur Karten, deren letzter Stand von diesem Gerät stammt (r = letzter Protokolltag). */
+function fixLeechK(){
+  if(loadJ('q.fixk',0)) return;
+  const L=logLoad(), by=new Map(), now=Date.now(); let n=0;
+  L.e.forEach(e=>{ const k=L.k[e[1]]; if(!by.has(k)) by.set(k,[]); by.get(k).push(e); });
+  by.forEach((E,key)=>{
+    const cur=SRS.c[key]; if(!cur || cur.k!==undefined || (cur.l||0)<LEECH || cur.r!==E[E.length-1][0]) return;
+    let k=0; E.forEach(([,,G,el,mode])=>{ if(mode===1 || (mode===2&&G>1)) return; k=nextK(k,G,el); });
+    SRS.c[key]={...cur,k,u:now}; n++;
+  });
+  store.set('q.fixk','1');
+  if(n){ saveQ(); scheduleSync(); }
+}
+function quizEnter(){ fixLeechK(); spreadBacklog();
    if(!R || !$('pick').hidden || !$('sum').hidden || !$('empty').hidden){ renderPick(); show('pick'); } }
 
 /* Eigene Parameter: im Hintergrund prüfen, ob eine Neuberechnung fällig ist — nicht mitten in einer Runde */

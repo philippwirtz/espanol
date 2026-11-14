@@ -84,14 +84,31 @@ await tt('merge: neue Karte kommt dazu', ()=>JSON.parse(ev('(()=>{const T={c:{}}
 await tt('Karten-Neuberechnung: grade() und vtGrade() wie Bausteine', ()=>ev(`(()=>{
   const t=today(), seed=()=>({b:3,due:t-2,l:1,s:10,d:5,r:t-12,fr:t-12});
   const pick=x=>JSON.stringify({s:x.s,d:x.d,b:x.b,due:x.due,l:x.l,r:x.r,fr:x.fr});
-  const want=(key,G,lAdd)=>{ const x0=seed(), m=fsrsNext(x0,G,t), s=+m.s.toFixed(3);
-    return JSON.stringify({s,d:+m.d.toFixed(3),b:stageOfS(s),due:G===1?t:t+ivlOf(s,key,t),l:(x0.l||0)+lAdd,r:t,fr:t}); };
+  const want=(key,G,lAdd,voc)=>{ const x0=seed(), m=fsrsNext(x0,G,t), s=+m.s.toFixed(3);
+    return JSON.stringify({s,d:+m.d.toFixed(3),b:stageOfS(s),due:G===1?(voc?t+1:t):t+ivlOf(s,key,t),l:(x0.l||0)+lAdd,r:t,fr:t}); };
   const vk=allCards()[0].key; let ok=true;
   for(const g of [0,1,2]){ SRS.c[vk]=seed(); startRound('T',()=>allCards().filter(c=>c.key===vk),'normal'); grade(g);
-    if(pick(SRS.c[vk])!==want(vk,g+1,g===0?1:0)) ok=false; }
+    if(pick(SRS.c[vk])!==want(vk,g+1,g===0?1:0,true)) ok=false; }
   for(const G of [1,2,3]){ const card=vtCards()[0]; SRS.c[card.key]=seed(); vtGrade(card,G===3?[]:G===2?[0]:[0,1,2,3,4,5],false);
     if(pick(SRS.c[card.key])!==want(card.key,G,G===1?1:0)) ok=false; }
   return ok; })()`));
+
+await tt('Problemkarte: Ausstieg nach 3 Tagen in Folge gewusst', ()=>ev(`(()=>{
+  const t=today(), vk=allCards()[0].key; let ok=true;
+  const run=(g,x)=>{ SRS.c[vk]=x; startRound('T',()=>allCards().filter(c=>c.key===vk),'normal'); grade(g); return SRS.c[vk]; };
+  let x=run(2,{b:2,due:t,l:4,s:3,d:9.9,r:t-3,fr:t-3});
+  if(x.k!==1 || !isLeech(x)) ok=false;
+  x=run(1,{...x,k:2,due:t,r:t-2,fr:t-2});            // Knapp zählt als gewusst
+  if(x.k!==3 || isLeech(x)) ok=false;
+  x=run(0,{...x,due:t,r:t-2,fr:t-2});                // neuer Fehler: wieder Problemkarte
+  if(x.k!==0 || !isLeech(x) || x.due!==t+1) ok=false;
+  x=run(2,{...x,k:1,due:t,r:t,fr:t});               // am selben Tag: kein Zuwachs
+  if(x.k!==1) ok=false;
+  return ok; })()`));
+
+await tt('Tagesbudget bleibt trotz Tempoänderung fest', ()=>ev(`(()=>{
+  SRS.spreadDay=null; SRS.pace=10; spreadBacklog(); const B0=budgetCards();
+  SRS.pace=5; const B1=budgetCards(); return B0===B1 && day().B===B0; })()`));
 
 await tt('Eigene Werte: w[20]=0 wird abgelehnt', ()=>{ ev("$('optW').value=W_DEF.slice(0,20).join(',')+',0'; $('optSet').click()"); return ev('SRS.w')===undefined; });
 await tt('Eigene Werte: gültige Liste wird übernommen', ()=>{ ev("$('optW').value=W_DEF.join(','); $('optSet').click()"); const ok=Array.isArray(ev('SRS.w')); ev('delete SRS.w'); return ok; });

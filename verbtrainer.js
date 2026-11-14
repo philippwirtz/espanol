@@ -38,6 +38,7 @@ function vtGrade(card,wrong,redo){
   const G=vtGradeOf(wrong.length,card.items.length), t=today();
   if(SRS.snapDay!==t){ if(Object.keys(SRS.c).length) snapshot('Tagesbeginn'); SRS.snapDay=t; }
   const old=st(card.key), wasNew=!(old.b>0), x=reviewState(old,G,t,card.key);
+  if(!redo) x.k=nextK(old.k,G,wasNew?-1:t-lastRev(old));
   if(G===1 && !redo) x.l=(x.l||0)+1;
   x.u=Date.now(); SRS.c[card.key]=x;
   if(!redo){
