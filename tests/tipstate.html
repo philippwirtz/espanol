@@ -45,6 +45,9 @@ t('ganze Sätze werden nie Tippkarten', !phr.some(k=>ev("tipWanted(allCards().fi
 t('loadTip ohne Wert → rare', ev("loadTip()")==='rare');
 ev("store.set('q.tip','\"x\"')");
 t('loadTip ungültig → rare', ev("loadTip()")==='rare');
+ev("store.set('q.tip','\"constructor\"')");
+t('loadTip Prototyp-Schlüssel → rare', ev("loadTip()")==='rare');
+t('Hinweis nennt den Akzentschalter', ev("TIP_HINT.rare")&&ev("TIP_HINT.rare.includes('Akzente müssen stimmen')"));
 t('BK_KEYS enthält q.tip', ev("BK_KEYS.includes('q.tip')"));
 ev("document.querySelector('#segtip button[data-t=\"off\"]').click()");
 t('Klick „Aus“ speichert', ev("localStorage.getItem(nsk('q.tip'))")==='"off"');

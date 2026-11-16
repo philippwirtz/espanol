@@ -45,7 +45,9 @@ ev(q('got')+'.click()');
 t('Saß: Karte gelernt', ev('SRS.c['+JSON.stringify(plain.key)+'].r')===ev('today()'));
 t('Saß: Protokoll Bewertung 3', ev('(()=>{const e=logLoad().e; return e[e.length-1][2]})()')===3);
 
+const resTxt=()=>ev(q('qres')+'.textContent');
 show(plain.key); type('zzzzzzzz');
+t('falsch getippt: „Falsch“ und eigener Text', resTxt().startsWith('Falsch') && resTxt().includes('zzzzzzzz'));
 t('falsch: Vorschlag Nochmal', ev('R.tipSug')===0 && cls('again','sug') && cls('qres','bad'));
 ev(q('again')+'.click()');
 t('Wiederholung: Tippkarte in derselben Richtung', ev('R.queue[0].redo')===1 && ev('R.queue[0].tip')===true && ev('R.queue[0].toEs')===true && ev('R.toEs')===true);
@@ -54,11 +56,15 @@ t('Wiederholung: Vorschlag zurückgesetzt', ev('R.tipSug')===null && !cls('again
 
 show(plain.key); type('','no');
 t('„Weiß ich nicht“ → Nochmal', ev('R.tipSug')===0 && cls('again','sug'));
+t('„Weiß ich nicht“: Text „Nicht gewusst“', resTxt()==='Nicht gewusst');
 show(plain.key); type('   ');
 t('leeres Absenden → Nochmal', ev('R.tipSug')===0 && !hid('qans'));
+t('leeres Absenden: Text „Nicht gewusst“', resTxt()==='Nicht gewusst');
 
 show(acc.key); type(acc.es.normalize('NFD').replace(/[̀-ͯ]/g,''));
+const typedAcc=acc.es.normalize('NFD').replace(/[̀-ͯ]/g,'');
 t('Akzent fehlt (streng) → Knapp', ev('R.tipSug')===1 && cls('hard','sug') && cls('qres','near'));
+t('Fast richtig zeigt den eigenen Text', resTxt().startsWith('Fast richtig') && resTxt().includes('du: '+typedAcc));
 show(plain.key); type('  '+plain.es.toUpperCase()+'  ');
 t('Großschreibung und Ränder → Saß', ev('R.tipSug')===2);
 show(enye.key); type(enye.es);
@@ -67,6 +73,31 @@ t('Wort mit ñ → Saß', ev('R.tipSug')===2);
 show(plain.key,acc.key); type('abc');
 ev(q('qskip')+'.click()');
 t('Überspringen: nächste Tippkarte mit leerem Feld', ev('R.queue[0].key')===acc.key && ev(q('qtipin')+'.value')==='' && ev(q('qtipin')+'.disabled')===false && !hid('qtip'));
+
+/* Zusatz: Bedienelemente */
+show(plain.key);
+t('Reihenfolge wie im Verbtrainer: „Weiß ich nicht“ vor „Prüfen“', (ev(q('qtipno')+'.compareDocumentPosition('+q('qtipok')+')')&4)===4);
+t('Ergebnisfeld ist role=status', ev(q('qres')+".getAttribute('role')")==='status');
+ev("(()=>{const f="+q('qtipin')+"; f.value='aa'; f.focus(); f.setSelectionRange(2,2); document.querySelector('#qtipkeys button[data-ch=\"ñ\"]').click()})()");
+t('Akzenttaste fügt am Cursor ein', ev(q('qtipin')+'.value')==='aañ');
+ev("(()=>{const f="+q('qtipin')+"; f.setSelectionRange(1,1); document.querySelector('#qtipkeys button[data-ch=\"á\"]').click()})()");
+t('Akzenttaste mitten im Wort', ev(q('qtipin')+'.value')==='aáañ');
+
+/* Aufdeckkarte bleibt in der Wiederholung Aufdeckkarte, auch wenn Tippen danach eingeschaltet wird */
+ev("tipMode='off'"); show(plain.key);
+ev(q('card')+'.click()');
+t('Aufdeckkarte: aufgedeckt', !hid('qans') && !hid('rowJudge'));
+ev("tipMode='often'");
+ev(q('again')+'.click()');
+t('Wiederholung der Aufdeckkarte bleibt Aufdeckkarte', ev('R.queue[0].redo')===1 && ev('R.queue[0].tip')===false && !hid('qtap') && hid('qtip'));
+
+/* Beispielmodus „Zeigen“ mit Tippkarte: Satz erscheint nach dem Prüfen */
+const exCard=tipCards.find(c=>ev("!!EXD["+JSON.stringify(c.key)+"]"));
+ev("exMode='show'; tipMode='often'");
+if(exCard){ show(exCard.key); type(exCard.es);
+  t('Zeigen: Tippkarte, nach dem Prüfen Satz sichtbar', ev('R.tipSug')===2 && !hid('qaex') && ev(q('qaex')+'.textContent.length')>0); }
+t('Karte mit Beispielsatz für den Zeigen-Test gefunden', !!exCard);
+ev("exMode='word'");
 
 ev("tipMode='off'"); show(plain.key);
 t('Tippen aus: normale Karte', !hid('qtap') && hid('qtip') && ev('R.queue[0].tip')===false);
