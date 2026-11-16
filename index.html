@@ -174,10 +174,11 @@
         <div class="qex qcloze" id="qpex" hidden></div>
         <div class="qtap" id="qtap">Tippen zum Aufdecken</div>
         <form class="qtip" id="qtip" hidden autocomplete="off">
+          <div class="vtkeys" id="qtipkeys"><button type="button" data-ch="á">á</button><button type="button" data-ch="é">é</button><button type="button" data-ch="í">í</button><button type="button" data-ch="ó">ó</button><button type="button" data-ch="ú">ú</button><button type="button" data-ch="ñ">ñ</button><button type="button" data-ch="ü">ü</button></div>
           <input id="qtipin" type="text" lang="es" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Spanische Übersetzung">
-          <div class="qtipbtns"><button type="submit" class="act pri" id="qtipok">Prüfen</button><button type="button" class="act" id="qtipno">Weiß ich nicht</button></div>
+          <div class="qtipbtns"><button type="button" class="act" id="qtipno">Weiß ich nicht</button><button type="submit" class="act pri" id="qtipok">Prüfen</button></div>
         </form>
-        <div class="qres" id="qres" hidden></div>
+        <div class="qres" id="qres" role="status" hidden></div>
         <div class="qans" id="qans" hidden><div class="txt" id="qanstxt"></div><div class="qex" id="qaex" hidden></div></div>
       </div>
       <div class="judge" id="rowJudge" hidden>

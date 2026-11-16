@@ -346,12 +346,12 @@ function chooseDir(c,x){                   // true = Deutsch → Spanisch
 /* Tippkarten: ein Teil der Wortkarten (Deutsch → Spanisch, ab Stufe 1) wird getippt statt aufgedeckt.
    Nur Darstellung und Bewertungsvorschlag — Karte, Planung, Protokoll bleiben gleich. */
 const TIP_N={rare:4,often:2};
-const loadTip=()=>{ const v=loadJ('q.tip','rare'); return v==='off'||TIP_N[v]?v:'rare'; };
+const loadTip=()=>{ const v=loadJ('q.tip','rare'); return ['off','rare','often'].includes(v)?v:'rare'; };
 let tipMode=loadTip();
 const TIP_HINT={
   off:'Es wird nie getippt.',
-  rare:'Etwa jede vierte passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES.',
-  often:'Etwa jede zweite passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES.'};
+  rare:'Etwa jede vierte passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES. Ob Akzente zählen, steht unter Konjugieren („Akzente müssen stimmen“).',
+  often:'Etwa jede zweite passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES. Ob Akzente zählen, steht unter Konjugieren („Akzente müssen stimmen“).'};
 function tipWanted(c,x,toEs){             // pro Karte und Tag fest, wie chooseDir
   if(tipMode==='off' || !toEs || !c.key.startsWith('w:') || !(x.b>0) || !tipEligible(c.it[1])) return false;
   if(exMode==='cloze' && exPick(c)) return false;                      // dort wird schon ein ganzer Satz übersetzt
@@ -1101,13 +1101,19 @@ function tipSubmit(giveUp){
   R.tipSug={ok:2,near:1,wrong:0}[res];
   inp.disabled=true; $('qtip').hidden=true;
   const r=$('qres'); r.className='qres '+(res==='wrong'?'bad':res);
-  r.textContent={ok:'Richtig',near:'Fast richtig',wrong:'Nicht gewusst'}[res]; r.hidden=false;
+  const typed=inp.value.trim();                                        // getippter Text bleibt sichtbar: beim Vergleich lernt man am meisten
+  r.textContent=res==='ok'?'Richtig':!typed||giveUp?'Nicht gewusst':(res==='near'?'Fast richtig':'Falsch')+' — du: '+typed; r.hidden=false;
   reveal();
   $(['again','hard','got'][R.tipSug]).classList.add('sug');
 }
 $('qtip').onsubmit=e=>{ e.preventDefault(); tipSubmit(false); };
 $('qtipno').onclick=()=>tipSubmit(true);
-$('qtip').onclick=e=>e.stopPropagation();
+$('qtip').onclick=e=>{                                                  // Akzenttaste: am Cursor einfügen; Klicks im Formular decken die Karte nie auf
+  e.stopPropagation();
+  const b=e.target.closest('#qtipkeys button'), i=$('qtipin');
+  if(b && !i.disabled){ i.setRangeText(b.dataset.ch,i.selectionStart??i.value.length,i.selectionEnd??i.value.length,'end'); i.focus(); }
+};
+$('qtip').onmousedown=e=>{ if(e.target.closest('#qtipkeys button')) e.preventDefault(); };      // Fokus im Feld behalten
 
 /* g: 0 = Nochmal · 1 = Knapp · 2 = Saß */
 function grade(g){
@@ -1430,7 +1436,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-16 · 29';
+const APP_VERSION='2026-11-16 · 30';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
