@@ -84,6 +84,20 @@ ev("(()=>{const f="+q('qtipin')+"; f.setSelectionRange(1,1); document.querySelec
 t('Akzenttaste mitten im Wort', ev(q('qtipin')+'.value')==='aáañ');
 
 /* Aufdeckkarte bleibt in der Wiederholung Aufdeckkarte, auch wenn Tippen danach eingeschaltet wird */
+/* Modus „Im Satz“: deutscher Satz mit markiertem Wort, getippt wird die Form aus dem spanischen Satz */
+ev("exMode='cloze'; tipMode='often'");
+const clz=ev("(()=>{const cs=allCards().filter(c=>c.key.startsWith('w:')&&EXD[c.key]&&tipWanted(c,{b:2},true)).map(c=>({key:c.key,es:c.it[1],tgt:exTarget(exPick(c)[0])})); return cs.find(c=>c.tgt.toLowerCase()!==c.es.toLowerCase())||cs[0]||null})()");
+t('Karte für den Im-Satz-Test gefunden', !!clz);
+if(clz){ show(clz.key);
+  t('Im Satz: Tippfeld statt Aufdecken', !hid('qtip') && hid('qtap') && hid('qans') && ev('R.queue[0].tip')===true);
+  t('Im Satz: Satz als Frage, Zielwort markiert', cls('qprompt','sent') && ev(q('qprompt')+".querySelector('mark')!==null"));
+  t('Im Satz: Hinweis im Feld', ev(q('qtipin')+'.placeholder').length>0);
+  type(clz.tgt);
+  t('Im Satz: Form aus dem Satz = richtig', ev('R.tipSug')===2 && ev(q('qres')+'.textContent')==='Richtig');
+  show(clz.key); type('zzzzzzzz');
+  t('Im Satz: falsches Wort = Nochmal vorgeschlagen', ev('R.tipSug')===0 && !hid('qans')); }
+ev("exMode='word'");
+
 ev("tipMode='off'"); show(plain.key);
 ev(q('card')+'.click()');
 t('Aufdeckkarte: aufgedeckt', !hid('qans') && !hid('rowJudge'));
