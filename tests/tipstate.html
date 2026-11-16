@@ -35,7 +35,8 @@ t('false bei Wortkarte mit Schrägstrich', ev("tipWanted(allCards().find(c=>c.ke
 const exKey=ev("(()=>{const c=allCards().find(c=>c.key.startsWith('w:')&&tipEligible(c.it[1])&&EX[c.key]&&EX[c.key].length&&tipWanted(c,{b:2},true)); return c?c.key:null})()");
 t('Wortkarte mit Beispielsatz und Tippauswahl gefunden', !!exKey);
 ev("exMode='cloze'");
-t('Lückentext-Modus: nie Tippkarte', ev("tipWanted(allCards().find(c=>c.key===" +JSON.stringify(exKey)+"),{b:2},true)")===false);
+t('Lückentext-Modus: Tippkarte, Antwort = Form aus dem spanischen Satz', ev("(()=>{const c=allCards().find(c=>c.key==="+JSON.stringify(exKey)+"); return tipWanted(c,{b:2},true)===true && tipAnswer(c)===exTarget(exPick(c)[0])})()")===true);
+t('Lückentext-Modus: Wort ohne Satz-Form-Eignung (Komma/Schrägstrich) nie Tippkarte', ev("(()=>{const c=allCards().find(c=>c.key==="+JSON.stringify(exKey)+"); const E=EXD[c.key]; const old=E.slice(); EXD[c.key]=[['x [a, b] y','x [a, b] y'],['x [a, b] y','x [a, b] y']]; const r=Array.from({length:60},(_,i)=>tipWanted({...c,key:c.key},{b:2},true)); EXD[c.key]=old; return r.some(Boolean)})()")===false);
 ev("exMode='word'");
 t('Modus Wort: wieder Tippkarte', ev("tipWanted(allCards().find(c=>c.key===" +JSON.stringify(exKey)+"),{b:2},true)")===true);
 const phr=ev("allCards().filter(c=>c.key.startsWith('w:')&&/[.!?]$/.test(c.it[1])&&c.it[1].split(' ').length>2).map(c=>c.key)");

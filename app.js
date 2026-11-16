@@ -350,11 +350,14 @@ const loadTip=()=>{ const v=loadJ('q.tip','rare'); return ['off','rare','often']
 let tipMode=loadTip();
 const TIP_HINT={
   off:'Es wird nie getippt.',
-  rare:'Etwa jede vierte passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES. Ob Akzente zählen, steht unter Konjugieren („Akzente müssen stimmen“).',
-  often:'Etwa jede zweite passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES. Ob Akzente zählen, steht unter Konjugieren („Akzente müssen stimmen“).'};
+  rare:'Etwa jede vierte passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES. Im Modus „Im Satz“ tippst du das Wort so, wie es im Satz steht. Ob Akzente zählen, steht unter Konjugieren („Akzente müssen stimmen“).',
+  often:'Etwa jede zweite passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES. Im Modus „Im Satz“ tippst du das Wort so, wie es im Satz steht. Ob Akzente zählen, steht unter Konjugieren („Akzente müssen stimmen“).'};
+function tipAnswer(c){                    // was getippt wird: im Modus „Im Satz“ die Form aus dem spanischen Satz, sonst das Wort der Karte
+  const E=exMode==='cloze'?exPick(c):null;
+  return (E&&exTarget(E[0]))||c.it[1];
+}
 function tipWanted(c,x,toEs){             // pro Karte und Tag fest, wie chooseDir
-  if(tipMode==='off' || !toEs || !c.key.startsWith('w:') || !(x.b>0) || !tipEligible(c.it[1])) return false;
-  if(exMode==='cloze' && exPick(c)) return false;                      // dort wird schon ein ganzer Satz übersetzt
+  if(tipMode==='off' || !toEs || !c.key.startsWith('w:') || !(x.b>0) || !tipEligible(tipAnswer(c))) return false;
   return hashStr(c.key+'|tip|'+today())%TIP_N[tipMode]===0;
 }
 let level=loadJ('q.level','basis');
@@ -1059,7 +1062,7 @@ function nextCard(){
   }
   $('qans').hidden=true; $('qtap').hidden=!!c.tip;
   $('qtip').hidden=!c.tip; $('qres').hidden=true;
-  if(c.tip){ const f=$('qtipin'); f.value=''; f.disabled=false; f.focus(); }
+  if(c.tip){ const f=$('qtipin'); f.value=''; f.disabled=false; f.placeholder=cloze?'Wort so, wie es im Satz steht':''; f.focus(); }
   $('rowJudge').hidden=true;
   // Lautsprecher: Spanisch nur hörbar, wenn es schon sichtbar ist
   $('qspk').hidden=!TTS; $('qspk').disabled=toEs;
@@ -1097,7 +1100,7 @@ $('card').onclick=reveal;
 function tipSubmit(giveUp){
   if(!R || !R.queue.length || R.tipSug!==null) return;
   const c=R.queue[0], inp=$('qtipin');
-  const res=giveUp?'wrong':tipCheck(inp.value,c.it[1],vtSettings().strict);
+  const res=giveUp?'wrong':tipCheck(inp.value,tipAnswer(c),vtSettings().strict);
   R.tipSug={ok:2,near:1,wrong:0}[res];
   inp.disabled=true; $('qtip').hidden=true;
   const r=$('qres'); r.className='qres '+(res==='wrong'?'bad':res);
@@ -1436,7 +1439,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-16 · 30';
+const APP_VERSION='2026-11-16 · 33';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
