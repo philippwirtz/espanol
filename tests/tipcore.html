@@ -27,5 +27,10 @@ t('tipEligible mit Artikel', tipEligible('el hijo')===true);
 t('tipEligible Schrägstrich', tipEligible('el hijo / la hija')===false);
 t('tipEligible Komma', tipEligible('ir, venir')===false);
 t('tipEligible Auslassung', tipEligible('etc …')===false);
+t('tipEligible ganzer Satz (Punkt)', tipEligible('Mi esposa es muy simpática.')===false);
+t('tipEligible ganzer Satz (Frage)', tipEligible('¿A qué se dedica?')===false);
+t('tipEligible kurze Frage bleibt', tipEligible('¿Cómo está?')===true);
+t('tipEligible kurzer Satz bleibt', tipEligible('No entiendo.')===true);
+t('tipEligible Wortgruppe ohne Satzzeichen bleibt', tipEligible('la tarjeta de crédito')===true);
 done();
 </script>

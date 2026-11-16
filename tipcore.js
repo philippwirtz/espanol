@@ -4,8 +4,9 @@
 const TIP_ART=/^(el|la|los|las|un|una) /;
 const tipPlain=s=>s.replace(/[¿¡?!]/g,'').replace(/^[\s.]+|[\s.]+$/g,'');
 
-/* Alternativen („el hijo / la hija“), Aufzählungen und Auslassungen lassen sich nicht eindeutig tippen */
-const tipEligible=es=>!/[\/,…]/.test(es);
+/* Alternativen („el hijo / la hija“), Aufzählungen und Auslassungen lassen sich nicht eindeutig tippen;
+   ganze Sätze (Aufbau-Kapitel haben Beispielsätze als Wortkarten) auch nicht: Satzzeichen am Ende und mehr als zwei Wörter */
+const tipEligible=es=>!/[\/,…]/.test(es) && !(/[.!?]$/.test(es) && es.split(/\s+/).length>2);
 
 function tipOneEdit(a,b){                       // Abstand genau 1 (Ersetzen, Einfügen oder Löschen)
   if(Math.abs(a.length-b.length)>1) return false;
