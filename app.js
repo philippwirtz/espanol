@@ -1025,6 +1025,9 @@ function nextCard(){
   R.shownAt=Date.now();
   const toEs = c.redo ? c.toEs : chooseDir(c,x); // Wiederholung in derselben Richtung wie der Fehlversuch
   R.toEs=toEs;
+  if(c.tip===undefined) c.tip=tipWanted(c,x,toEs);                     // einmal je Karte entschieden; Wiederholungen erben es
+  R.tipSug=null;
+  ['again','hard','got'].forEach(id=>$(id).classList.remove('sug'));
   const [de,es]=c.it;
   const E=exMode!=='word'?exPick(c):null, cloze=!!E&&exMode==='cloze';
   R.say=es;                                                   // was die Sprachausgabe vorliest
@@ -1054,7 +1057,9 @@ function nextCard(){
   } else if(E){                                               // „Zeigen": Satz nach dem Aufdecken
     $('qaex').innerHTML='<span class="es">'+exHtml(E[0])+'</span><span class="de">'+exHtml(E[1])+'</span>'; $('qaex').hidden=false;
   }
-  $('qans').hidden=true; $('qtap').hidden=false;
+  $('qans').hidden=true; $('qtap').hidden=!!c.tip;
+  $('qtip').hidden=!c.tip; $('qres').hidden=true;
+  if(c.tip){ const f=$('qtipin'); f.value=''; f.disabled=false; f.focus(); }
   $('rowJudge').hidden=true;
   // Lautsprecher: Spanisch nur hörbar, wenn es schon sichtbar ist
   $('qspk').hidden=!TTS; $('qspk').disabled=toEs;
@@ -1081,12 +1086,28 @@ function fmtIvl(n){
 }
 function reveal(){
   if(!$('qans').hidden) return;
+  if(R && R.queue[0] && R.queue[0].tip && R.tipSug===null) return;     // Tippkarte: erst prüfen, dann aufdecken
   $('qans').hidden=false; $('qtap').hidden=true;
   $('qspk').disabled=false;
   if(autoSpeak && R.toEs) speak(R.say||R.queue[0].it[1],$('qanstxt'));
   $('rowJudge').hidden=false;
 }
 $('card').onclick=reveal;
+/* Tippkarte: Ergebnis zeigen, Lösung aufdecken, passende Bewertung vorwählen (die Knöpfe bleiben frei wählbar) */
+function tipSubmit(giveUp){
+  if(!R || !R.queue.length || R.tipSug!==null) return;
+  const c=R.queue[0], inp=$('qtipin');
+  const res=giveUp?'wrong':tipCheck(inp.value,c.it[1],vtSettings().strict);
+  R.tipSug={ok:2,near:1,wrong:0}[res];
+  inp.disabled=true; $('qtip').hidden=true;
+  const r=$('qres'); r.className='qres '+(res==='wrong'?'bad':res);
+  r.textContent={ok:'Richtig',near:'Fast richtig',wrong:'Nicht gewusst'}[res]; r.hidden=false;
+  reveal();
+  $(['again','hard','got'][R.tipSug]).classList.add('sug');
+}
+$('qtip').onsubmit=e=>{ e.preventDefault(); tipSubmit(false); };
+$('qtipno').onclick=()=>tipSubmit(true);
+$('qtip').onclick=e=>e.stopPropagation();
 
 /* g: 0 = Nochmal · 1 = Knapp · 2 = Saß */
 function grade(g){
