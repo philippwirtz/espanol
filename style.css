@@ -153,6 +153,17 @@ mark{background:var(--saf);color:var(--on-saf);border-radius:2px;padding:0 1px}
 .qans.dedir .txt{color:var(--ink)}
 .qtap{margin-top:auto;padding-top:16px;border-top:1px dashed var(--rule);font-size:13px;color:var(--soft);text-align:center}
 .qtap[hidden]{display:none}
+.qtip{margin-top:auto;padding-top:16px;border-top:1px dashed var(--rule)}
+.qtip[hidden]{display:none}
+.qtip input{font:20px var(--font);width:100%;box-sizing:border-box;padding:11px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--bg);color:var(--ink)}
+.qtip input:focus{outline:2px solid var(--pri);outline-offset:-1px}
+.qtipbtns{display:flex;gap:9px;margin-top:10px}
+.qtipbtns button{flex:1;padding:11px 4px}
+.qres{margin-top:12px;font:500 13.5px/1 var(--font)}
+.qres[hidden]{display:none}
+.qres.ok{color:var(--ok)}
+.qres.near{color:var(--gold)}
+.qres.bad{color:var(--alert)}
 .btnrow{display:flex;gap:9px}
 .btnrow[hidden]{display:none}
 button.act{flex:1;padding:15px 10px;font:500 15px var(--font);border-radius:13px;
@@ -281,6 +292,7 @@ details.settings .setrow{padding:4px 2px}
 .judge[hidden]{display:none}
 .judge button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:11px 4px}
 .judge small{font:500 11.5px/1 var(--font);opacity:.8}
+.judge button.sug{box-shadow:0 0 0 2px var(--pri)}
 /* Navigation */
 nav button svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 nav button{position:relative;gap:4px;padding-top:9px}

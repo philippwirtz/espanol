@@ -9,6 +9,7 @@
 | `content.js` | Grammatik, Wortschatz, Verben, Beispielsätze (reine Daten) |
 | `app.js` | Programmlogik: Suche, Abfrage, Statistik, Cloud-Sync |
 | `verbcore.js` | Verbtrainer: Formen aus den Verbtabellen lesen, Antworten prüfen |
+| `tipcore.js` | Tippkarten: getippte Vokabel prüfen (richtig · fast · falsch) |
 | `verbtrainer.js` | Verbtrainer: Planung (FSRS) und Übungsbildschirm |
 | `sw.js` | Service Worker — macht die App offline nutzbar |
 | `manifest.webmanifest` | Name, Farben, Vollbildmodus |
@@ -41,7 +42,7 @@ sobald sie einmal geladen wurde.
 Neue Datei mit gleichem Namen hochladen und überschreiben. Damit der Service Worker
 die neue Fassung ausliefert, in `sw.js` die erste Zeile hochzählen:
 
-    const CACHE = 'espanol-v30';
+    const CACHE = 'espanol-v31';
 
 Ohne diese Änderung bleibt auf dem iPhone die alte Fassung im Zwischenspeicher.
 

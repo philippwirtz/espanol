@@ -1,0 +1,36 @@
+<!doctype html><meta charset="utf-8"><title>tipcore</title><body>
+<script src="../content.js"></script>
+<script src="../verbcore.js"></script>
+<script src="../tipcore.js"></script>
+<script src="harness.js"></script>
+<script>
+/* Prüflogik der Tippkarten: tipCheck (ok · near · wrong) und tipEligible */
+const ck=(i,a,s)=>tipCheck(i,a,s);
+t('ok: gleich', ck('hola','hola',true)==='ok');
+t('ok: Großschreibung und Ränder', ck('  HOLA ','hola',true)==='ok');
+t('ok: Satzzeichen der Antwort', ck('cómo está','¿Cómo está?',true)==='ok');
+t('ok: Satzzeichen und Leerzeichen der Eingabe', ck('¿Cómo   está?','cómo está',true)==='ok');
+t('Akzent fehlt, streng → near', ck('adios','adiós',true)==='near');
+t('Akzent fehlt, locker → ok', ck('adios','adiós',false)==='ok');
+t('Artikel fehlt → near', ck('hijo','el hijo',true)==='near');
+t('Artikel da → ok', ck('el hijo','el hijo',true)==='ok');
+t('ein Buchstabe falsch → near', ck('cosa','casa',true)==='near');
+t('zwei Buchstaben falsch → wrong', ck('coso','casa',true)==='wrong');
+t('kurzes Wort: ein Buchstabe falsch → wrong', ck('sol','sal',true)==='wrong');
+t('ñ ist eigener Buchstabe', ck('ano','año',false)==='wrong');
+t('ñ richtig', ck('año','año',false)==='ok');
+t('leer → wrong', ck('','casa',true)==='wrong');
+t('nur Leerzeichen → wrong', ck('   ','casa',true)==='wrong');
+t('tipEligible Wort', tipEligible('hola')===true);
+t('tipEligible Wortgruppe', tipEligible('buenos días')===true);
+t('tipEligible mit Artikel', tipEligible('el hijo')===true);
+t('tipEligible Schrägstrich', tipEligible('el hijo / la hija')===false);
+t('tipEligible Komma', tipEligible('ir, venir')===false);
+t('tipEligible Auslassung', tipEligible('etc …')===false);
+t('tipEligible ganzer Satz (Punkt)', tipEligible('Mi esposa es muy simpática.')===false);
+t('tipEligible ganzer Satz (Frage)', tipEligible('¿A qué se dedica?')===false);
+t('tipEligible kurze Frage bleibt', tipEligible('¿Cómo está?')===true);
+t('tipEligible kurzer Satz bleibt', tipEligible('No entiendo.')===true);
+t('tipEligible Wortgruppe ohne Satzzeichen bleibt', tipEligible('la tarjeta de crédito')===true);
+done();
+</script>

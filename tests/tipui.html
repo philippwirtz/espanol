@@ -1,0 +1,75 @@
+<!doctype html><meta charset="utf-8"><title>tipui</title><body>
+<iframe id="app" src="../index.html" style="width:400px;height:800px"></iframe>
+<script src="harness.js"></script>
+<script>
+/* Tippkarten: Bedienung in der Vokabelabfrage */
+const fr=document.getElementById('app');
+fr.onload=()=>setTimeout(run,300);
+function run(){
+const w=fr.contentWindow, ev=c=>w.eval(c);
+w.onerror=m=>t('iframe-Fehler: '+m,false);
+const q=id=>"document.getElementById('"+id+"')";
+const hid=id=>ev(q(id)+'.hidden');
+const cls=(id,c)=>ev(q(id)+".classList.contains('"+c+"')");
+ev("SRS.c={};SRS.hist={};localStorage.removeItem(nsk('q.log'));localStorage.removeItem(nsk('q.vbacc'));exMode='word';tipMode='often'");
+const tipCards=ev("allCards().filter(c=>c.key.startsWith('w:')&&tipWanted(c,{b:2},true)).map(c=>({key:c.key,es:c.it[1]}))");
+const plain=tipCards.find(c=>/^[a-z ]+$/.test(c.es)&&c.es.length>=5);
+const acc=tipCards.find(c=>/[áéíóú]/.test(c.es)&&!/[ñü]/.test(c.es));
+const enye=tipCards.find(c=>/ñ/.test(c.es));
+t('Wortkarten für die Tests gefunden', !!plain && !!acc && !!enye);
+/* eine Karte als erste der Runde zeigen (Stufe 2, fällig) */
+const show=(...keys)=>{
+  ev("SRS.c={};"+JSON.stringify(keys)+".forEach(k=>SRS.c[k]={b:2,due:0,l:0,s:5,d:5,r:today()-5,fr:today()-5})");
+  ev("startRound('T',()=>allCards().filter(c=>"+JSON.stringify(keys)+".includes(c.key)),'normal')");
+  ev("R.queue="+JSON.stringify(keys)+".map(k=>({...allCards().find(c=>c.key===k),redo:0})); R.total=R.queue.length; show('play'); nextCard()");
+};
+const type=(v,how)=>{ ev(q('qtipin')+".value="+JSON.stringify(v)); if(how==='no') ev(q('qtipno')+'.click()'); else ev(q('qtip')+'.requestSubmit()'); };
+
+show(plain.key);
+t('Tippkarte: Feld sichtbar', !hid('qtip'));
+t('Tippkarte: „Tippen zum Aufdecken“ weg', hid('qtap'));
+t('Tippkarte: Lösung verborgen', hid('qans'));
+t('Tippkarte: Bewertungsleiste verborgen', hid('rowJudge'));
+t('Tippkarte: c.tip gesetzt', ev("R.queue[0].tip")===true);
+ev(q('qtipin')+".dispatchEvent(new MouseEvent('click',{bubbles:true}))");
+t('Klick ins Feld deckt nicht auf', hid('qans'));
+ev(q('card')+".click()");
+t('Klick auf die Karte deckt vor dem Prüfen nicht auf', hid('qans') && hid('rowJudge'));
+
+type(plain.es);
+t('richtig: Lösung sichtbar', !hid('qans') && !hid('rowJudge'));
+t('richtig: Ergebnis ok', cls('qres','ok') && !hid('qres'));
+t('richtig: Vorschlag Saß', ev('R.tipSug')===2 && cls('got','sug') && !cls('again','sug') && !cls('hard','sug'));
+t('richtig: Feld gesperrt', ev(q('qtipin')+'.disabled')===true && hid('qtip'));
+ev(q('got')+'.click()');
+t('Saß: Karte gelernt', ev('SRS.c['+JSON.stringify(plain.key)+'].r')===ev('today()'));
+t('Saß: Protokoll Bewertung 3', ev('(()=>{const e=logLoad().e; return e[e.length-1][2]})()')===3);
+
+show(plain.key); type('zzzzzzzz');
+t('falsch: Vorschlag Nochmal', ev('R.tipSug')===0 && cls('again','sug') && cls('qres','bad'));
+ev(q('again')+'.click()');
+t('Wiederholung: Tippkarte in derselben Richtung', ev('R.queue[0].redo')===1 && ev('R.queue[0].tip')===true && ev('R.queue[0].toEs')===true && ev('R.toEs')===true);
+t('Wiederholung: Feld leer und aktiv', ev(q('qtipin')+'.value')==='' && ev(q('qtipin')+'.disabled')===false && !hid('qtip') && hid('qans'));
+t('Wiederholung: Vorschlag zurückgesetzt', ev('R.tipSug')===null && !cls('again','sug'));
+
+show(plain.key); type('','no');
+t('„Weiß ich nicht“ → Nochmal', ev('R.tipSug')===0 && cls('again','sug'));
+show(plain.key); type('   ');
+t('leeres Absenden → Nochmal', ev('R.tipSug')===0 && !hid('qans'));
+
+show(acc.key); type(acc.es.normalize('NFD').replace(/[̀-ͯ]/g,''));
+t('Akzent fehlt (streng) → Knapp', ev('R.tipSug')===1 && cls('hard','sug') && cls('qres','near'));
+show(plain.key); type('  '+plain.es.toUpperCase()+'  ');
+t('Großschreibung und Ränder → Saß', ev('R.tipSug')===2);
+show(enye.key); type(enye.es);
+t('Wort mit ñ → Saß', ev('R.tipSug')===2);
+
+show(plain.key,acc.key); type('abc');
+ev(q('qskip')+'.click()');
+t('Überspringen: nächste Tippkarte mit leerem Feld', ev('R.queue[0].key')===acc.key && ev(q('qtipin')+'.value')==='' && ev(q('qtipin')+'.disabled')===false && !hid('qtip'));
+
+ev("tipMode='off'"); show(plain.key);
+t('Tippen aus: normale Karte', !hid('qtap') && hid('qtip') && ev('R.queue[0].tip')===false);
+done();
+}
+</script>

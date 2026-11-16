@@ -1,0 +1,56 @@
+<!doctype html><meta charset="utf-8"><title>tipstate</title><body>
+<iframe id="app" src="../index.html" style="width:400px;height:800px"></iframe>
+<script src="harness.js"></script>
+<script>
+/* Tippkarten: Einstellung q.tip und Auswahl tipWanted */
+const fr=document.getElementById('app');
+fr.onload=()=>setTimeout(run,300);
+function run(){
+const w=fr.contentWindow, ev=c=>w.eval(c);
+w.onerror=m=>t('iframe-Fehler: '+m,false);
+ev("localStorage.removeItem(nsk('q.tip')); localStorage.removeItem(nsk('q.exmode')); exMode='word'; SRS.c={}");
+const words=ev("allCards().filter(c=>c.key.startsWith('w:')&&tipEligible(c.it[1])).slice(0,200).map(c=>c.key)");
+t('200 Wortkarten zum Probieren', words.length===200);
+ev("SRS.c={}; "+JSON.stringify(words)+".forEach(k=>SRS.c[k]={b:2,due:0,l:0})");
+const share=mode=>{ ev("tipMode='"+mode+"'");
+  const n=words.filter(k=>ev("tipWanted(allCards().find(c=>c.key==="+JSON.stringify(k)+"),st("+JSON.stringify(k)+"),true)")).length;
+  return n/words.length; };
+t('aus: nie', share('off')===0);
+const r=share('rare'), o=share('often');
+t('selten: 15–35 % ('+r+')', r>=.15 && r<=.35);
+t('öfter: 35–65 % ('+o+')', o>=.35 && o<=.65);
+ev("tipMode='often'");
+const pick=ev("allCards().find(c=>c.key.startsWith('w:')&&tipWanted(c,st(c.key),true)).key");
+const card="allCards().find(c=>c.key==="+JSON.stringify(pick)+")";
+t('stabil am selben Tag', ev("tipWanted("+card+",st("+card+".key),true)")===ev("tipWanted("+card+",st("+card+".key),true)"));
+t('false bei Richtung → DE', ev("tipWanted("+card+",st("+card+".key),false)")===false);
+ev("SRS.c["+JSON.stringify(pick)+"]={b:0,due:0,l:0}");
+t('false bei neuer Karte (Stufe 0)', ev("tipWanted("+card+",st("+card+".key),true)")===false);
+ev("SRS.c["+JSON.stringify(pick)+"]={b:2,due:0,l:0}");
+t('true bei Stufe 2 (Gegenprobe)', ev("tipWanted("+card+",st("+card+".key),true)")===true);
+t('false bei Satzkarte', ev("(()=>{const c=allCards().find(c=>c.key.startsWith('s:')); SRS.c[c.key]={b:2,due:0,l:0}; return Array.from({length:60},(_,i)=>tipWanted({...c,key:c.key+i},{b:2},true)).some(Boolean)})()")===false);
+const slashKey=ev("(()=>{const c=allCards().find(c=>c.key.startsWith('w:')&&/\\//.test(c.it[1])); if(!c) return null; SRS.c[c.key]={b:2,due:0,l:0}; return c.key})()");
+t('Wortkarte mit Schrägstrich gefunden', !!slashKey);
+t('false bei Wortkarte mit Schrägstrich', ev("tipWanted(allCards().find(c=>c.key===" +JSON.stringify(slashKey)+"),{b:2},true)")===false);
+const exKey=ev("(()=>{const c=allCards().find(c=>c.key.startsWith('w:')&&tipEligible(c.it[1])&&EX[c.key]&&EX[c.key].length&&tipWanted(c,{b:2},true)); return c?c.key:null})()");
+t('Wortkarte mit Beispielsatz und Tippauswahl gefunden', !!exKey);
+ev("exMode='cloze'");
+t('Lückentext-Modus: nie Tippkarte', ev("tipWanted(allCards().find(c=>c.key===" +JSON.stringify(exKey)+"),{b:2},true)")===false);
+ev("exMode='word'");
+t('Modus Wort: wieder Tippkarte', ev("tipWanted(allCards().find(c=>c.key===" +JSON.stringify(exKey)+"),{b:2},true)")===true);
+const phr=ev("allCards().filter(c=>c.key.startsWith('w:')&&/[.!?]$/.test(c.it[1])&&c.it[1].split(' ').length>2).map(c=>c.key)");
+t('ganze Sätze unter den Wortkarten gefunden ('+phr.length+')', phr.length>0);
+ev("tipMode='often'; "+JSON.stringify(phr)+".forEach(k=>SRS.c[k]={b:2,due:0,l:0})");
+t('ganze Sätze werden nie Tippkarten', !phr.some(k=>ev("tipWanted(allCards().find(c=>c.key==="+JSON.stringify(k)+"),{b:2},true)")));
+t('loadTip ohne Wert → rare', ev("loadTip()")==='rare');
+ev("store.set('q.tip','\"x\"')");
+t('loadTip ungültig → rare', ev("loadTip()")==='rare');
+t('BK_KEYS enthält q.tip', ev("BK_KEYS.includes('q.tip')"));
+ev("document.querySelector('#segtip button[data-t=\"off\"]').click()");
+t('Klick „Aus“ speichert', ev("localStorage.getItem(nsk('q.tip'))")==='"off"');
+t('Klick „Aus“ setzt tipMode', ev("tipMode")==='off');
+ev("document.querySelector('#segtip button[data-t=\"often\"]').click()");
+t('Klick „Öfter“ setzt aria-pressed', ev("document.querySelector('#segtip button[data-t=\"often\"]').getAttribute('aria-pressed')")==='true');
+done();
+}
+</script>
