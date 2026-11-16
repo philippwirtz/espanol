@@ -343,6 +343,20 @@ function chooseDir(c,x){                   // true = Deutsch → Spanisch
   if(x.b<=3) return true;
   return r%4!==0;                          // ab Stufe 4: meist bilden, gelegentlich zurück
 }
+/* Tippkarten: ein Teil der Wortkarten (Deutsch → Spanisch, ab Stufe 1) wird getippt statt aufgedeckt.
+   Nur Darstellung und Bewertungsvorschlag — Karte, Planung, Protokoll bleiben gleich. */
+const TIP_N={rare:4,often:2};
+const loadTip=()=>{ const v=loadJ('q.tip','rare'); return v==='off'||TIP_N[v]?v:'rare'; };
+let tipMode=loadTip();
+const TIP_HINT={
+  off:'Es wird nie getippt.',
+  rare:'Etwa jede vierte passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES.',
+  often:'Etwa jede zweite passende Karte: Wort eintippen, die App prüft und schlägt die Bewertung vor. Nur Einzelwörter ab der zweiten Abfrage, Richtung → ES.'};
+function tipWanted(c,x,toEs){             // pro Karte und Tag fest, wie chooseDir
+  if(tipMode==='off' || !toEs || !c.key.startsWith('w:') || !(x.b>0) || !tipEligible(c.it[1])) return false;
+  if(exMode==='cloze' && exPick(c)) return false;                      // dort wird schon ein ganzer Satz übersetzt
+  return hashStr(c.key+'|tip|'+today())%TIP_N[tipMode]===0;
+}
 let level=loadJ('q.level','basis');
 function streak(){
   let t=today(), n=0;
@@ -874,6 +888,8 @@ function renderPick(){
   $('dirHint').textContent=DIR_HINT[dirMode]||'';
   document.querySelectorAll('#segex button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.x===exMode));
   $('exHint').textContent=EX_HINT[exMode]+' Gilt nur für dieses Profil.';
+  document.querySelectorAll('#segtip button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===tipMode));
+  $('tipHint').textContent=TIP_HINT[tipMode]+' Gilt nur für dieses Profil.';
   document.querySelectorAll('#segret button').forEach(b=>b.setAttribute('aria-pressed',Math.abs(+b.dataset.r-RET)<.001));
   $('retHint').textContent='So sicher soll eine Karte am Fälligkeitstag noch sitzen. '+(RET>=.95?'95 %: kaum Vergessen, aber deutlich mehr Wiederholungen.'
     :RET<=.85?'85 %: weniger Wiederholungen, dafür häufiger „Nochmal".':'90 %: der übliche Kompromiss.')
@@ -964,6 +980,8 @@ document.querySelectorAll('#segret button').forEach(b=>b.onclick=()=>{
   RET=+b.dataset.r; store.set('q.ret',JSON.stringify(RET)); renderPick(); });
 document.querySelectorAll('#segex button').forEach(b=>b.onclick=()=>{
   exMode=b.dataset.x; store.set('q.exmode',JSON.stringify(exMode)); renderPick(); });
+document.querySelectorAll('#segtip button').forEach(b=>b.onclick=()=>{
+  tipMode=b.dataset.t; store.set('q.tip',JSON.stringify(tipMode)); renderPick(); });
 document.querySelectorAll('#segdir button').forEach(b=>b.onclick=()=>{
   dirMode=b.dataset.d; store.set('q.dir',JSON.stringify(dirMode)); renderPick(); });
 $('ttsTest').onclick=()=>{
@@ -1430,7 +1448,7 @@ addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
 if(SYNC&&SYNC.gist) setTimeout(syncNow,800);
 
 /* --- Lernstand sichern / wiederherstellen --- */
-const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log','q.exmode','q.vbforms','q.vbsize','q.vbnew','q.vbacc'];
+const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log','q.exmode','q.tip','q.vbforms','q.vbsize','q.vbnew','q.vbacc'];
 function bkStatus(){
   const last=loadJ('q.backup',null), started=Object.keys(SRS.c).length;
   const days=last===null?null:today()-last;
@@ -1494,7 +1512,7 @@ $('bkFile').onchange=async e=>{
     SRS.gen=gen;                                             // neue Generation: gilt auf allen Geräten
     saveQ(); scheduleSync(true);
     LOG=null; RET=loadJ('q.ret',0.9);
-    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto'); exMode=loadJ('q.exmode','word');
+    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto'); exMode=loadJ('q.exmode','word'); tipMode=loadTip();
     renderPick(); bkStatus(); bkMsg('Lernstand vom '+when+' geladen ('+n+' Karten).');
   }catch(err){ bkMsg('Datei konnte nicht gelesen werden: '+err.message,true); }
 };
