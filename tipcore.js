@@ -16,13 +16,24 @@ function tipOneEdit(a,b){                       // Abstand genau 1 (Ersetzen, Ei
   return s.slice(i)===l.slice(i+1);
 }
 
-/* ok = richtig · near = Akzent (bei strengem Schalter), Artikel oder ein Buchstabe daneben · wrong = sonst */
-function tipCheck(input,answer,strict){
+/* Synonyme (SYN in content.js) zu einem Kartenwort, ohne Artikel und Akzente.
+   form = Form im Satz: hängt dort eine Endung am Kartenwort (cerveza → cervezas), bekommen die Synonyme sie auch (birras). */
+const tipBase=w=>vtNorm(tipPlain(w),false).replace(TIP_ART,'');
+function tipAlts(word,form){
+  const G=typeof SYN==='object'?SYN:[], b=tipBase(word);
+  const g=G.find(g=>g.some(w=>tipBase(w)===b)); if(!g) return [];
+  const f=tipBase(form||word), suf=f.startsWith(b)?f.slice(b.length):'';
+  return g.filter(w=>tipBase(w)!==b).map(w=>tipBase(w)+suf);
+}
+
+/* ok = richtig · alt = Synonym aus SYN (zählt als richtig) · near = Akzent (bei strengem Schalter), Artikel oder ein Buchstabe daneben · wrong = sonst */
+function tipCheck(input,answer,strict,alts){
   const i=vtNorm(tipPlain(input),true), a=vtNorm(tipPlain(answer),true);
   if(!i) return 'wrong';
   if(i===a) return 'ok';
   const fi=vtNorm(i,false), fa=vtNorm(a,false);
   if(fi===fa) return strict?'near':'ok';
+  if(alts && alts.includes(fi.replace(TIP_ART,''))) return 'alt';
   if(TIP_ART.test(fa) && fi===fa.replace(TIP_ART,'')) return 'near';
   if(fa.length>=4 && tipOneEdit(fi,fa)) return 'near';
   return 'wrong';

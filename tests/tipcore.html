@@ -5,7 +5,7 @@
 <script src="harness.js"></script>
 <script>
 /* Prüflogik der Tippkarten: tipCheck (ok · near · wrong) und tipEligible */
-const ck=(i,a,s)=>tipCheck(i,a,s);
+const ck=(i,a,s,alts)=>tipCheck(i,a,s,alts);
 t('ok: gleich', ck('hola','hola',true)==='ok');
 t('ok: Großschreibung und Ränder', ck('  HOLA ','hola',true)==='ok');
 t('ok: Satzzeichen der Antwort', ck('cómo está','¿Cómo está?',true)==='ok');
@@ -32,5 +32,14 @@ t('tipEligible ganzer Satz (Frage)', tipEligible('¿A qué se dedica?')===false)
 t('tipEligible kurze Frage bleibt', tipEligible('¿Cómo está?')===true);
 t('tipEligible kurzer Satz bleibt', tipEligible('No entiendo.')===true);
 t('tipEligible Wortgruppe ohne Satzzeichen bleibt', tipEligible('la tarjeta de crédito')===true);
+t('Synonym: pues für entonces → alt', ck('pues','entonces',true,tipAlts('entonces','entonces'))==='alt');
+t('Synonym mit Artikel: birra für la cerveza → alt', ck('birra','la cerveza',true,tipAlts('la cerveza','la cerveza'))==='alt');
+t('Synonym im Plural: birras für cervezas → alt', ck('birras','cervezas',true,tipAlts('la cerveza','cervezas'))==='alt');
+t('Synonym mit Artikel getippt: la gasolinera für bomba → alt', ck('la gasolinera','bomba',true,tipAlts('la bomba','bomba'))==='alt');
+t('Synonym ohne Akzent: ¡que bien! für ¡Qué dicha! → alt', ck('que bien','¡Qué dicha!',true,tipAlts('¡Qué dicha!','¡Qué dicha!'))==='alt');
+t('kein Synonym: o sea für entonces → wrong', ck('o sea','entonces',true,tipAlts('entonces','entonces'))==='wrong');
+t('kein Synonym: perdón für con permiso → wrong', ck('perdón','con permiso',true,tipAlts('con permiso','con permiso'))==='wrong');
+t('ohne Gruppe: tipAlts leer', tipAlts('hola','hola').length===0);
+t('SYN: jedes Wort ist eine Karte', SYN.every(g=>g.length>1));
 done();
 </script>

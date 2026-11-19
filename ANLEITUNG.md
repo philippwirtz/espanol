@@ -9,7 +9,7 @@
 | `content.js` | Grammatik, Wortschatz, Verben, Beispielsätze (reine Daten) |
 | `app.js` | Programmlogik: Suche, Abfrage, Statistik, Cloud-Sync |
 | `verbcore.js` | Verbtrainer: Formen aus den Verbtabellen lesen, Antworten prüfen |
-| `tipcore.js` | Tippkarten: getippte Vokabel prüfen (richtig · fast · falsch) |
+| `tipcore.js` | Tippkarten: getippte Vokabel prüfen (richtig · Synonym · fast · falsch) |
 | `verbtrainer.js` | Verbtrainer: Planung (FSRS) und Übungsbildschirm |
 | `sw.js` | Service Worker — macht die App offline nutzbar |
 | `manifest.webmanifest` | Name, Farben, Vollbildmodus |
@@ -52,7 +52,7 @@ Der Tab **Konjugieren** übt Verbformen: Du tippst alle Personen einer Form (z. 
 Neue Datei mit gleichem Namen hochladen und überschreiben. Damit der Service Worker
 die neue Fassung ausliefert, in `sw.js` die erste Zeile hochzählen:
 
-    const CACHE = 'espanol-v33';
+    const CACHE = 'espanol-v34';
 
 Ohne diese Änderung bleibt auf dem iPhone die alte Fassung im Zwischenspeicher.
 

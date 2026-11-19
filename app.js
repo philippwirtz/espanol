@@ -1043,7 +1043,7 @@ function nextCard(){
   $('qprompt').className=toEs?'qprompt':'qprompt esdir';
   $('qans').className=toEs?'qans':'qans dedir';
   $('qanstxt').textContent=toEs?es:de;
-  $('qpex').hidden=true; $('qaex').hidden=true;
+  $('qpex').hidden=true; $('qaex').hidden=true; $('qaex').innerHTML='';
   if(cloze){
     const [sEs,sDe]=E, tgt=exTarget(sEs);
     R.say=exPlain(sEs); $('qprompt').classList.add('sent');
@@ -1059,6 +1059,10 @@ function nextCard(){
     }
   } else if(E){                                               // „Zeigen": Satz nach dem Aufdecken
     $('qaex').innerHTML='<span class="es">'+exHtml(E[0])+'</span><span class="de">'+exHtml(E[1])+'</span>'; $('qaex').hidden=false;
+  }
+  const alts=toEs&&typeof SYN==='object'?(SYN.find(g=>g.includes(es))||[]).filter(w=>w!==es):[];
+  if(alts.length){                                            // echte Synonyme (SYN): beim Selbstbewerten auch als richtig zählen
+    $('qaex').insertAdjacentHTML('beforeend','<span class="base">Auch richtig: '+alts.map(esc).join(', ')+'</span>'); $('qaex').hidden=false;
   }
   $('qans').hidden=true; $('qtap').hidden=!!c.tip;
   $('qtip').hidden=!c.tip; $('qres').hidden=true;
@@ -1100,12 +1104,12 @@ $('card').onclick=reveal;
 function tipSubmit(giveUp){
   if(!R || !R.queue.length || R.tipSug!==null) return;
   const c=R.queue[0], inp=$('qtipin');
-  const res=giveUp?'wrong':tipCheck(inp.value,tipAnswer(c),vtSettings().strict);
-  R.tipSug={ok:2,near:1,wrong:0}[res];
+  const ans=tipAnswer(c), res=giveUp?'wrong':tipCheck(inp.value,ans,vtSettings().strict,tipAlts(c.it[1],ans));
+  R.tipSug={ok:2,alt:2,near:1,wrong:0}[res];
   inp.disabled=true; $('qtip').hidden=true;
-  const r=$('qres'); r.className='qres '+(res==='wrong'?'bad':res);
+  const r=$('qres'); r.className='qres '+(res==='wrong'?'bad':res==='alt'?'ok':res);
   const typed=inp.value.trim();                                        // getippter Text bleibt sichtbar: beim Vergleich lernt man am meisten
-  r.textContent=res==='ok'?'Richtig':!typed||giveUp?'Nicht gewusst':(res==='near'?'Fast richtig':'Falsch')+' — du: '+typed; r.hidden=false;
+  r.textContent=res==='ok'?'Richtig':res==='alt'?'Auch richtig — gesucht war: '+ans:!typed||giveUp?'Nicht gewusst':(res==='near'?'Fast richtig':'Falsch')+' — du: '+typed; r.hidden=false;
   reveal();
   $(['again','hard','got'][R.tipSug]).classList.add('sug');
 }
@@ -1439,7 +1443,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-16 · 33';
+const APP_VERSION='2026-11-19 · 34';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
