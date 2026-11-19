@@ -115,6 +115,21 @@ ev("exMode='word'");
 
 ev("tipMode='off'"); show(plain.key);
 t('Tippen aus: normale Karte', !hid('qtap') && hid('qtip') && ev('R.queue[0].tip')===false);
+/* Synonyme (SYN): Alternativwort zählt als richtig, beim Aufdecken steht „Auch richtig“ */
+const showTip=(k,mode)=>{
+  ev("dirMode='es';exMode="+JSON.stringify(mode)+";SRS.c={};SRS.c["+JSON.stringify(k)+"]={b:2,due:0,l:0,s:5,d:5,r:today()-5,fr:today()-5}");
+  ev("startRound('T',()=>allCards().filter(c=>c.key==="+JSON.stringify(k)+"),'normal')");
+  ev("R.queue=[{...allCards().find(c=>c.key==="+JSON.stringify(k)+"),redo:0,tip:true}]; R.total=1; show('play'); nextCard()");
+};
+showTip('w:entonces','word'); type('pues');
+t('Synonym: Ergebnis „Auch richtig“ mit Sollwort', resTxt()==='Auch richtig — gesucht war: entonces' && cls('qres','ok'));
+t('Synonym: Vorschlag Saß', ev('R.tipSug')===2 && cls('got','sug'));
+t('Synonym: Zeile „Auch richtig: pues“ in der Lösung', ev(q('qaex')+'.textContent').includes('Auch richtig: pues') && !hid('qaex'));
+showTip('w:entonces','word'); type('o sea');
+t('Nicht-Synonym: weiter falsch', ev('R.tipSug')===0);
+showTip('w:con permiso','word');
+t('ohne Gruppe: keine Zeile „Auch richtig“', !ev(q('qaex')+'.textContent').includes('Auch richtig'));
+ev("dirMode='auto';exMode='word'");
 done();
 }
 </script>

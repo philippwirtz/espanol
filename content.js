@@ -1459,3 +1459,19 @@ const SENT_DECKS=[
 ]
 }
 ];
+
+/* Echte Synonyme: Gruppen spanischer Kartenwörter, die in allen ihren Beispielsätzen gegeneinander austauschbar sind.
+   Tippkarten werten ein Wort aus derselben Gruppe als richtig („Auch richtig — gesucht war …“), beim Aufdecken
+   ins Spanische steht „Auch richtig: …“. Nur Paare eintragen, deren Unterschied man NICHT lernen muss
+   (also nicht con permiso/perdón, talla/número, llevar/traer, calle/carretera). Schreibweise wie die Karte (c.it[1]). */
+const SYN=[
+  ['entonces','pues'],
+  ['o sea','es decir'],
+  ['brete','el trabajo'],
+  ['birra','la cerveza'],
+  ['por eso','por lo tanto'],
+  ['la bomba','la gasolinera'],
+  ['¡Qué dicha!','¡qué bien!'],
+  ['simpático','buena nota'],
+  ['el camino','el sendero'],
+];
