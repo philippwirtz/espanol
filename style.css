@@ -388,6 +388,9 @@ details.settings.nudge summary{color:var(--alert)}
 .goal.done .fill{background:var(--ok)}
 .plannote{font-size:12.5px;color:var(--soft);margin:-4px 0 10px;padding:7px 10px;background:color-mix(in srgb,var(--pri) 7%,transparent);border-radius:8px}
 .plannote[hidden]{display:none}
+.pathinfo{font-size:12.5px;color:var(--soft);margin:-4px 0 10px}
+.pathinfo b{color:var(--gold)}
+.pathinfo[hidden]{display:none}
 
 /* ---------- Flamme ---------- */
 .kpi.streak b{display:flex;align-items:center;gap:4px}

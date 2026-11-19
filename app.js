@@ -594,6 +594,64 @@ const WORD_DECKS=VOC.map((b,i)=>{const lv=levelOf(b.g), adv=lv!=='basis'; return
   .filter(d=>d.items.length>=4);
 SENT_DECKS.forEach(d=>{d.kind='s'; d.lv='basis'; d.lvl=1;});
 const ALL=[...SENT_DECKS,...WORD_DECKS];
+/* Lernpfad: feste Reihenfolge, in der neue Karten kommen (statt zufällig). Stapel als 'Art:Name',
+   Wörter eines Themas vor den passenden Sätzen. Jeder Stapel wird in Lektionen zu höchstens PATH_LES Karten
+   geteilt (gleich groß, Reihenfolge wie im Wortschatz). Nicht aufgeführte Stapel kommen ans Ende ihrer Stufe —
+   neue Kapitel gehen so nie verloren, gehören aber hier eingetragen. Ändert nur die Auswahl neuer Karten,
+   nicht Lernstand, Planung oder Abgleich. */
+const PATH_ORDER=[
+  'w:Begrüßung & Höflichkeit','s:Begrüßung & Kennenlernen',
+  'w:Reagieren','w:Bindewörter','s:Verständigung',
+  'w:Die wichtigsten Verben','s:Grammatik-Muster',
+  'w:Zahlen','w:Uhrzeit','w:Wochentage, Monate, Datum','w:Zeit','w:Jahreszeiten & Wetter','s:Zeit, Datum, Wetter',
+  'w:Ort','w:Menge & Grad','w:Häufige Adjektive','w:Farben',
+  'w:Restaurant','s:Restaurant',
+  'w:Unterkunft','s:Unterkunft',
+  'w:Unterwegs','s:Unterwegs',
+  'w:Einkaufen & Geld','s:Einkaufen & Geld',
+  'w:Familie & Menschen','w:Hochzeitsreise','s:Hochzeitsreise & Smalltalk',
+  'w:Natur & Ausflüge','s:Ausflüge & Natur',
+  'w:Gesundheit & Notfall','s:Gesundheit & Notfall',
+  'w:Redewendungen','w:Tico-Spanisch','s:Redewendungen & Tico',
+  'w:Zeitangaben & Häufigkeit','w:Gefühle & Stimmung','w:Menschen beschreiben','w:Freizeit & Sport',
+  'w:Küche & Speisen','w:Wohnen & Haushalt','w:In der Stadt','w:Handy & Technik','w:Beruf & Arbeitsalltag',
+  'w:Mit dem Mietwagen','w:Tiere & Natur Costa Ricas','w:Probleme lösen','w:Meinung & Gespräch'];
+const PATH_LES=12;
+const PATH=(()=>{                                   // {les:[{deck,part,parts,lv,keys}], at:Map key→{pos,les}}
+  const id=d=>d.kind+':'+d.name, rank=d=>{const i=PATH_ORDER.indexOf(id(d)); return i<0?PATH_ORDER.length:i;};
+  const decks=ALL.slice().sort((a,b)=>(a.lvl||1)-(b.lvl||1)||rank(a)-rank(b));
+  const les=[], at=new Map(); let pos=0;
+  decks.forEach(d=>{
+    const keys=d.items.map(it=>d.kind+':'+it[1]).filter(k=>!at.has(k));   // doppelte Karten zählen beim ersten Stapel
+    keys.forEach(k=>at.set(k,null));
+    const parts=Math.ceil(keys.length/PATH_LES)||0, size=keys.length/parts;
+    for(let p=0;p<parts;p++){
+      const ks=keys.slice(Math.round(p*size),Math.round((p+1)*size));
+      ks.forEach(k=>at.set(k,{pos:pos++,les:les.length}));
+      les.push({deck:d.name,kind:d.kind,part:p+1,parts,lv:d.lv||'basis',keys:ks});
+    }
+  });
+  return {les,at};
+})();
+const pathPos=c=>{const p=PATH.at.get(c.key); return p?p.pos:1e9;};
+/* Reihenfolge pro Profil: path = Lernpfad · mix = zufällig innerhalb der Stufe (Grundlagen vor Aufbau) */
+let orderMode=loadJ('q.order','path'); if(!['path','mix'].includes(orderMode)) orderMode='path';
+const ORDER_HINT={
+  path:'Neue Karten kommen Lektion für Lektion: erst die Wörter eines Themas, dann die Sätze dazu, vom Grundwortschatz zu den Situationen. Begonnene Karten bleiben, wie sie sind.',
+  mix:'Neue Karten kommen zufällig aus allen Stapeln der gewählten Stufe, Grundlagen vor Aufbau.'};
+const orderNew=list=>orderMode==='path'
+  ? list.slice().sort((a,b)=>pathPos(a)-pathPos(b))
+  : shuffle(list.slice()).sort((a,b)=>a.lvl-b.lvl);
+/* Aktuelle Lektion im Bereich: erste Lektion mit noch neuen Karten darin */
+function pathNow(cards){
+  const inScope=new Set(cards.map(c=>c.key)), fresh=new Set(cards.filter(isNew).map(c=>c.key));
+  const L=PATH.les.map((l,i)=>({...l,i,keys:l.keys.filter(k=>inScope.has(k))})).filter(l=>l.keys.length);
+  const k=L.findIndex(l=>l.keys.some(x=>fresh.has(x)));
+  if(k<0) return {done:true,n:L.length};
+  const l=L[k];
+  return {done:false,no:k+1,n:L.length,deck:l.deck,kind:l.kind,part:l.part,parts:l.parts,
+          begun:l.keys.filter(x=>!fresh.has(x)).length,size:l.keys.length};
+}
 const cardsRaw=d=>d.items.map(it=>({it,key:d.kind+':'+it[1],deck:d.name,lvl:d.lvl||1,lv:d.lv||'basis'}));
 /* „Brauche ich nicht": Karte mit x=1 im Lernstand. Sie fällt aus allen Kartenlisten heraus — keine Abfrage,
    keine Fälligkeit, zählt nirgends mit. Ihr Lernstand bleibt erhalten; Zurückholen in den Einstellungen. */
@@ -610,7 +668,7 @@ function buildRound(cards,mode){
   const P=plan(cards);
   if(mode==='extra')                                     // freiwillig über das Budget hinaus: riskanteste Wiederholungen
     return P.due.slice(0,roundSize);
-  const fresh=shuffle(P.fresh.slice()).sort((a,b)=>a.lvl-b.lvl);   // Grundlagen vor Aufbau
+  const fresh=orderNew(P.fresh);                         // Lernpfad oder zufällig (Grundlagen vor Aufbau)
   if(mode==='more') return fresh.slice(0,roundSize);
   // Tagesplan: Wiederholungen zuerst; Neues nur, wenn der Plan es zulässt — dann ein Drittel der Runde eingestreut
   let nNew=Math.min(P.newOk, P.reviews?Math.ceil(roundSize*.3):roundSize);
@@ -857,6 +915,12 @@ function renderPick(){
     : P.heavy ? 'Die nächsten Tage sind gut gefüllt — neue Karten pausieren kurz, damit es in deiner Lernzeit bleibt.'
     : full ? 'Heute füllen Wiederholungen deine '+minutes+' Min — Neues pausiert bis morgen.' : '';
   $('planNote').textContent=note; $('planNote').hidden=!note;
+  // Lernpfad: aktuelle Lektion im gewählten Bereich
+  const PN=orderMode==='path'?pathNow(all):null;
+  $('pathInfo').hidden=!PN;
+  if(PN) $('pathInfo').innerHTML=PN.done?'Lernpfad: alle '+PN.n+' Lektionen begonnen ✓'
+    :'Lektion <b>'+PN.no+'</b> / '+PN.n+' · '+(PN.kind==='s'?'Sätze: ':'')+PN.deck+(PN.parts>1?' '+PN.part+'/'+PN.parts:'')
+     +' · '+PN.begun+' von '+PN.size+' begonnen';
   $('ovleft').textContent=(all.length-fresh)+' / '+all.length;
   $('ovbar').outerHTML=stageBar(all).replace('class="sbar"','class="sbar" id="ovbar"');
   // Wochengrafik (Lernserie gilt stufenübergreifend)
@@ -889,6 +953,8 @@ function renderPick(){
   $('autoSpeak').checked=autoSpeak; $('autoRow').hidden=!TTS;
   document.querySelectorAll('#segdir button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===dirMode));
   $('dirHint').textContent=DIR_HINT[dirMode]||'';
+  document.querySelectorAll('#segord button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.o===orderMode));
+  $('ordHint').textContent=ORDER_HINT[orderMode]+' Gilt nur für dieses Profil.';
   document.querySelectorAll('#segex button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.x===exMode));
   $('exHint').textContent=EX_HINT[exMode]+' Gilt nur für dieses Profil.';
   document.querySelectorAll('#segtip button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===tipMode));
@@ -981,6 +1047,8 @@ $('optSet').onclick=()=>{
 };
 document.querySelectorAll('#segret button').forEach(b=>b.onclick=()=>{
   RET=+b.dataset.r; store.set('q.ret',JSON.stringify(RET)); renderPick(); });
+document.querySelectorAll('#segord button').forEach(b=>b.onclick=()=>{
+  orderMode=b.dataset.o; store.set('q.order',JSON.stringify(orderMode)); renderPick(); });
 document.querySelectorAll('#segex button').forEach(b=>b.onclick=()=>{
   exMode=b.dataset.x; store.set('q.exmode',JSON.stringify(exMode)); renderPick(); });
 document.querySelectorAll('#segtip button').forEach(b=>b.onclick=()=>{
@@ -1443,7 +1511,7 @@ async function finishConnect(){
   await syncNow();
 }
 $('syNow').onclick=()=>syncNow();
-const APP_VERSION='2026-11-19 · 34';
+const APP_VERSION='2026-11-19 · 35';
 function relDay(d){ if(d<0) return 'noch nie gelernt'; const n=today()-d; return n===0?'heute gelernt':n===1?'gestern gelernt':'zuletzt vor '+n+' Tagen'; }
 function renderDiag(){
   $('verInfo').textContent='App '+APP_VERSION;
@@ -1482,7 +1550,7 @@ addEventListener('online',()=>{ if(SYNC&&SYNC.pending) syncNow(); });
 if(SYNC&&SYNC.gist) setTimeout(syncNow,800);
 
 /* --- Lernstand sichern / wiederherstellen --- */
-const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log','q.exmode','q.tip','q.vbforms','q.vbsize','q.vbnew','q.vbacc'];
+const BK_KEYS=['q.srs','q.size','q.newcap','q.kind','q.auto','q.level','q.dir','q.minutes','q.ret','q.log','q.exmode','q.order','q.tip','q.vbforms','q.vbsize','q.vbnew','q.vbacc'];
 function bkStatus(){
   const last=loadJ('q.backup',null), started=Object.keys(SRS.c).length;
   const days=last===null?null:today()-last;
@@ -1546,7 +1614,7 @@ $('bkFile').onchange=async e=>{
     SRS.gen=gen;                                             // neue Generation: gilt auf allen Geräten
     saveQ(); scheduleSync(true);
     LOG=null; RET=loadJ('q.ret',0.9);
-    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto'); exMode=loadJ('q.exmode','word'); tipMode=loadTip();
+    roundSize=loadJ('q.size',10); newPerDay=loadJ('q.newcap',10); minutes=loadJ('q.minutes',10); deckKind=loadJ('q.kind','s'); autoSpeak=loadJ('q.auto',false); level=loadJ('q.level','basis'); dirMode=loadJ('q.dir','auto'); exMode=loadJ('q.exmode','word'); orderMode=loadJ('q.order','path'); tipMode=loadTip();
     renderPick(); bkStatus(); bkMsg('Lernstand vom '+when+' geladen ('+n+' Karten).');
   }catch(err){ bkMsg('Datei konnte nicht gelesen werden: '+err.message,true); }
 };
