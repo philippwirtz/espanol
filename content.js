@@ -240,7 +240,7 @@ const GRAM=[
 <table>
 <tr><th>Endung</th><th>Genus</th><th>Ausnahmen</th></tr>
 <tr><td class="mono">-o</td><td class="de">m.</td><td class="de">la mano, la foto, la moto</td></tr>
-<tr><td class="mono">-a</td><td class="de">f.</td><td class="de">el problema, el día, el mapa, el clima, el agua</td></tr>
+<tr><td class="mono">-a</td><td class="de">f.</td><td class="de">el problema, el día, el mapa, el clima</td></tr>
 <tr><td class="mono">-ción -dad</td><td class="de">f.</td><td class="de">—</td></tr>
 <tr><td class="mono">-or -aje</td><td class="de">m.</td><td class="de">la flor</td></tr>
 </table>
@@ -249,37 +249,73 @@ const GRAM=[
 <tr><td class="de">m. Sg./Pl.</td><td class="mono">el / los</td><td class="mono">un / unos</td></tr>
 <tr><td class="de">f. Sg./Pl.</td><td class="mono">la / las</td><td class="mono">una / unas</td></tr>
 </table>
+<div class="note"><span class="tag">Falle</span><i>el agua</i> ist weiblich. Vor betontem <span class="mono">a-</span> steht nur aus Klanggründen <i>el</i> statt <i>la</i>; das Adjektiv bleibt weiblich und der Plural nimmt wieder <i>las</i>: <span class="es">el agua fría · las aguas termales</span>. Ebenso <i>el águila</i>, <i>el hambre</i>.</div>
 <p><b>Plural:</b> Vokal → <span class="mono">-s</span> · Konsonant → <span class="mono">-es</span> (<i>hotel → hoteles</i>) · <span class="mono">-z</span> → <span class="mono">-ces</span> (<i>vez → veces</i>).</p>
 <div class="note"><span class="tag">Falle</span>Pflichtverschmelzungen: <span class="mono">a + el = al</span>, <span class="mono">de + el = del</span>. <span class="es">Nosotros vamos al hotel. La llave del cuarto.</span></div>`},
 
 {g:'Substantive & Adjektive',t:'Adjektive & Steigerung',h:`
-<p>Sie stehen <b>hinter</b> dem Substantiv und richten sich nach Genus und Zahl: <span class="es">un café caliente · una playa bonita · unos días tranquilos</span>. Adjektive auf <span class="mono">-e</span> oder Konsonant haben keine eigene weibliche Form — außer Nationalitäten: <i>alemán / alemana</i>.</p>
+<p>Sie stehen <b>hinter</b> dem Substantiv und richten sich nach Genus und Zahl: <span class="es">un café caliente · una playa bonita · unos días tranquilos</span>. Adjektive auf <span class="mono">-e</span> oder Konsonant haben keine eigene weibliche Form — außer Nationalitäten (<i>alemán / alemana</i>) und Adjektiven auf <span class="mono">-or</span> (<i>trabajador / trabajadora</i>).</p>
 <ul class="phr">
 <li><span class="es">más … que</span> <span class="gloss">mehr als</span></li>
 <li><span class="es">menos … que</span> <span class="gloss">weniger als</span></li>
 <li><span class="es">tan … como</span> <span class="gloss">so … wie</span></li>
 <li><span class="es">el / la más …</span> <span class="gloss">der/die/das …ste</span></li>
 <li><span class="mono">bueno → mejor · malo → peor</span></li>
-<li><span class="mono">grande → mayor · pequeño → menor</span></li>
+<li><span class="mono">grande → mayor · pequeño → menor</span> <span class="gloss">bei Alter und Rang; bei Größe meist más grande / más pequeño</span></li>
 </ul>
 <p><b>Adverb</b> aus Adjektiv: weibliche Form + <span class="mono">-mente</span>. <i>rápido → rápidamente, fácil → fácilmente.</i> Im Alltag sagt man oft einfach das Adjektiv: <span class="es">Hable más despacio.</span></p>`},
 
 {g:'Substantive & Adjektive',t:'Possessiv & Demonstrativ',h:`
-<p><span class="mono">mi · tu · su · nuestro</span> — Plural durch <span class="mono">-s</span>: <span class="es">Yo tengo mis maletas.</span> Nur <i>nuestro</i> hat eine weibliche Form: <span class="es">Nosotros tenemos nuestra habitación.</span></p>
+<p><span class="mono">mi · tu · su · nuestro</span> — Plural durch <span class="mono">-s</span>: <span class="es">Yo tengo mis maletas.</span> Nur <i>nuestro</i> (und <i>vuestro</i>) hat eine weibliche Form: <span class="es">Nosotros tenemos nuestra habitación.</span></p>
 <p><span class="mono">este</span> dieser hier · <span class="mono">ese</span> der da · <span class="mono">aquel</span> jener dort. Angleichung wie beim Adjektiv: <span class="es">Nosotros queremos esta playa.</span> Für Unbestimmtes unveränderlich: <span class="es">¿Qué es esto?</span></p>
 <div class="note"><span class="tag">Falle</span><i>su</i> heißt <i>sein, ihr, Ihr</i> und <i>deren</i> zugleich. Im Zweifel anhängen: <span class="es">la maleta de él / de usted.</span></div>`},
 
 {g:'Satzbau',t:'Objektpronomen',h:`
+<p>Zwei Fragen entscheiden alles. <b>Wen oder was?</b> (Akkusativ, direktes Objekt) → <i>lo, la, los, las</i>. <b>Wem?</b> (Dativ, indirektes Objekt) → <i>le, les</i>. Bei <i>me, te, nos, os</i> gibt es den Unterschied nicht.</p>
 <table>
-<tr><th></th><th>direkt</th><th>indirekt</th></tr>
-<tr><td class="de">mich / mir</td><td class="mono">me</td><td class="mono">me</td></tr>
-<tr><td class="de">dich / dir</td><td class="mono">te</td><td class="mono">te</td></tr>
-<tr><td class="de">ihn, sie, es / ihm</td><td class="mono">lo, la</td><td class="mono">le</td></tr>
-<tr><td class="de">uns</td><td class="mono">nos</td><td class="mono">nos</td></tr>
-<tr><td class="de">sie / ihnen, Ihnen</td><td class="mono">los, las</td><td class="mono">les</td></tr>
+<tr><th></th><th>wen / was</th><th>wem</th></tr>
+<tr><td class="de">yo — mich / mir</td><td class="mono">me</td><td class="mono">me</td></tr>
+<tr><td class="de">tú — dich / dir</td><td class="mono">te</td><td class="mono">te</td></tr>
+<tr><td class="de">él — ihn / ihm</td><td class="mono">lo</td><td class="mono">le</td></tr>
+<tr><td class="de">ella — sie / ihr</td><td class="mono">la</td><td class="mono">le</td></tr>
+<tr><td class="de">usted — Sie / Ihnen</td><td class="mono">lo (Mann), la (Frau)</td><td class="mono">le</td></tr>
+<tr><td class="de">nosotros — uns</td><td class="mono">nos</td><td class="mono">nos</td></tr>
+<tr><td class="de">vosotros — euch</td><td class="mono">os</td><td class="mono">os</td></tr>
+<tr><td class="de">ellos / ellas — sie / ihnen</td><td class="mono">los / las</td><td class="mono">les</td></tr>
+<tr><td class="de">ustedes — Sie, ihr / Ihnen, euch</td><td class="mono">los / las</td><td class="mono">les</td></tr>
 </table>
-<div class="note"><span class="tag">Falle</span>Das Objektpronomen steht <b>vor</b> dem konjugierten Verb, nicht dahinter: <span class="es">Yo no lo entiendo. ¿Usted me puede ayudar?</span> An Infinitiv und Gerundium darf es angehängt werden: <span class="es">¿Usted puede ayudarme?</span> — beides richtig.</div>
-<p>Treffen zwei aufeinander, steht der <b>Dativ zuerst</b>: <span class="es">¿Me lo puede traer?</span> <span class="gloss">Können Sie es mir bringen?</span></p>`},
+<p>Für Dinge gilt dasselbe, nach dem Genus des spanischen Wortes: <i>el pasaporte</i> → <i>lo</i>, <i>la llave</i> → <i>la</i>, <i>las maletas</i> → <i>las</i>.</p>
+<ul class="phr">
+<li><span class="es">¿El pasaporte? No lo encuentro.</span> <span class="gloss">Den Pass? Ich finde ihn nicht.</span></li>
+<li><span class="es">¿La cuenta? Ya la pagamos.</span> <span class="gloss">Die Rechnung? Die haben wir schon bezahlt.</span></li>
+<li><span class="es">Le traigo la cuenta.</span> <span class="gloss">Ich bringe Ihnen die Rechnung. (wem?)</span></li>
+<li><span class="es">Les mandamos fotos.</span> <span class="gloss">Wir schicken ihnen Fotos. (wem?)</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><b>le und lo heißen oft „Sie“.</b> <i>usted</i> ist grammatisch 3. Person, deshalb sagt man zu einem Fremden nie <i>te</i>, sondern <i>lo / la / le</i>. <span class="es">Lo llamo después.</span> <span class="gloss">Ich rufe Sie später an.</span> <span class="es">¿Le gusta?</span> <span class="gloss">Gefällt es Ihnen?</span> Ohne Zusammenhang kann <i>le</i> also „ihm“, „ihr“ oder „Ihnen“ heißen.</div>
+<p><b>Das Pronomen ist doppelt da.</b> Steht die Person ausgeschrieben im Satz, bleibt <i>le / les</i> trotzdem stehen. Das klingt für Deutsche überflüssig, ist aber der Normalfall:</p>
+<ul class="phr">
+<li><span class="es">Le pregunto al chofer.</span> <span class="gloss">Ich frage den Fahrer.</span></li>
+<li><span class="es">Les llevamos café a los suegros.</span> <span class="gloss">Wir bringen den Schwiegereltern Kaffee mit.</span></li>
+<li><span class="es">A mi esposa le gustan los perezosos.</span> <span class="gloss">Meiner Frau gefallen die Faultiere.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><b>Manche Verben haben einen anderen Fall als im Deutschen.</b> <i>preguntar</i> fragen → wem: <span class="es">le pregunto</span> (dt. „ich frage ihn“). <i>ayudar</i> helfen → wen: <span class="es">lo ayudo</span> (dt. „ich helfe ihm“). <i>esperar</i> warten auf → wen: <span class="es">lo esperamos abajo</span>. <i>llamar</i> anrufen → wen: <span class="es">la llamo mañana</span>.</div>
+<p><b>Stellung.</b> Das Pronomen steht vor dem konjugierten Verb. An Infinitiv und Gerundium darf es angehängt werden, an den bejahten Imperativ muss es angehängt werden. Beim verneinten Imperativ steht es wieder davor.</p>
+<ul class="phr">
+<li><span class="es">No lo entiendo.</span> <span class="gloss">vor dem Verb</span></li>
+<li><span class="es">¿Me puede ayudar? = ¿Puede ayudarme?</span> <span class="gloss">beides richtig</span></li>
+<li><span class="es">Estoy buscándolo. = Lo estoy buscando.</span> <span class="gloss">beides richtig</span></li>
+<li><span class="es">Dígame. · Ayúdeme, por favor.</span> <span class="gloss">bejahter Imperativ: angehängt</span></li>
+<li><span class="es">No me diga. · No lo toque.</span> <span class="gloss">verneint: davor</span></li>
+</ul>
+<p><b>Zwei Pronomen.</b> Wem vor wen: <span class="es">¿Me lo puede traer?</span> <span class="gloss">Können Sie es mir bringen?</span> Treffen <i>le / les</i> auf <i>lo, la, los, las</i>, wird daraus <b>se</b>, nie <i>le lo</i>:</p>
+<ul class="phr">
+<li><span class="es">Le traigo la cuenta → Se la traigo.</span> <span class="gloss">Ich bringe sie Ihnen.</span></li>
+<li><span class="es">Ahorita se lo traigo.</span> <span class="gloss">Ich bringe es Ihnen gleich.</span></li>
+<li><span class="es">Se la cambiamos.</span> <span class="gloss">Wir tauschen es (das Zimmer) für Sie um.</span></li>
+</ul>
+<p><b>lo ohne Bezugswort</b> heißt „es, das“ für einen ganzen Gedanken: <span class="es">No lo sé.</span> <span class="gloss">Ich weiß es nicht.</span> <span class="es">Lo siento.</span> <span class="gloss">Es tut mir leid.</span> <span class="es">Ya lo sabemos.</span> <span class="gloss">Das wissen wir schon.</span></p>
+<div class="note"><span class="tag">Falle</span><b>se hat drei Aufgaben.</b> Reflexiv: <span class="es">se llama</span> er heißt (nennt sich). Unpersönlich: <span class="es">se puede</span> man kann. Ersatz für <i>le / les</i>: <span class="es">se lo doy</span> ich gebe es ihm. Nur die dritte gehört zu diesem Kapitel.</div>
+<div class="note t"><span class="tag">Tico</span>In Costa Rica hört man für „Sie“ oft auch <i>le</i> statt <i>lo / la</i>, besonders höflich: <span class="es">¿Le ayudo?</span> statt <span class="es">¿Lo ayudo?</span> Beides ist richtig und wird verstanden. Für dich gilt: <i>lo / la</i> für wen, <i>le</i> für wem, dann liegst du nie falsch.</div>`},
 
 {g:'Satzbau',t:'gustar — rückwärts gebaut',h:`
 <p>Nicht „ich mag X", sondern „mir gefällt X". Das Gemochte ist das Subjekt und bestimmt die Verbform.</p>
