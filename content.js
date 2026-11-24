@@ -271,17 +271,51 @@ const GRAM=[
 <div class="note"><span class="tag">Falle</span><i>su</i> heißt <i>sein, ihr, Ihr</i> und <i>deren</i> zugleich. Im Zweifel anhängen: <span class="es">la maleta de él / de usted.</span></div>`},
 
 {g:'Satzbau',t:'Objektpronomen',h:`
+<p>Zwei Fragen entscheiden alles. <b>Wen oder was?</b> (Akkusativ, direktes Objekt) → <i>lo, la, los, las</i>. <b>Wem?</b> (Dativ, indirektes Objekt) → <i>le, les</i>. Bei <i>me, te, nos, os</i> gibt es den Unterschied nicht.</p>
 <table>
-<tr><th></th><th>direkt</th><th>indirekt</th></tr>
-<tr><td class="de">mich / mir</td><td class="mono">me</td><td class="mono">me</td></tr>
-<tr><td class="de">dich / dir</td><td class="mono">te</td><td class="mono">te</td></tr>
-<tr><td class="de">ihn, sie, es / ihm</td><td class="mono">lo, la</td><td class="mono">le</td></tr>
-<tr><td class="de">uns</td><td class="mono">nos</td><td class="mono">nos</td></tr>
-<tr><td class="de">sie / ihnen, Ihnen</td><td class="mono">los, las</td><td class="mono">les</td></tr>
+<tr><th></th><th>wen / was</th><th>wem</th></tr>
+<tr><td class="de">yo — mich / mir</td><td class="mono">me</td><td class="mono">me</td></tr>
+<tr><td class="de">tú — dich / dir</td><td class="mono">te</td><td class="mono">te</td></tr>
+<tr><td class="de">él — ihn / ihm</td><td class="mono">lo</td><td class="mono">le</td></tr>
+<tr><td class="de">ella — sie / ihr</td><td class="mono">la</td><td class="mono">le</td></tr>
+<tr><td class="de">usted — Sie / Ihnen</td><td class="mono">lo (Mann), la (Frau)</td><td class="mono">le</td></tr>
+<tr><td class="de">nosotros — uns</td><td class="mono">nos</td><td class="mono">nos</td></tr>
+<tr><td class="de">vosotros — euch</td><td class="mono">os</td><td class="mono">os</td></tr>
+<tr><td class="de">ellos / ellas — sie / ihnen</td><td class="mono">los / las</td><td class="mono">les</td></tr>
+<tr><td class="de">ustedes — Sie, ihr / Ihnen, euch</td><td class="mono">los / las</td><td class="mono">les</td></tr>
 </table>
-<div class="note"><span class="tag">Falle</span>Das Objektpronomen steht <b>vor</b> dem konjugierten Verb, nicht dahinter: <span class="es">Yo no lo entiendo. ¿Usted me puede ayudar?</span> An Infinitiv und Gerundium darf es angehängt werden: <span class="es">¿Usted puede ayudarme?</span> — beides richtig.</div>
-<p>Treffen zwei aufeinander, steht der <b>Dativ zuerst</b>: <span class="es">¿Me lo puede traer?</span> <span class="gloss">Können Sie es mir bringen?</span></p>
-<div class="note"><span class="tag">Falle</span>Vor <i>lo, la, los, las</i> wird <i>le</i> und <i>les</i> zu <b>se</b>, nie <i>le lo</i>: <span class="es">Ahorita se lo traigo.</span> <span class="gloss">Ich bringe es Ihnen gleich.</span> <span class="es">Se la cambiamos.</span> <span class="gloss">Wir tauschen es (das Zimmer) für Sie um.</span></div>`},
+<p>Für Dinge gilt dasselbe, nach dem Genus des spanischen Wortes: <i>el pasaporte</i> → <i>lo</i>, <i>la llave</i> → <i>la</i>, <i>las maletas</i> → <i>las</i>.</p>
+<ul class="phr">
+<li><span class="es">¿El pasaporte? No lo encuentro.</span> <span class="gloss">Den Pass? Ich finde ihn nicht.</span></li>
+<li><span class="es">¿La cuenta? Ya la pagamos.</span> <span class="gloss">Die Rechnung? Die haben wir schon bezahlt.</span></li>
+<li><span class="es">Le traigo la cuenta.</span> <span class="gloss">Ich bringe Ihnen die Rechnung. (wem?)</span></li>
+<li><span class="es">Les mandamos fotos.</span> <span class="gloss">Wir schicken ihnen Fotos. (wem?)</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><b>le und lo heißen oft „Sie“.</b> <i>usted</i> ist grammatisch 3. Person, deshalb sagt man zu einem Fremden nie <i>te</i>, sondern <i>lo / la / le</i>. <span class="es">Lo llamo después.</span> <span class="gloss">Ich rufe Sie später an.</span> <span class="es">¿Le gusta?</span> <span class="gloss">Gefällt es Ihnen?</span> Ohne Zusammenhang kann <i>le</i> also „ihm“, „ihr“ oder „Ihnen“ heißen.</div>
+<p><b>Das Pronomen ist doppelt da.</b> Steht die Person ausgeschrieben im Satz, bleibt <i>le / les</i> trotzdem stehen. Das klingt für Deutsche überflüssig, ist aber der Normalfall:</p>
+<ul class="phr">
+<li><span class="es">Le pregunto al chofer.</span> <span class="gloss">Ich frage den Fahrer.</span></li>
+<li><span class="es">Les llevamos café a los suegros.</span> <span class="gloss">Wir bringen den Schwiegereltern Kaffee mit.</span></li>
+<li><span class="es">A mi esposa le gustan los perezosos.</span> <span class="gloss">Meiner Frau gefallen die Faultiere.</span></li>
+</ul>
+<div class="note"><span class="tag">Falle</span><b>Manche Verben haben einen anderen Fall als im Deutschen.</b> <i>preguntar</i> fragen → wem: <span class="es">le pregunto</span> (dt. „ich frage ihn“). <i>ayudar</i> helfen → wen: <span class="es">lo ayudo</span> (dt. „ich helfe ihm“). <i>esperar</i> warten auf → wen: <span class="es">lo esperamos abajo</span>. <i>llamar</i> anrufen → wen: <span class="es">la llamo mañana</span>.</div>
+<p><b>Stellung.</b> Das Pronomen steht vor dem konjugierten Verb. An Infinitiv und Gerundium darf es angehängt werden, an den bejahten Imperativ muss es angehängt werden. Beim verneinten Imperativ steht es wieder davor.</p>
+<ul class="phr">
+<li><span class="es">No lo entiendo.</span> <span class="gloss">vor dem Verb</span></li>
+<li><span class="es">¿Me puede ayudar? = ¿Puede ayudarme?</span> <span class="gloss">beides richtig</span></li>
+<li><span class="es">Estoy buscándolo. = Lo estoy buscando.</span> <span class="gloss">beides richtig</span></li>
+<li><span class="es">Dígame. · Ayúdeme, por favor.</span> <span class="gloss">bejahter Imperativ: angehängt</span></li>
+<li><span class="es">No me diga. · No lo toque.</span> <span class="gloss">verneint: davor</span></li>
+</ul>
+<p><b>Zwei Pronomen.</b> Wem vor wen: <span class="es">¿Me lo puede traer?</span> <span class="gloss">Können Sie es mir bringen?</span> Treffen <i>le / les</i> auf <i>lo, la, los, las</i>, wird daraus <b>se</b>, nie <i>le lo</i>:</p>
+<ul class="phr">
+<li><span class="es">Le traigo la cuenta → Se la traigo.</span> <span class="gloss">Ich bringe sie Ihnen.</span></li>
+<li><span class="es">Ahorita se lo traigo.</span> <span class="gloss">Ich bringe es Ihnen gleich.</span></li>
+<li><span class="es">Se la cambiamos.</span> <span class="gloss">Wir tauschen es (das Zimmer) für Sie um.</span></li>
+</ul>
+<p><b>lo ohne Bezugswort</b> heißt „es, das“ für einen ganzen Gedanken: <span class="es">No lo sé.</span> <span class="gloss">Ich weiß es nicht.</span> <span class="es">Lo siento.</span> <span class="gloss">Es tut mir leid.</span> <span class="es">Ya lo sabemos.</span> <span class="gloss">Das wissen wir schon.</span></p>
+<div class="note"><span class="tag">Falle</span><b>se hat drei Aufgaben.</b> Reflexiv: <span class="es">se llama</span> er heißt (nennt sich). Unpersönlich: <span class="es">se puede</span> man kann. Ersatz für <i>le / les</i>: <span class="es">se lo doy</span> ich gebe es ihm. Nur die dritte gehört zu diesem Kapitel.</div>
+<div class="note t"><span class="tag">Tico</span>In Costa Rica hört man für „Sie“ oft auch <i>le</i> statt <i>lo / la</i>, besonders höflich: <span class="es">¿Le ayudo?</span> statt <span class="es">¿Lo ayudo?</span> Beides ist richtig und wird verstanden. Für dich gilt: <i>lo / la</i> für wen, <i>le</i> für wem, dann liegst du nie falsch.</div>`},
 
 {g:'Satzbau',t:'gustar — rückwärts gebaut',h:`
 <p>Nicht „ich mag X", sondern „mir gefällt X". Das Gemochte ist das Subjekt und bestimmt die Verbform.</p>
